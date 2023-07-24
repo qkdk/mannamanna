@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c7e9ced1-4877-4287-8f6c-2c57934f8f9d" name="Changes" comment="Docs: 0721 API명세서">
-      <change beforePath="$PROJECT_DIR$/Plan/Younsik_Figma/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Plan/Younsik_Figma/README.md" afterDir="false" />
+    <list default="true" id="c7e9ced1-4877-4287-8f6c-2c57934f8f9d" name="Changes" comment="Docs: 0724 SpringDataJPA">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plan/Gyubo_Figma/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Plan/Gyubo_Figma/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,7 +16,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="S09P12B205-27-0719" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,21 +74,6 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="S09P12B205" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="S09P12B205" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -98,6 +84,7 @@
       <updated>1689931053717</updated>
       <workItem from="1689931055629" duration="322000" />
       <workItem from="1689931523060" duration="180000" />
+      <workItem from="1690197988154" duration="346000" />
     </task>
     <task id="LOCAL-00001" summary="Docs: 0721 API명세서">
       <option name="closed" value="true" />
@@ -107,14 +94,42 @@
       <option name="project" value="LOCAL" />
       <updated>1689931252157</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Docs: 0724 SpringDataJPA">
+      <option name="closed" value="true" />
+      <created>1690197390218</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1690197390218</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Docs: 0724 SpringDataJPA">
+      <option name="closed" value="true" />
+      <created>1690198009960</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1690198009960</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Docs: 0721 API명세서" />
-    <option name="LAST_COMMIT_MESSAGE" value="Docs: 0721 API명세서" />
+    <MESSAGE value="Docs: 0724 SpringDataJPA" />
+    <option name="LAST_COMMIT_MESSAGE" value="Docs: 0724 SpringDataJPA" />
   </component>
 </project>
