@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components'
-import MacBookBox from '../../components/common/macbookBox';
 import Profile from '../../components/common/Profile';
 import Button from '@mui/material/Button';
 
