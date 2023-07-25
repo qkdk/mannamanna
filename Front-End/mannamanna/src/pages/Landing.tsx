@@ -5,7 +5,7 @@ import MacBookBox from '../components/common/MacbookBox';
 const LandingPage = () => {
     return (
         <div>
-            <MacBookBox></MacBookBox>
+            우리 지금만나~당장만나~
         </div>
     );
 };
