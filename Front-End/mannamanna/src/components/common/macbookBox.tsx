@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import React from 'react';
-import './App.css';
+import React, { ReactNode } from 'react';
 
+interface MacBookBoxProps{
+  children:ReactNode;
+}
 
-function App() {
+function MacBookBox({children} :MacBookBoxProps) {
   let MacBox = styled.div`
  border: solid 7px black;
   width: 700px;
@@ -72,11 +72,13 @@ const MacBtn = styled.div<MacBtnProps>`
       <MacBtn bg="#25c339"/>      
     </MacBtnContainer>
         </UpBox>
-        <MidBox></MidBox>
+        <MidBox>
+        {children}
+        </MidBox>
         <BottomBox></BottomBox>
       </MacBox>
     </div>
   );
 }
 
-export default App;
+export default MacBookBox;

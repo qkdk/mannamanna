@@ -9,7 +9,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 
 const HeaderBack = styled.div`
     width: 100%;
-    height: 100px;
+    height: 10vh;
     background : #ffcced;
     opacity:0.35;
     display: flex;

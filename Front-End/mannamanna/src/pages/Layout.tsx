@@ -1,16 +1,14 @@
 import React from 'react';
 import {Outlet} from 'react-router-dom';
+import Greetings from '../components/common/Greetings';
 
 const Layout = () => {
     return (
         <div>
-            <div>
-            헤더 넣을꺼
-            </div>
+        <Greetings/>
             <div>
                 <Outlet></Outlet>
             </div>
-            
         </div>
     );
 };
