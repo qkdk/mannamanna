@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Logo from './Logo';
-import Profile from './Profile';
+import Logo from '../common/Logo';
+import Profile from '../common/Profile';
 
 import IconButton from '@mui/material/IconButton';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -10,8 +10,8 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 const HeaderBack = styled.div`
     width: 100%;
     height: 10vh;
-    background : #ffcced;
-    opacity:0.35;
+    background-color :rgba(255, 204, 237, 0.35) ;
+    // opacity:0.35;
     display: flex;
     justify-content: space-between;
     align-items: center;

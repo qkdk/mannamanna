@@ -6,6 +6,8 @@ const ProFile = styled.div`
     background : black;
     border-radius: 50%;
     opacity: 1;
+    // border: 1px solid red;
+    margin: 2vh;
 `;
 
 function Profile(){
