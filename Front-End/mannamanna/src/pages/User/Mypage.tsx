@@ -38,7 +38,7 @@ const MyPageButton = ({ children }: MyPageButtonProps) => {
             <Hello style={{width:'30%',height:'80%'}}>
                 <Profile/>
                 <br/>
-                안녕
+                안녕 임시저장임시저장
                 <br/>
                 <Button variant="outlined">내 정보 수정</Button>
                 <br/>
