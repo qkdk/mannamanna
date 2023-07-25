@@ -1,11 +1,8 @@
 import styled from 'styled-components';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import React from 'react';
-import './App.css';
 
 
-function App() {
+function MacBookBox() {
   let MacBox = styled.div`
  border: solid 7px black;
   width: 700px;
@@ -79,4 +76,4 @@ const MacBtn = styled.div<MacBtnProps>`
   );
 }
 
-export default App;
+export default MacBookBox;
