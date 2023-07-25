@@ -7,7 +7,7 @@ import Register from './pages/User/Register';
 import ResetPassword from './pages/User/ResetPassword';
 import MainHome from './pages/MainHome'; 
 import Choice from './pages/Choice';
-import Schedule from './pages/User/Schedule';
+import Schedule from './pages/User/Schedule/Schedule';
 import Mypage from './pages/User/Mypage';
 import Chatting from './pages/Chatting';
 import SoagetingMain from './pages/Sogaeting/SoagetingMain';
