@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
-import Landing from './pages/Landing';
-import Login from './pages/User/Login';
+import Landing from './pages/Landing/Landing';
+import Login from './pages/User/Login/Login';
 import Register from './pages/User/Register';
 import ResetPassword from './pages/User/ResetPassword';
 import MainHome from './pages/MainHome'; 
