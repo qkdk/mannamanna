@@ -1,9 +1,11 @@
 import React from 'react';
+import LoginInputBox from '../components/common/LoginBox'
+import MacBookBox from '../components/common/MacbookBox';
 
 const LandingPage = () => {
     return (
         <div>
-            처음에 나오는 페이지
+            우리 지금만나~당장만나~
         </div>
     );
 };

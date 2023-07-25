@@ -1,9 +1,6 @@
 import styled from 'styled-components';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import React from 'react';
-// import backgroundImage from 'C:\Users\SSAFY\Desktop\css_Component\css_component\background.jpg';
-import './App.css';
 
 let LoginBox = styled.form`
 border : solid white 4px; 
@@ -47,7 +44,7 @@ width: 400px
 height: 200px
 ` 
 
-function App() {
+function LoginInputBox() {
   return (
     <div className="App" >
   <LoginBox>
@@ -100,4 +97,4 @@ function App() {
   );
 }
 
-export default App;
+export default LoginInputBox;
