@@ -2,22 +2,16 @@ package com.ssafy.manna.domain.member.domain;
 
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.OnDelete;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -31,7 +25,7 @@ public class MemberDetail extends BaseTimeEntity {
     @Id
     private Member member;
 
-    private Long addressMemberId;       //멤버주소 아이디
+    private Long addressMemberId;       //멤버주소 아이디 - 추후 address_member table이랑 매핑
     private String tel;                 //전화번호
     private String birth;               //생년월일
     private String emailId;             //이메일 아이디
