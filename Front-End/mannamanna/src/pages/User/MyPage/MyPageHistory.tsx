@@ -1,28 +1,11 @@
 import React from 'react';
 import styled from 'styled-components'
 import {MileageBox, LeftStyle, RightStyle} from './MyPageStyle';
-
-let Hello = styled.div`
- border: solid 7px black;
-  border-radius:20px;
-  display: flex;
-  flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-  &::-webkit-scrollbar {
-    width: 0.5vw;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 3px;
-    background: #d9cff4;
-  }
-` 
-  
-
+import MacBookBox from '../../../components/common/macbookBox';
 
 function MyPageHistory() {
     return (
-        <Hello style={{width:'50%',height:'80%',overflow: 'auto'}}>
+        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='none'>
             <SogeList/>
             <MeetList/>
             <SogeList/>
@@ -45,7 +28,7 @@ function MyPageHistory() {
             <MeetList/>
             <SogeList/>
             <MeetList/>
-        </Hello>
+        </MacBookBox>
     );
  };
 

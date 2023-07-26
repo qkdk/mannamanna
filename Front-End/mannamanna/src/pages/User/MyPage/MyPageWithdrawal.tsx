@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
+import MacBookBox from '../../../components/common/macbookBox';
 
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -10,17 +11,8 @@ import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 
-let Hello = styled.div`
- border: solid 7px black;
-  border-radius:40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  ` 
   const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -51,7 +43,7 @@ function MyPageWithdrawal() {
     const handleClose = () => setOpen(false);
 
     return (
-        <Hello style={{width:'50%',height:'80%',overflow: 'auto'}}>
+        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='center'>
             <div  style={{display:'flex', justifyContent:'center', alignItems:'center' }}>
                 Password : 
 
@@ -100,7 +92,7 @@ function MyPageWithdrawal() {
             </div>
 
 
-        </Hello>
+        </MacBookBox>
     );
  };
   

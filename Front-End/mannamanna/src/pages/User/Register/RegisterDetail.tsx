@@ -5,7 +5,7 @@ import RadiusContainerBox from '../../../components/common/RadiusContainer';
 import signup from '../../../asset/image/signup.png';
 import Logo from '../../../components/common/Logo';
 import { ImageBox, SmallInputBox } from './RegisterStyle';
-import MacBookBox from '../../../components/common/macbookBox';
+import MacbookBox from '../../../components/common/macbookBox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Switch , SwitchProps } from '@mui/material';
 import OutboxIcon from '@mui/icons-material/Outbox';
@@ -36,7 +36,7 @@ const RegisterDetail = () => {
             alt="Signup"
             style={{ maxWidth: '80vh', maxHeight: '100vh' }}
           ></img>
-          <MacBookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff">
+          <MacbookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff" alignItems='center'>
             <CenterBox style={{ flexDirection: 'column' }}>
                 <ImageBox>
                 <Avatar src="/broken-image.jpg" />
@@ -91,7 +91,7 @@ const RegisterDetail = () => {
               </SmallInputBox>
               <StyledButton>완료</StyledButton>
             </CenterBox>
-          </MacBookBox>
+          </MacbookBox>
         </RadiusContainerBox>
       </CenterBox>
     </div>
