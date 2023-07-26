@@ -4,16 +4,8 @@ import Profile from '../../../components/common/Profile';
 import Button from '@mui/material/Button';
 import { Outlet } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import MacBookBox from '../../../components/common/macbookBox';
 
-let Hello = styled.div`
- border: solid 7px black;
-  border-radius:40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  ` 
 type MyPageButtonProps = {
     children: string;
     onClick: ()=>void;
@@ -59,8 +51,7 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
     
     return (
         <div style={{width:'100%',height:'90vh' ,display:'flex', justifyContent: 'space-around', alignItems: 'center'}}>
-        
-            <Hello style={{width:'30%',height:'80%'}}>
+            <MacBookBox width="30%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='center'>
                 <Profile/>
                 <br/>
                 이름이름이름
@@ -69,14 +60,10 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
                 <MyPageButton onClick={GoHistory} >소개팅 미팅 내역</MyPageButton>
                 <MyPageButton onClick={GoWithdrawal} >회원탈퇴</MyPageButton>
                 마일리지 : 10000
-            </Hello>
-            
+            </MacBookBox>
             <Outlet></Outlet>
-            
         </div>
     );
  };
-
-
  
  export default Mypage;

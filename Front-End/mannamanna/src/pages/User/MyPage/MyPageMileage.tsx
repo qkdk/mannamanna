@@ -1,27 +1,18 @@
 import React from 'react';
 import styled from 'styled-components'
 import {MileageBox, LeftStyle, RightStyle} from './MyPageStyle';
-
-let Hello = styled.div`
- border: solid 7px black;
-  border-radius:20px;
-  display: flex;
-  flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-  ` 
-
+import MacBookBox from '../../../components/common/macbookBox';
 
 function MyPageMiileage() {
     return (
-        <Hello style={{width:'50%',height:'80%',overflow: 'auto'}}>
+        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='none'>
             <UseMileage/>
             <GetMileage/>
             <UseMileage/>
             <GetMileage/>
             <UseMileage/>
             <GetMileage/>
-        </Hello>
+        </MacBookBox>
     );
  };
 

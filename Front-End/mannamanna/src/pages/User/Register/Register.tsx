@@ -21,7 +21,7 @@ const Register = () => {
             <GoBackIcon></GoBackIcon>
             <RadiusContainerBox>
             <img src={signup} alt="Signup" style={{ maxWidth: '80vh', maxHeight: '100vh' }}></img>
-            <MacBookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff">
+            <MacBookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff" alignItems='center'>
             <CenterBox style={{ flexDirection: 'column' }}>
             <SmallInputBox>
                 <div  style={{ width:'65%' }}>
