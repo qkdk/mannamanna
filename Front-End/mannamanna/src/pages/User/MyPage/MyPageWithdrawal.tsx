@@ -9,6 +9,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 
 let Hello = styled.div`
  border: solid 7px black;
@@ -18,17 +21,35 @@ let Hello = styled.div`
   justify-content: center;
   align-items: center;
   ` 
-  
-
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    height: 300,
+    bgcolor: 'background.paper',
+    border: '0.3vw solid #000',
+    borderRadius: 4,
+    p: 4,
+    display: 'flex',
+    justifyContent: 'center', 
+    alignItems: 'center',
+  };
 
 function MyPageWithdrawal() {
     const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-  };
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
+
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <Hello style={{width:'50%',height:'80%',overflow: 'auto'}}>
             <div  style={{display:'flex', justifyContent:'center', alignItems:'center' }}>
@@ -57,7 +78,28 @@ function MyPageWithdrawal() {
                 </FormControl>
 
             </div>
-                <Button variant="outlined">회원탈퇴</Button>
+            
+            <div>
+            <Button variant="outlined" onClick={handleOpen}>회원탈퇴</Button>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    정말 탈퇴하시겠습니까ㄴㄴㄴ?
+                    <div>
+                    <Button variant="outlined" color="warning">확인</Button>
+                    <Button variant="outlined" color="error">취소</Button>
+                    </div>
+                </Box>
+            </Modal>
+
+            </div>
+
+
         </Hello>
     );
  };
