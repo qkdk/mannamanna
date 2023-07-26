@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.OnDelete;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -46,5 +47,16 @@ public class MemberDetail extends BaseTimeEntity {
     private String introduction;        //자기소개
     private boolean isBlockingFriend;   //지인차단 여부
     private int mileage;                //현재마일리지
+
+    // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
+    public void updateHeight(int height){
+        this.height = height;
+    }
+
+    public void updateJob(String job){
+        this.job = job;
+    }
+
+    //주소 수정 추후 추가
 
 }
