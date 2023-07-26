@@ -1,7 +1,6 @@
-package com.ssafy.manna.domain.sogaeting.domain;
+package com.ssafy.manna.domain.member.domain;
 
-import com.ssafy.manna.domain.member.domain.Member;
-import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
+import com.ssafy.manna.global.common.domain.BaseCreateOnlyEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,18 +12,17 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Sogaeting extends BaseStartEndEntity {
+public class MileageHistory extends BaseCreateOnlyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member female;
+    private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member male;
+    private Integer cost;
 
-    private Boolean isSuccess;
+    private String list;
 
 }

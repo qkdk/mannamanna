@@ -1,15 +1,16 @@
-package com.ssafy.manna.domain.meeting.domain;
+package com.ssafy.manna.domain.member.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Meeting {
+public class ReserveAddress extends Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,12 +18,11 @@ public class Meeting {
 
     private String name;
 
-    private String host;
+    private Boolean isAdvertisement;
+    private Integer advertisementCost;
 
-    private String game;
-
-    private Boolean isOpenProfile;
-    private Integer level;
+    private LocalDateTime advertisementStartDate;
+    private LocalDateTime advertisementEndDate;
 
 
 }

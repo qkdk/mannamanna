@@ -1,5 +1,6 @@
 package com.ssafy.manna.domain.member.domain;
 
+import com.ssafy.manna.domain.member.Enums.UserRole;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +28,7 @@ public class Member extends BaseTimeEntity {
     private String name;    //사용자 이름
     private String gender;  //성별
     @Enumerated(EnumType.STRING)
-    private Role role;      //ROLE
+    private UserRole role;      //ROLE
 
     //회원 정보 매핑
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)

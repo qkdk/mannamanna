@@ -1,8 +1,10 @@
-package com.ssafy.manna.domain.sogaeting.domain;
+package com.ssafy.manna.domain.member.domain;
 
-import com.ssafy.manna.domain.member.domain.Member;
-import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
+import com.ssafy.manna.domain.member.Enums.AlarmCode;
+import com.ssafy.manna.global.common.domain.BaseCreateOnlyEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,18 +15,19 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Sogaeting extends BaseStartEndEntity {
+public class Alarm extends BaseCreateOnlyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member female;
+    private Member receiver;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member male;
+    private String content;
 
-    private Boolean isSuccess;
+    @Enumerated(EnumType.STRING)
+    private AlarmCode code;
+
 
 }

@@ -1,37 +1,35 @@
 package com.ssafy.manna.domain.mission.domain;
 
-import com.ssafy.manna.domain.sogaeting.domain.Sogaeting;
+import com.ssafy.manna.domain.mission.Enums.MissionCode;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Mission extends BaseStartEndEntity {
+public class MissionQuestion extends BaseStartEndEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    private Sogaeting sogaeting;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Mission mission;
 
-    private Boolean isSuccess;
+    private Integer no;
+    private Boolean maleIsDone;
+    private Boolean femaleIsDone;
 
-    private Boolean isDone;
+    @Enumerated(EnumType.STRING)
+    private MissionCode code;
 
-    private String maleId;
 
-    private String femaleId;
-
-    private String maleImagePath;
-    private String maleImageMame;
-    private String femaleImagePath;
-    private String femaleImageName;
 }

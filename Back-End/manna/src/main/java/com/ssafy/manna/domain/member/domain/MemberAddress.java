@@ -1,4 +1,4 @@
-package com.ssafy.manna.domain.meeting.domain;
+package com.ssafy.manna.domain.member.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,20 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Meeting {
+public class MemberAddress extends Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    private String name;
-
-    private String host;
-
-    private String game;
-
-    private Boolean isOpenProfile;
-    private Integer level;
-
 
 }

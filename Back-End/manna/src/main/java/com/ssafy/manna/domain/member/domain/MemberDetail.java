@@ -5,7 +5,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,12 +19,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberDetail extends BaseTimeEntity {
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="id")
     @Id
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Member member;
 
-    private Long addressMemberId;       //멤버주소 아이디 - 추후 address_member table이랑 매핑
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private MemberAddress memberAddress;
+
     private String tel;                 //전화번호
     private String birth;               //생년월일
     private String emailId;             //이메일 아이디
@@ -43,11 +43,11 @@ public class MemberDetail extends BaseTimeEntity {
     private int mileage;                //현재마일리지
 
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
-    public void updateHeight(int height){
+    public void updateHeight(int height) {
         this.height = height;
     }
 
-    public void updateJob(String job){
+    public void updateJob(String job) {
         this.job = job;
     }
 

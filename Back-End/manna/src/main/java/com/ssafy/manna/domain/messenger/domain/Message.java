@@ -1,30 +1,33 @@
-package com.ssafy.manna.domain.sogaeting.domain;
+package com.ssafy.manna.domain.messenger.domain;
 
 import com.ssafy.manna.domain.member.domain.Member;
-import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Sogaeting extends BaseStartEndEntity {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member female;
+    private MessageRoom messageRoom;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member male;
+    private Member sender;
 
-    private Boolean isSuccess;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member receiver;
 
+    private String content;
+
+    private LocalDateTime dateTime;
+
+    private Boolean isRead;
 }
