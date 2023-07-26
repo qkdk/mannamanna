@@ -9,8 +9,6 @@ let Hello = styled.div`
   justify-content: center;
   align-items: center;
   ` 
-  
-
 
 function MyPageModify() {
     return (
