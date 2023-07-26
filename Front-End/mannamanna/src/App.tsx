@@ -3,8 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Landing from './pages/Landing/Landing';
 import Login from './pages/User/Login/Login';
-import Register from './pages/User/Register';
-import ResetPassword from './pages/User/ResetPassword';
+import Register from './pages/User/Register/Register';
+import ForgotId from './pages/User/ForgotIdPw/ForgotId';
+import ForgotPw from './pages/User/ForgotIdPw/ForgotPw';
 import MainHome from './pages/MainHome'; 
 import Choice from './pages/Choice';
 import Schedule from './pages/User/Schedule/Schedule';
@@ -36,8 +37,7 @@ function App() {
     {/* 초기오류수정 */}
       <Routes>
         <Route path="/*" element={<Layout/>}>
-        <Route path="home" element={<Landing/>} />
-        <Route path="main" element={<MainHome/>} />
+        <Route path="main" element={<MainHome/>} /> 
         <Route path="schedule" element={<Schedule/>} />
         <Route path="choice" element={<Choice/>}/>
         <Route path="sogaetingMain" element={<SoagetingMain />} />
@@ -55,8 +55,10 @@ function App() {
         <Route path="alram" element={<Alarm  />} />
         <Route index element={<Navigate to="home" replace />} />
         </Route>
+        <Route path="home" element={<Landing/>}/>
         <Route path="login" element={<Login/>}/>
-        <Route path="passwordReset" element={<ResetPassword/>} />
+        <Route path="ForgotId" element={<ForgotId/>} />
+        <Route path="ForgotPw" element={<ForgotPw/>} />
         <Route path="register" element={<Register/>} />
       </Routes>
     </>
