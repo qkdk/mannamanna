@@ -10,7 +10,7 @@ alignItems:center;
 
 const Content = styled.div`
   color: white; 
-  font-size: 70px; 
+  font-size: 13vh; 
   text-align: center;
 `;
 

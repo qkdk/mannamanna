@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import Logo from '../common/Logo';
 import Profile from '../common/Profile';
-
 import IconButton from '@mui/material/IconButton';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
