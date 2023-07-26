@@ -14,7 +14,7 @@ public interface MemberService {
     void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception;
 
     //정보 수정
-    void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception;
+//    void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception;
 
     //회원탈퇴
     void delete(String pwd, String id);

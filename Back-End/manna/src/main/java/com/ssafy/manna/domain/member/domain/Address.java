@@ -1,7 +1,8 @@
 package com.ssafy.manna.domain.member.domain;
 
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
-import jakarta.persistence.Column;
+import com.ssafy.manna.global.common.domain.Gugun;
+import com.ssafy.manna.global.common.domain.Sido;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -19,10 +19,10 @@ public class MemberServiceImpl implements MemberService{
 
     }
 
-    @Override
-    public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
-
-    }
+//    @Override
+//    public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
+//
+//    }
 
     @Override
     public void delete(String pwd, String id) {
