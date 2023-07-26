@@ -24,6 +24,7 @@ import Note from './pages/Note';
 import Alarm from './pages/Alarm';
 import GlobalFont from './Styles/GlobalFont';
 import GlobalStyle from './Styles/GlobalStyle';
+import RegisterDetail from './pages/User/Register/RegisterDetail';
 import MyPageModify from './pages/User/MyPage/MyPageModify';
 import MyPageMiileage from './pages/User/MyPage/MyPageMileage';
 import MyPageHistory from './pages/User/MyPage/MyPageHistory';
@@ -69,6 +70,7 @@ function App() {
         <Route path="ForgotId" element={<ForgotId/>} />
         <Route path="ForgotPw" element={<ForgotPw/>} />
         <Route path="register" element={<Register/>} />
+        <Route path="registerDetail" element={<RegisterDetail/>}/>
       </Routes>
     </>
   );
