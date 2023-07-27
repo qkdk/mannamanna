@@ -5,7 +5,7 @@ import MacBookBox from '../../../components/common/macbookBox';
 
 function MyPageHistory() {
     return (
-        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+        <MacBookBox width="60%" height="90%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
             <SogeList />
             <MeetList/>
             <SogeList/>

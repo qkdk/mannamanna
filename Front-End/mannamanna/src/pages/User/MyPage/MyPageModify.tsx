@@ -164,7 +164,7 @@ function MyPageModify() {
     };
 
     return (
-            <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+            <MacBookBox width="60%" height="90%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
                     기본정보
                     <div  style={{ display:'flex', justifyContent: 'center', alignItems: 'center'}}>
                         <ModifyBox>
