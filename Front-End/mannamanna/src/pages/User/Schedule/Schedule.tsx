@@ -1,7 +1,8 @@
 import React from 'react';
-import Container from '../../../components/common/Container';
 import BackBox  from '../../../components/common/Back';
 import Sidebar from '../../../components/layout/Sidebar/SidebarHome';
+import RadiusContainerBox from './../../../components/common/RadiusContainer';
+import { DateCalendar } from '@mui/x-date-pickers';
 
 const Schedule = () => {
     return (
@@ -12,7 +13,9 @@ const Schedule = () => {
             <Sidebar></Sidebar>
             </div>
             <div style={{ height:'80vh'}}>
-            <Container></Container>
+            <RadiusContainerBox>
+            <DateCalendar showDaysOutsideCurrentMonth fixedWeekNumber={6} />
+            </RadiusContainerBox>
             </div>
             <div></div>
         </BackBox>

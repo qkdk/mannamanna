@@ -6,13 +6,13 @@ type SidebarProps = {
  }
 
 const Sidecom = styled.button`
-    width: 150px;
-    height: 50px;
+    width: 15vh;
+    height: 5.5 vh;
     opacity: 1;
     border-style: solid;
     border-color: #000000;
     border-radius: 10px;
-    border-width: 3px;
+    border-width: 0.3vh;
     justify-content: center;
     align-items: center;
 `;

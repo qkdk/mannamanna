@@ -19,7 +19,7 @@ const GoLogin = () => {
             새로운 인연의 시작<br/>
             맞나?만나!
             </Content>
-            <img src={start} alt="Start" style={{ maxWidth: '80vh', maxHeight: '100vh' }} onClick={GoLogin}></img>
+            <img src={start} alt="Start" style={{marginTop:'10vh', maxWidth: '80vh', maxHeight: '100vh' }} onClick={GoLogin}></img>
         </CenteredDiv>
         </div>
     );

@@ -11,6 +11,9 @@ const Main = () => {
     const GoChoice = () => {
       navigate('/choice');
     };
+    const GoSchedule = () => {
+        navigate('/schedule');
+      };
     return (
         <div>
             <div style={{height:'5vh' }}></div>
@@ -20,6 +23,9 @@ const Main = () => {
             </div>
             <div style={{ height:'80vh'}}>
            <RadiusContainerBox>
+           <StyledButton onClick={GoSchedule}>
+                스케줄 보러가즈아
+            </StyledButton>
             <StyledButton onClick={GoChoice}>
                 인연찾으러가즈아
             </StyledButton>

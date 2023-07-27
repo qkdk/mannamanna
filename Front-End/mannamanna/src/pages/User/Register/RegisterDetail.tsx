@@ -7,9 +7,11 @@ import Logo from '../../../components/common/Logo';
 import { ImageBox, SmallInputBox } from './RegisterStyle';
 import MacbookBox from '../../../components/common/macbookBox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { Avatar, Switch , SwitchProps } from '@mui/material';
+import { Avatar } from '@mui/material';
 import OutboxIcon from '@mui/icons-material/Outbox';
 import { useNavigate } from 'react-router-dom';
+import SmokeCheck from './SmokeCheck';
+import DrinkCheck from './DrinkCheck';
 
 const RegisterDetail = () => {
   const navigate = useNavigate();
@@ -17,18 +19,6 @@ const RegisterDetail = () => {
   const GoMain = () => {
       navigate('/main');
     }
-  const SwitchMemo: React.FC<SwitchProps> = React.memo(Switch);
-  const [smokingChecked, setSmokingChecked] = useState(false);
-  const [drinkingChecked, setDrinkingChecked] = useState(false);
-
-  const handleSmokingClick = () => {
-    setSmokingChecked(!smokingChecked);
-  };
-
-  const handleDrinkingClick = () => {
-    setDrinkingChecked(!drinkingChecked);
-  };
-
   return (
     <div>
       <div style={{ height: '5vh', alignItems: 'center' }}>
@@ -62,22 +52,13 @@ const RegisterDetail = () => {
                 <div>
                   <p>흡연을 하시나요?</p>
                 </div>
-                {/* SwitchMemo로 감싸서 최적화 */}
-                <SwitchMemo
-                  checked={smokingChecked}
-                  onClick={handleSmokingClick}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
+              <SmokeCheck></SmokeCheck>
               </SmallInputBox>
               <SmallInputBox>
                 <div>
                   <p>음주를 하시나요?</p>
                 </div>
-                <SwitchMemo
-                  checked={drinkingChecked}
-                  onClick={handleDrinkingClick}
-                  inputProps={{ 'aria-label': 'controlled' }}
-                />
+            <DrinkCheck></DrinkCheck>
               </SmallInputBox>
               <SmallInputBox>
                 <div>
