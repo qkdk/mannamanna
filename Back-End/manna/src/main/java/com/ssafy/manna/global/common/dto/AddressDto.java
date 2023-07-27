@@ -1,8 +1,10 @@
 package com.ssafy.manna.global.common.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class AddressDto {
 
     //시도 id

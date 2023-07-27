@@ -1,5 +1,6 @@
 package com.ssafy.manna.member.domain;
 
+import com.querydsl.core.annotations.QueryEntity;
 import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@QueryEntity
 public class Member extends BaseTimeEntity {
 
     @Id

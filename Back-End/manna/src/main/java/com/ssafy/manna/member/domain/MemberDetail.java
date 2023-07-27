@@ -1,5 +1,6 @@
 package com.ssafy.manna.member.domain;
 
+import com.querydsl.core.annotations.QueryEntity;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@QueryEntity
 public class MemberDetail extends BaseTimeEntity {
 
     @Id

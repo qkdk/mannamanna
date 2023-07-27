@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class MemberInfoResponse {
+    //마이페이지 - 조회 Response
 
 //    이름
     private String name;

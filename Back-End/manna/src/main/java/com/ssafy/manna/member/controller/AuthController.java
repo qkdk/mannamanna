@@ -43,12 +43,13 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-        return new ResponseEntity<>(
-                ResponseTemplate.<MemberLoginResponse>builder()
-                        .result(true)
-                        .msg("로그인에 성공헸습니다")
-                        .data(new MemberLoginResponse(jwt, auth, loginDto.getId()))
-                        .build()
-                , httpHeaders, HttpStatus.OK);
+//        return new ResponseEntity<>(
+//                ResponseTemplate.<MemberLoginResponse>builder()
+//                        .result(true)
+//                        .msg("로그인에 성공헸습니다")
+//                        .data(new MemberLoginResponse(jwt, auth, loginDto.getId()))
+//                        .build()
+//                , httpHeaders, HttpStatus.OK);
+        return null;
     }
 }
