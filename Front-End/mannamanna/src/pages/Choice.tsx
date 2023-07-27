@@ -1,10 +1,15 @@
 import React from 'react';
+import RadiusContainerBox from '../components/common/RadiusContainer';
+import { CenterBox } from './User/Login/LoginStyle';
 
 const Choice = () => {
     return (
-        <div>
-            소개팅 미팅 중 선택
-        </div>
+        <CenterBox style={{flexDirection:'column'}}>
+ <RadiusContainerBox>
+    
+</RadiusContainerBox> 
+        </CenterBox>
+
     );
 };
 

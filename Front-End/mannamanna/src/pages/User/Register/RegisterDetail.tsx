@@ -9,8 +9,14 @@ import MacbookBox from '../../../components/common/macbookBox';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Avatar, Switch , SwitchProps } from '@mui/material';
 import OutboxIcon from '@mui/icons-material/Outbox';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterDetail = () => {
+  const navigate = useNavigate();
+
+  const GoMain = () => {
+      navigate('/main');
+    }
   const SwitchMemo: React.FC<SwitchProps> = React.memo(Switch);
   const [smokingChecked, setSmokingChecked] = useState(false);
   const [drinkingChecked, setDrinkingChecked] = useState(false);
@@ -25,18 +31,14 @@ const RegisterDetail = () => {
 
   return (
     <div>
-      <div style={{ height: '10vh', alignItems: 'center' }}>
+      <div style={{ height: '5vh', alignItems: 'center' }}>
         <Logo />
       </div>
       <CenterBox>
         <GoBackIcon></GoBackIcon>
-        <RadiusContainerBox>
-          <img
-            src={signup}
-            alt="Signup"
-            style={{ maxWidth: '80vh', maxHeight: '100vh' }}
-          ></img>
-          <MacbookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff" alignItems='center'>
+      <CenterBox style={{ flexDirection: 'column' }}>
+        <img src={signup} alt="Signup" style={{ maxWidth: '80vh', maxHeight: '100vh' }}></img>
+          <MacbookBox width="120vh" height="60vh" color1="#bcd3ff" color2="#FFFFFF" alignItems='center' >
             <CenterBox style={{ flexDirection: 'column' }}>
                 <ImageBox>
                 <Avatar src="/broken-image.jpg" />
@@ -89,11 +91,10 @@ const RegisterDetail = () => {
                 </div>
                 <KeyboardArrowDownIcon fontSize="large" />
               </SmallInputBox>
-              <StyledButton>완료</StyledButton>
+              <StyledButton onClick={GoMain}>완료</StyledButton>
             </CenterBox>
           </MacbookBox>
-        </RadiusContainerBox>
-      </CenterBox>
+      </CenterBox></CenterBox>
     </div>
   );
 };

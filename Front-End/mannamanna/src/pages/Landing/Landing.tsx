@@ -1,9 +1,8 @@
 import React from 'react';
-import ColorButton from '../../components/common/ColorButton';
 import { useNavigate } from 'react-router-dom';
 import { CenteredDiv, Content } from './LandingStyle';
 import Logo from '../../components/common/Logo';
-
+import start from '../../asset/image/start.png';
 
 const LandingPage = () => {
     const navigate = useNavigate();
@@ -20,9 +19,7 @@ const GoLogin = () => {
             새로운 인연의 시작<br/>
             맞나?만나!
             </Content>
-            <ColorButton onClick={GoLogin}> 
-            시작하기
-            </ColorButton>
+            <img src={start} alt="Start" style={{ maxWidth: '80vh', maxHeight: '100vh' }} onClick={GoLogin}></img>
         </CenteredDiv>
         </div>
     );
