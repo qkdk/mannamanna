@@ -1,12 +1,15 @@
 package com.ssafy.manna.member.controller;
 
 
+import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.dto.request.MemberLoginRequest;
 import com.ssafy.manna.global.util.SecurityUtil;
 import com.ssafy.manna.global.util.jwt.JwtFilter;
 import com.ssafy.manna.global.util.jwt.TokenProvider;
+import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -40,14 +43,12 @@ public class AuthController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
-//        return new ResponseEntity<>(
-//                ResponseTemplate.<LoginResponseDto>builder()
-//                        .result(true)
-//                        .msg("로그인에 성공헸습니다")
-//                        .data(new LoginResponseDto(jwt, auth, loginDto.getUserId()))
-//                        .build()
-//                , httpHeaders, HttpStatus.OK);
-
-        return null;
+        return new ResponseEntity<>(
+                ResponseTemplate.<MemberLoginResponse>builder()
+                        .result(true)
+                        .msg("로그인에 성공헸습니다")
+                        .data(new MemberLoginResponse(jwt, auth, loginDto.getId()))
+                        .build()
+                , httpHeaders, HttpStatus.OK);
     }
 }
