@@ -23,7 +23,10 @@ public interface MemberService {
     Optional<Member> findOne(String insertedUserId);
 
     //Id로 회원 찾기
-    
 
 //    void signUp(String id, String pwd);
+
+
+    //converToDto
+    MemberInfoResponse convertToDto(Member member);
 }

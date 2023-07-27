@@ -1,5 +1,9 @@
 package com.ssafy.manna.member.dto.request;
 
-public class MemberFindIdRequest {
+import lombok.Data;
 
+@Data
+public class MemberFindIdRequest {
+    private String emailId;
+    private String emailDomain;
 }
