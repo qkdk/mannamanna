@@ -3,6 +3,7 @@ package com.ssafy.manna.domain.member.controller;
 import com.ssafy.manna.domain.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,8 +17,13 @@ public class MemberController {
 
     //회원가입
     @PostMapping("/user/regist")
-    public void regist( @RequestBody MemberSignUpRequest memberRequest) throws Exception{
-
+    public ResponseEntity<String> join(@RequestBody MemberSignUpRequest dto) {
+        try {
+            memberService.signUp(dto);
+            return ResponseEntity.ok("join success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //로그인

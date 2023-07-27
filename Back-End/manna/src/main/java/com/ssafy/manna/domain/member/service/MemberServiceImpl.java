@@ -2,8 +2,10 @@ package com.ssafy.manna.domain.member.service;
 
 import com.ssafy.manna.domain.member.domain.Member;
 import com.ssafy.manna.domain.member.dto.request.MemberSignUpRequest;
+import com.ssafy.manna.domain.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.domain.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.domain.member.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,11 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
+
+    }
+
+    @Override
+    public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
 
     }
 
@@ -32,5 +39,10 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public MemberInfoResponse getInfo(String id) throws Exception {
         return null;
+    }
+
+    @Override
+    public Optional<Member> findOne(String insertedUserId) {
+        return memberRepository.findById(insertedUserId);
     }
 }
