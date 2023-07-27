@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.common.domain;
+package com.ssafy.manna.meeting.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,11 +9,20 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Sido {
+public class Meeting {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String name;
+
+    private String host;
+
+    private String game;
+
+    private Boolean isOpenProfile;
+    private Integer level;
+
 
 }

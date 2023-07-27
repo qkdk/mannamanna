@@ -1,5 +1,6 @@
-package com.ssafy.manna.global.common.domain;
+package com.ssafy.manna.member.domain;
 
+import com.ssafy.manna.global.common.domain.Address;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,11 +10,10 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Sido {
+public class MemberAddress extends Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
 
 }
