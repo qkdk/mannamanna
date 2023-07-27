@@ -79,8 +79,8 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
 
   const MacBtn = styled.div<MacBtnProps>`
     background: ${props => props.bg};
-    width: 3vh;
-    height: 3vh;
+    width: 2.5vh;
+    height: 2.5vh;
     border-radius: 50%;
   `;
 
