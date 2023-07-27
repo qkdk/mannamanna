@@ -71,7 +71,7 @@ function MyPageWithdrawal() {
     const handleClose = () => setOpen(false);
 
     return (
-        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+        <MacBookBox width="60%" height="90%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
             <div style={{ width:'100%',height:'100%' ,flexDirection:'column' ,display:'flex', justifyContent: 'space-around', alignItems: 'center'}}>
                 <div  style={{display:'flex', justifyContent:'center', alignItems:'center' }}>
                     Password : 
