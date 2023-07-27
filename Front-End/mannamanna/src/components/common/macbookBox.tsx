@@ -38,18 +38,19 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
     width: 100%;
     height: 92%;
     background-color: ${color2};
+    background-color: rgba(${parseInt(color2.slice(1, 3), 16)}, ${parseInt(color2.slice(3, 5), 16)}, ${parseInt(color2.slice(5, 7), 16)}, 0.5); 
     overflow: auto;
-    display: flex; 
     flex-direction: column; 
     justify-content: center; 
     align-items: ${alignItems};
     font-size: 3vh;
+    // border: 1px solid red;
     &::-webkit-scrollbar {
       width: 0.5vw;
     }
     &::-webkit-scrollbar-thumb {
       border-radius: 0.5vh;
-      background: #d9cff4;
+      background: rgba(${parseInt(color2.slice(1, 3), 16)}, ${parseInt(color2.slice(3, 5), 16)}, ${parseInt(color2.slice(5, 7), 16)}, 0.7); 
     }
   `;
 
@@ -77,8 +78,8 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
 
   const MacBtn = styled.div<MacBtnProps>`
     background: ${props => props.bg};
-    width: 3vh;
-    height: 3vh;
+    width: 2.5vh;
+    height: 2.5vh;
     border-radius: 50%;
   `;
 

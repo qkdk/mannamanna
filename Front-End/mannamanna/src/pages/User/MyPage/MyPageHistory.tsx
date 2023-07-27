@@ -5,7 +5,49 @@ import MacBookBox from '../../../components/common/macbookBox';
 
 function MyPageHistory() {
     return (
-        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='none'>
+        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+            <SogeList />
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
+            <SogeList/>
+            <MeetList/>
             <SogeList/>
             <MeetList/>
             <SogeList/>
@@ -46,5 +88,7 @@ function MeetList(){
         </RightStyle>
     );
 }
+
+
 
  export default MyPageHistory;

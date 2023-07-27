@@ -6,6 +6,7 @@ import SidebarChat from '../components/layout/Sidebar/SidebarChat';
 const Chatting = () => {
     return (
         <div>
+            채팅채팅
             <div style={{height:'5vh' }}></div>
         <BackBox>
             <div style={{ height:'80vh' }}>

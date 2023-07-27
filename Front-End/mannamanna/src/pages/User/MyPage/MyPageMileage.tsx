@@ -5,7 +5,7 @@ import MacBookBox from '../../../components/common/macbookBox';
 
 function MyPageMiileage() {
     return (
-        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='none'>
+        <MacBookBox width="50%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
             <UseMileage/>
             <GetMileage/>
             <UseMileage/>
