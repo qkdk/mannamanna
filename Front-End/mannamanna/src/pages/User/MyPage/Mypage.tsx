@@ -23,7 +23,7 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
             borderRadius: 3,
             color:'common.black',
             borderColor: "ffcced",
-            fontSize: '3vh',
+            fontSize: '2.5vh',
             '&:hover': { backgroundColor: '#f8e3ea' },
         }}
         variant="contained"
@@ -33,33 +33,36 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
 }
 
  const Mypage = () => {
+    
+     const navigate = useNavigate();
+ 
+     const GoModify = () => {
+         navigate('/mypage/modify');
+     }
+     const GoMileage = () => {
+         navigate('/mypage/mileage');
+     }
+     const GoHistory = () => {
+         navigate('/mypage/history');
+     }
+     const GoWithdrawal = () => {
+         navigate('/mypage/withdrawal');
+     }
 
-    const navigate = useNavigate();
-
-    const GoModify = () => {
-        navigate('/mypage/modify');
-    }
-    const GoMileage = () => {
-        navigate('/mypage/mileage');
-    }
-    const GoHistory = () => {
-        navigate('/mypage/history');
-    }
-    const GoWithdrawal = () => {
-        navigate('/mypage/withdrawal');
-    }
     
     return (
         <div style={{width:'100%',height:'90vh' ,display:'flex', justifyContent: 'space-around', alignItems: 'center'}}>
-            <MacBookBox width="30%" height="80%" color1="#bcd3ff" color2="ffffff" alignItems='center'>
-                <Profile/>
-                <br/>
-                이름이름이름
-                <MyPageButton onClick={GoModify} >내 정보 수정</MyPageButton>
-                <MyPageButton onClick={GoMileage} >마일리지</MyPageButton>
-                <MyPageButton onClick={GoHistory} >소개팅 미팅 내역</MyPageButton>
-                <MyPageButton onClick={GoWithdrawal} >회원탈퇴</MyPageButton>
-                마일리지 : 10000
+            <MacBookBox width="30%" height="80%" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+                <div style={{ width:'100%',height:'100%' ,flexDirection:'column' ,display:'flex', justifyContent: 'space-around', alignItems: 'center'}}>
+                    <Profile/>
+                    <br/>
+                    이름이름이름
+                    <MyPageButton onClick={GoModify} >내 정보 수정</MyPageButton>
+                    <MyPageButton onClick={GoMileage} >마일리지</MyPageButton>
+                    <MyPageButton onClick={GoHistory} >소개팅/미팅 내역</MyPageButton>
+                    <MyPageButton onClick={GoWithdrawal} >회원탈퇴</MyPageButton>
+                    마일리지 : 10000
+                </div>
             </MacBookBox>
             <Outlet></Outlet>
         </div>
