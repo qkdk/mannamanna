@@ -14,7 +14,7 @@ import {
   Online,
   DetailProfile,
   DetailText,
-} from "./SogaetinStyle";
+} from "./SoagaetinStyle";
 // import Button from '@mui/material/Button';
 
 const SoagetingFilter = () => {

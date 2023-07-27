@@ -1,7 +1,6 @@
 import React from 'react';
 import { CenterBox, StyledButton } from '../Login/LoginStyle';
 import GoBackIcon from '../../../components/common/GoBackIcon';
-import RadiusContainerBox from '../../../components/common/RadiusContainer';
 import signup from '../../../asset/image/signup.png';
 import Logo from '../../../components/common/Logo';
 import { SmallInput, SmallInputBox } from './RegisterStyle';
@@ -16,13 +15,13 @@ const Register = () => {
       }
     return (
         <div>
-        <div style={{height:'10vh', alignItems:'center'}}><Logo/></div>
+        <div style={{height:'5vh', alignItems:'center'}}><Logo/></div>
         <CenterBox>
             <GoBackIcon></GoBackIcon>
-            <RadiusContainerBox>
+        <CenterBox style={{ flexDirection: 'column' }}>
             <img src={signup} alt="Signup" style={{ maxWidth: '80vh', maxHeight: '100vh' }}></img>
-            <MacBookBox width="120vh" height="60vh" color1="#bcd3ff" color2="ffffff" alignItems='center'>
-            <CenterBox style={{ flexDirection: 'column' }}>
+            <MacBookBox width="120vh" height="60vh" color1="#bcd3ff" color2="#ffffff" alignItems='center'>
+            <CenterBox style={{ flexDirection: 'column', overflow:'auto'}}>
             <SmallInputBox>
                 <div  style={{ width:'65%' }}>
                 <p>카카오톡 연동이 필요합니다.</p>
@@ -84,7 +83,7 @@ const Register = () => {
             </StyledButton>
             </CenterBox>
             </MacBookBox>
-            </RadiusContainerBox>
+        </CenterBox>
         </CenterBox>
         </div>
     );
