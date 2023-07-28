@@ -7,7 +7,7 @@ type SidebarProps = {
 
 const Sidecom = styled.button`
     width: 15vh;
-    height: 5.5 vh;
+    height: 8vh;
     opacity: 1;
     border-style: solid;
     border-color: #000000;

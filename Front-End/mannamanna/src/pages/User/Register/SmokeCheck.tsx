@@ -3,7 +3,7 @@ import { Switch } from '@mui/material';
 import { styled } from 'styled-components';
 const SmokeCheck = () => {
 
-  const CustomSwitch = styled(Switch)(({ theme }) => ({
+  const CustomSwitch = styled(Switch)(({  }) => ({
   }));
 
     const [smokingChecked, setSmokingChecked] = useState(false);
