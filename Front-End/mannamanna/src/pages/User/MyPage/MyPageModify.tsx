@@ -86,7 +86,7 @@ const CustomSwitch = styled(Switch)(({  }) => ({
       color: '#000000', // 라벨 색상을 초록색으로 지정
     },
   });
-  const CustomSelect = styled(Select)(({  }) => ({
+  const CustomSelect = styled(Select)(({}) => ({
     '& .MuiSelect-root': {
       minWidth: '200px', // 최소 너비를 200px로 지정
       backgroundColor: '#ffcced', // 배경색을 회색으로 지정
