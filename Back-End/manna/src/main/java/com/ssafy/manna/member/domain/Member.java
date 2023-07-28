@@ -42,8 +42,10 @@ public class Member extends BaseTimeEntity {
 
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
     //1. 비밀번호 수정
-    public void updatePassword(PasswordEncoder passwordEncoder,String pwd){
+    public void changePassword(PasswordEncoder passwordEncoder,String pwd){
         this.pwd = passwordEncoder.encode(pwd);
     }
+
+
 
 }

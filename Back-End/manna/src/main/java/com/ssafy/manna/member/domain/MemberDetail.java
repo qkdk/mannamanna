@@ -46,11 +46,32 @@ public class MemberDetail extends BaseTimeEntity {
     public void updateHeight(int height) {
         this.height = height;
     }
-
     public void updateJob(String job) {
         this.job = job;
     }
+    public void updateIsSmoker(boolean isSmoker){
+        this.isSmoker = isSmoker;
+    }
+    public void updateIsDrinker(boolean isDrinker){
+        this.isDrinker = isDrinker;
+    }
+    public void updateMbti(String mbti){
+        this.mbti = mbti;
+    }
+    public void updateReligion(String religion){
+        this.religion = religion;
+    }
+    public void updateIntroduction(String introduction){
+        this.introduction = introduction;
+    }
 
-    //주소 수정 추후 추가
+    public void updateIsBlockingFriend(boolean isBlockingFriend){
+        this.isBlockingFriend = isBlockingFriend;
+    }
+
+    public void updateMileage(int mileage){
+        this.mileage = mileage;
+    }
+
 
 }
