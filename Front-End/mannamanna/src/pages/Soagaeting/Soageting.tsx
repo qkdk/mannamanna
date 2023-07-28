@@ -1,6 +1,7 @@
 import React from 'react';
 import MacBookBox from '../../components/common/macbookBox';
 import unKnown from '../../asset/image/unknown.png';
+// rtc 하기
 const Soageting = () => {
     return (
         <div>
