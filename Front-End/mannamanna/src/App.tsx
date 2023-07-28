@@ -35,8 +35,6 @@ import MyPageWithdrawal from './pages/User/MyPage/MyPageWithdrawal';
 function App() {
   return (
     <>
-
-    
     <GlobalFont />
     <GlobalStyle />
     {/* 초기오류수정 */}
@@ -54,7 +52,7 @@ function App() {
         <Route path="meeting" element={<Meeting  />} />
         <Route path="reserve" element={<Reserve  />} /> 
         <Route path="mypage" element={<Mypage />}>
-          <Route path="modify" element={ <MyPageModify/> } />
+          <Route index element={<MyPageModify />} />
           <Route path="mileage" element={ <MyPageMiileage/> } />
           <Route path="history" element={ <MyPageHistory/> } />
           <Route path="withdrawal" element={ <MyPageWithdrawal/> } />

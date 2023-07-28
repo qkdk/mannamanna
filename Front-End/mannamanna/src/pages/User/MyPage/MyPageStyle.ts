@@ -13,6 +13,7 @@ export const MileageBox = styled.div`
     font-size: 1.3vw;
 
 `
+
 export const LeftStyle = styled.div`
     flex-direction: column;
     display: flex;

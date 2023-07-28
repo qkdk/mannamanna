@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components'
+// import React from 'react';
+// import styled from 'styled-components'
 import {MileageBox, LeftStyle, RightStyle} from './MyPageStyle';
 import MacBookBox from '../../../components/common/macbookBox';
 
@@ -14,7 +14,7 @@ function MyPageMiileage() {
             <GetMileage/>
         </MacBookBox>
     );
- };
+};
 
 function UseMileage(){
     return(
@@ -24,6 +24,7 @@ function UseMileage(){
         </LeftStyle>
     );
 }
+
 function GetMileage(){
     return(
         <RightStyle>
@@ -32,8 +33,5 @@ function GetMileage(){
         </RightStyle>
     );
 }
-
-
-
   
- export default MyPageMiileage;
+export default MyPageMiileage;
