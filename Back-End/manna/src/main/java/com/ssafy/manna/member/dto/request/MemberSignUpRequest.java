@@ -1,8 +1,13 @@
 package com.ssafy.manna.member.dto.request;
 
+import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.domain.MemberDetail;
+import com.ssafy.manna.member.domain.ProfilePicture;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class MemberSignUpRequest {
     private String id;
     private String pwd;
@@ -20,4 +25,6 @@ public class MemberSignUpRequest {
     private String religion;
     private String introduction;
     private boolean isBlockingFriend;
+
+
 }

@@ -1,9 +1,13 @@
 package com.ssafy.manna.member.controller;
 
 import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
+import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
+import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberLoginRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
+import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +55,7 @@ public class MemberController {
 
     //마이페이지 조회
     @GetMapping("/user/mypage/{id}")
-    public void myPage(@Validated  @PathVariable("id")){
+    public void myPage(@Validated  @PathVariable("id")String id){
 
     }
 
@@ -63,14 +67,19 @@ public class MemberController {
 
     //아이디 찾기
     @GetMapping("/user/findId")
-    public void findId(){
 
+    public ResponseEntity<MemberFindIdResponse> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
+        MemberFindIdResponse findIdDto = memberService.findId(memberFindIdRequest);
+        return null;
     }
 
     //비밀번호 찾기
     @GetMapping("/user/findPwd")
-    public void findPwd(){
+    public ResponseEntity<MemberFindPwdResponse> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
 
+//        MemberFindPwdResponse findPwdDto = memberService.findPwd()
+        return null;
     }
+
 
 }

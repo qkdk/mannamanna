@@ -27,7 +27,7 @@ public class Message {
 
     private String content;
 
-    private LocalDateTime date;
+    private LocalDateTime dateTime;
 
     private Boolean isRead;
 }

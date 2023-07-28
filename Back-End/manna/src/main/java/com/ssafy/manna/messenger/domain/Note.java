@@ -27,7 +27,7 @@ public class Note {
 
     private String subject;
 
-    private String content;
+    private String contennt;
 
     private LocalDateTime date;
 

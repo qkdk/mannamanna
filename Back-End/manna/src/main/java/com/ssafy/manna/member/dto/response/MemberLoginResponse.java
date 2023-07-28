@@ -7,9 +7,10 @@ import lombok.Data;
 @AllArgsConstructor
 public class MemberLoginResponse {
 
-    private String accessToken;
-    private String role;
-    private String id;
-
+    //로그인 Response
+    private String accessToken;     //token
+    private String gender;          //성별
+    private String id;              //id
+    private String name;            //이름
 
 }
