@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components'
+// import React from 'react';
+// import styled from 'styled-components'
 import {MileageBox, LeftStyle, RightStyle} from './MyPageStyle';
 import MacBookBox from '../../../components/common/macbookBox';
 
@@ -72,7 +72,7 @@ function MyPageHistory() {
             <MeetList/>
         </MacBookBox>
     );
- };
+};
 
 function SogeList(){
     return(
@@ -81,6 +81,7 @@ function SogeList(){
         </LeftStyle>
     );
 }
+
 function MeetList(){
     return(
         <RightStyle>
@@ -91,4 +92,4 @@ function MeetList(){
 
 
 
- export default MyPageHistory;
+export default MyPageHistory;

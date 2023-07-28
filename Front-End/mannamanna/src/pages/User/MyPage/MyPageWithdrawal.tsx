@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import MacBookBox from '../../../components/common/macbookBox';
 
 import Button from '@mui/material/Button';
@@ -40,8 +40,8 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
 }
 
 
-  const style = {
-    position: 'absolute' as 'absolute',
+const style = {
+    // position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -54,7 +54,7 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
     display: 'flex',
     justifyContent: 'center', 
     alignItems: 'center',
-  };
+};
 
 function MyPageWithdrawal() {
 
