@@ -7,9 +7,14 @@ import unKnown from '../../asset/image/unknown.png';
 import fullheart from '../../asset/image/fullheart.png'
 import emptyheart from '../../asset/image/emptyheart.png'
 import HeartAnimation from './../../components/animation/HeartAnimation';
-
+import { useNavigate } from 'react-router-dom';
 
 const SoagetingWait = () => {
+  const navigate = useNavigate();
+
+  const GoSogaetingMain = () => {
+    navigate('/sogaeting');
+  };
   return (
     <CenteredDiv style={{ justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ fontSize: '3vw', color: 'white', marginTop: '6vh' }}>
@@ -47,7 +52,7 @@ const SoagetingWait = () => {
         </SmallMacBookProfile>
       </CenterBox>
 
-      <StyledButton style={{ marginTop: '1vh', marginBottom: '5vh' }}>입장하기</StyledButton>
+      <StyledButton style={{ marginTop: '1vh', marginBottom: '5vh' }} onClick={GoSogaetingMain}>입장하기</StyledButton>
     </CenteredDiv>
   );
 };

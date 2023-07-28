@@ -11,7 +11,7 @@ export default function HeartAnimation() {
         transition={{
           duration: 0.8,
           delay: 0.3,
-          repeatDelay: 1,
+          repeatDelay: 2,
           repeat: Infinity,
           ease: [0, 0.71, 0.2, 1.01],
           while: { loop: true } // Set while to a truthy value to create a continuous loop
@@ -26,7 +26,7 @@ export default function HeartAnimation() {
         transition={{
           duration: 0.8,
           delay: 0.6,
-          repeatDelay: 1,
+          repeatDelay: 2,
           repeat: Infinity,
           ease: [0, 0.71, 0.2, 1.01],
           while: { loop: true } // Set while to a truthy value to create a continuous loop
@@ -41,7 +41,7 @@ export default function HeartAnimation() {
         transition={{
           duration: 0.8,
           delay: 0.9,
-          repeatDelay: 1,
+          repeatDelay: 2,
           repeat: Infinity,
           
           ease: [0, 0.71, 0.2, 1.01],
@@ -58,7 +58,7 @@ export default function HeartAnimation() {
           duration: 0.8,
           delay: 1.2,
           repeat: Infinity,
-          repeatDelay: 1,
+          repeatDelay: 2,
           ease: [0, 0.71, 0.2, 1.01],
           while: { loop: true } // Set while to a truthy value to create a continuous loop
         }}
