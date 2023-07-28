@@ -3,12 +3,13 @@ package com.ssafy.manna.member.controller;
 import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
-import com.ssafy.manna.member.dto.request.MemberLoginRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
+import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +32,7 @@ public class MemberController {
     @PostMapping("/user/regist")
     public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
         try {
+            System.out.println(memberSignUpRequest);
             // 회원가입 시 카카오 인증
             memberService.signUp(memberSignUpRequest);
             return ResponseEntity.ok("join success");
@@ -49,20 +51,39 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping("/user/delete")
-    public void delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
-        memberService.delete(memberDeleteRequest.getId(), memberDeleteRequest.getPwd());
+    public ResponseEntity<String> delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
+        try{
+            memberService.delete(memberDeleteRequest.getId(), memberDeleteRequest.getPwd());
+            return ResponseEntity.ok("delete success");
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //마이페이지 조회
     @GetMapping("/user/mypage/{id}")
-    public void myPage(@Validated  @PathVariable("id")String id){
-
+    public ResponseEntity<MemberInfoResponse> myPage(@Validated @PathVariable("id") String id){
+        try{
+            //id로 member 조회
+            MemberInfoResponse memberInfoResponse = memberService.getInfo(id);
+            return ResponseEntity.ok(memberInfoResponse);
+        }
+        catch (Exception e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     //마이페이지 정보수정
-    @PutMapping("/user/mypage")
-    public void myPageEdit(MemberUpdateRequest memberUpdateRequest){
-
+    @PutMapping("/user/mypage/{id}")
+    public ResponseEntity<String> myPageEdit(MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
+        try{
+            memberService.update(memberUpdateRequest,id);
+            return ResponseEntity.ok(" 수정 성공");
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     //아이디 찾기
@@ -77,7 +98,7 @@ public class MemberController {
     @GetMapping("/user/findPwd")
     public ResponseEntity<MemberFindPwdResponse> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
 
-//        MemberFindPwdResponse findPwdDto = memberService.findPwd()
+        MemberFindPwdResponse findPwdDto = memberService.findPwd(memberFindPwdRequest);
         return null;
     }
 

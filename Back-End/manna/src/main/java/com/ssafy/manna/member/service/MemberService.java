@@ -2,12 +2,15 @@ package com.ssafy.manna.member.service;
 
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
+import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
+import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import java.util.Optional;
+import org.springframework.stereotype.Service;
 
 
 public interface MemberService {
@@ -32,6 +35,8 @@ public interface MemberService {
 
     //ID찾기
     MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest);
+
+    MemberFindPwdResponse findPwd(MemberFindPwdRequest memberFindPwdRequest);
     //converToDto
     MemberInfoResponse convertToMemberInfoDto(Member member);
     MemberLoginResponse converToMemberLoginDto(Member member);

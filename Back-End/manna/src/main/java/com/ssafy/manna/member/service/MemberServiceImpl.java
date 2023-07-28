@@ -1,12 +1,16 @@
 package com.ssafy.manna.member.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.manna.global.common.dto.AddressDto;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberAddress;
+import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
+import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
+import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import com.ssafy.manna.member.repository.MemberRepository;
@@ -23,45 +27,21 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
-//        //id 중복 확인
-//        String id = memberSignUpRequest.getId();
-//        if(memberRepository.existsById(id)){
-//            //있으면
-//            throw new RuntimeException("이미 존재하는 id입니다.");
-//        }
 //
-//        //DTO를 entity로 변환
-//
-//        MemberAddress memberAddress = MemberAddress.builder();
-//        MemberDetail memberDetail = MemberDetail.builder()
-//                .birth()
-//                .height()
-//                .emailId()
-//                .emailDomain()
-//                .job()
-//                .isBlockingFriend()
-//                .memberAddress()
-//                .introduction()
-//                .isDrinker()
-//                .isSmoker()
-//                .mbti()
-//                .mileage()
-//                .religion()
-//                .tel()
-//                ;
-//
-//
-//        Member member = Member.builder()
-//                        .id(memberSignUpRequest.getId())
-//                                .pwd(memberSignUpRequest.getPwd())
-//                                        .name(memberSignUpRequest.getName())
-//
+
 //        memberRepository.save(member);
+
 //        memberRepository.save(memberSignUpRequest);
     }
 
     @Override
     public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
+
+        //해당 id를 가진 member를 찾아서 return
+        Member member = memberRepository.findById(id).orElseThrow(()->new RuntimeException("Member not found"));
+
+        MemberDetail memberDetail = member.getMemberDetail();
+
 
     }
 
@@ -93,6 +73,11 @@ public class MemberServiceImpl implements MemberService{
 
         return null;
 
+    }
+
+    @Override
+    public MemberFindPwdResponse findPwd(MemberFindPwdRequest memberFindPwdRequest) {
+        return null;
     }
 
     @Override
