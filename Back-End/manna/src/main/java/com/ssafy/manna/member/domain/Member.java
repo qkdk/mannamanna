@@ -1,7 +1,7 @@
 package com.ssafy.manna.member.domain;
 
-import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
+import com.ssafy.manna.member.Enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -41,11 +41,13 @@ public class Member extends BaseTimeEntity {
     private ProfilePicture profilePicture;
 
 
-
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
     //1. 비밀번호 수정
-    public void updatePassword(PasswordEncoder passwordEncoder,String pwd){
+    public void updatePassword(PasswordEncoder passwordEncoder, String pwd) {
         this.pwd = passwordEncoder.encode(pwd);
     }
 
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }
