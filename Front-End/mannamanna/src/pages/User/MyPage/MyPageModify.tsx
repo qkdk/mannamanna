@@ -55,7 +55,7 @@ const MyPageButton = ({ children, onClick }: MyPageButtonProps) => {
     )
 }
 
-const CustomSwitch = styled(Switch)(({ theme }) => ({
+const CustomSwitch = styled(Switch)(({  }) => ({
     '& .MuiSwitch-switchBase.Mui-checked': {
     color: '#d9cff4', // 스위치가 checked 상태일 때의 색상
     },
@@ -86,7 +86,7 @@ const CustomSwitch = styled(Switch)(({ theme }) => ({
       color: '#000000', // 라벨 색상을 초록색으로 지정
     },
   });
-  const CustomSelect = styled(Select)(({ theme }) => ({
+  const CustomSelect = styled(Select)(({  }) => ({
     '& .MuiSelect-root': {
       minWidth: '200px', // 최소 너비를 200px로 지정
       backgroundColor: '#ffcced', // 배경색을 회색으로 지정
