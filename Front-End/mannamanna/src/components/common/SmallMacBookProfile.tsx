@@ -1,16 +1,19 @@
 import styled from 'styled-components';
 import React, { ReactNode } from 'react';
 
-interface MacBookBoxProps {
+interface SmallMacBookProps {
   children: ReactNode;
   width: string;
   height: string;
   color1: string;
   color2: string;
   alignItems: string;
+  Username:string;
+  age:string;
+  address:string;
 }
 
-function MacBookBox({children, width, height, color1, color2, alignItems}: MacBookBoxProps) {
+function SmallMacBookProfile({children, width, height, color1, color2, alignItems,Username,age,address}: SmallMacBookProps) {
   let MacBox = styled.div`
     border: solid 7px black;
     width: ${width};
@@ -25,7 +28,7 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
   let UpBox = styled.div`
     border-bottom: solid 5px black;
     width: 100%;
-    height: 5%;
+    height: 10%;
     border-top-left-radius: 3vh;
     border-top-right-radius: 3vh;
     background-color: ${color1};
@@ -36,7 +39,7 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
 
   let MidBox = styled.div`
     width: 100%;
-    height: 92%;
+    height: 80%;
     display:inline-block;
     background-color: ${color2};
     background-color: rgba(${parseInt(color2.slice(1, 3), 16)}, ${parseInt(color2.slice(3, 5), 16)}, ${parseInt(color2.slice(5, 7), 16)}, 0.5); 
@@ -58,7 +61,7 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
   let BottomBox = styled.div`
     border-top: solid 5px black;
     width: 100%;
-    height: 3%;
+    height: 10%;
     border-bottom-left-radius: 3vh;
     border-bottom-right-radius: 3vh;
     background-color: ${color1};
@@ -96,9 +99,19 @@ function MacBookBox({children, width, height, color1, color2, alignItems}: MacBo
         <MidBox>
           {children}
         </MidBox>
-        <BottomBox></BottomBox>
+        <BottomBox style={{display:'flex',justifyContent:'space-around'}}>
+        <div>
+        {Username}    
+        </div>
+        <div> 
+        {age}
+        </div>
+        <div>
+        {address}  
+        </div>
+        </BottomBox>
       </MacBox>
   );
 }
 
-export default MacBookBox;
+export default SmallMacBookProfile;
