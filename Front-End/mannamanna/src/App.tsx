@@ -10,7 +10,7 @@ import MainHome from './pages/MainHome';
 import Choice from './pages/Choice';
 import Schedule from './pages/User/Schedule/Schedule';
 import Mypage from './pages/User/MyPage/Mypage';
-import Chatting from './pages/Chatting';
+import Chatting from './pages/Chatting/Chatting';
 import SoagetingMain from './pages/Soagaeting/SoagetingMain';
 import SoagetingWait from './pages/Soagaeting/SoagetingWait';
 import Soageting from './pages/Soagaeting/Soageting';
