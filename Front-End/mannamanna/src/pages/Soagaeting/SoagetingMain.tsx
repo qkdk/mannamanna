@@ -35,7 +35,7 @@ const SoagetingFilter = () => {
             }
           >
             <p>
-              소개팅
+              소개팅~~
               <br />
               추천
             </p>
