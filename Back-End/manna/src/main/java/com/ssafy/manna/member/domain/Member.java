@@ -27,6 +27,8 @@ public class Member extends BaseTimeEntity {
     private String pwd;     //사용자 비밀번호
     private String name;    //사용자 이름
     private String gender;  //성별
+    private String refreshToken;
+
     @Enumerated(EnumType.STRING)
     private UserRole role;      //ROLE
 
