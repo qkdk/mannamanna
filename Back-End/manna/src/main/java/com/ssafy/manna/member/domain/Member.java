@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -42,9 +42,9 @@ public class Member extends BaseTimeEntity {
 
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
     //1. 비밀번호 수정
-    public void changePassword(PasswordEncoder passwordEncoder,String pwd){
-        this.pwd = passwordEncoder.encode(pwd);
-    }
+//    public void changePassword(PasswordEncoder passwordEncoder,String pwd){
+//        this.pwd = passwordEncoder.encode(pwd);
+//    }
 
 
 
