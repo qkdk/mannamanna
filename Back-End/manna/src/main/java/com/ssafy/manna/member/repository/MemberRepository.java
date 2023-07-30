@@ -11,5 +11,7 @@ public interface MemberRepository extends JpaRepository<Member,String> {
     //중복 id 조회
     boolean existsById(String id);
 
+    Optional<Member> findByRefreshToken(String refreshToken);
+
 //    Optional<Member> findByRefreshToken(String refreshToken);
 }
