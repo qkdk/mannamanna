@@ -1,11 +1,7 @@
 package com.ssafy.manna.member.domain;
 
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +17,11 @@ public class MemberDetail extends BaseTimeEntity {
 
     @Id
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="id")
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="id")
     private MemberAddress memberAddress;
 
     private String tel;                 //전화번호

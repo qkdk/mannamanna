@@ -1,15 +1,11 @@
 package com.ssafy.manna.member.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.manna.global.common.dto.AddressDto;
 import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.domain.MemberAddress;
 import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
-import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.dto.response.MemberLoginResponse;
@@ -66,12 +62,14 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest) {
-        //아이디 찾기 - 이름, 생년월일로
+    public Optional<Member> findMemberByNameAndEmail(MemberFindIdRequest memberFindIdRequest) {
+        //아이디 찾기 - 이름, emailId, emailDomain 으로 찾기
         String name = memberFindIdRequest.getName();
-        String birth = memberFindIdRequest.getBirth();
+        String emailId = memberFindIdRequest.getEmailId();
+        String emailDomain = memberFindIdRequest.getEmailDomain();
 
-        return null;
+
+        return memberRepository.findByNameAndMemberDetailEmailIdAndMemberDetailEmailDomain(name,emailId,emailDomain);
 
     }
 
