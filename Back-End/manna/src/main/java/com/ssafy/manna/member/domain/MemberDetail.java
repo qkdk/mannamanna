@@ -21,7 +21,7 @@ public class MemberDetail extends BaseTimeEntity {
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @JoinColumn(name="address_member_id")
     private MemberAddress memberAddress;
 
     private String tel;                 //전화번호

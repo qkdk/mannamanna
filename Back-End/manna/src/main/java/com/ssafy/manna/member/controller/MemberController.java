@@ -6,6 +6,7 @@ import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
@@ -98,11 +99,12 @@ public class MemberController {
 
     //아이디 찾기
     @PostMapping("/user/findId")
-    public ResponseEntity<Member> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
+    public ResponseEntity<MemberFindIdResponse> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
         Optional<Member> findMember = memberService.findMemberByNameAndEmail(memberFindIdRequest);
         if(findMember.isPresent()){
-            Member member = findMember.get();
-            return ResponseEntity.ok(member);
+            String findId = findMember.get().getId();
+            MemberFindIdResponse memberFindIdResponse = new MemberFindIdResponse(findId);
+            return ResponseEntity.ok(memberFindIdResponse);
         }
         else{
             return ResponseEntity.notFound().build();
