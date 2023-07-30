@@ -48,8 +48,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         if (refreshToken == null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
-
-
     }
 
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response,
