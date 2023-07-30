@@ -28,14 +28,10 @@ public interface MemberService {
 
     Optional<Member> findOne(String insertedUserId);
 
-    //Id로 회원 찾기
-
-
 //    void signUp(String id, String pwd);
 
-    //ID찾기
-    MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest);
-
+    //이름이랑 mail로 member 찾기
+    Optional<Member> findMemberByNameAndEmail(MemberFindIdRequest memberFindIdRequest);
     MemberFindPwdResponse findPwd(MemberFindPwdRequest memberFindPwdRequest);
     //converToDto
     MemberInfoResponse convertToMemberInfoDto(Member member);
