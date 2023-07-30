@@ -18,8 +18,8 @@ const ForgotId = () => {
             <IdInput type="text" name="user_id" />
           </InputBox>
           <InputBox>
-            <SmallIdLabel>생년월일</SmallIdLabel>
-            <IdInput type="password" name="user_pw" />
+            <SmallIdLabel>이메일</SmallIdLabel>
+            <IdInput type="test" name="user_email" />
           </InputBox>
           <BtnBox>
             <LargeStyledButton>아이디찾기</LargeStyledButton>
