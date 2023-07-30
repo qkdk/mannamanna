@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.jwt;
+package com.ssafy.manna.member.service;
 
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;

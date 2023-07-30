@@ -2,10 +2,10 @@ package com.ssafy.manna.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.manna.global.jwt.JwtService;
-import com.ssafy.manna.global.jwt.LoginFailureHandler;
-import com.ssafy.manna.global.jwt.LoginService;
-import com.ssafy.manna.global.jwt.LoginSuccessHandler;
-import com.ssafy.manna.global.jwt.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.ssafy.manna.global.handler.LoginFailureHandler;
+import com.ssafy.manna.member.service.LoginService;
+import com.ssafy.manna.global.handler.LoginSuccessHandler;
+import com.ssafy.manna.global.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.ssafy.manna.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.ssafy.manna.member.repository.MemberRepository;
 import jakarta.servlet.Filter;

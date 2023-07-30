@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.jwt.filter;
+package com.ssafy.manna.global.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

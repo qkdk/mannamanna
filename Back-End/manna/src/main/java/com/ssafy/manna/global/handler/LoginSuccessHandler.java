@@ -1,5 +1,6 @@
-package com.ssafy.manna.global.jwt;
+package com.ssafy.manna.global.handler;
 
+import com.ssafy.manna.global.jwt.JwtService;
 import com.ssafy.manna.member.repository.MemberRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
