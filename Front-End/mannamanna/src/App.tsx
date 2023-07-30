@@ -6,7 +6,7 @@ import Login from './pages/User/Login/Login';
 import Register from './pages/User/Register/Register';
 import ForgotId from './pages/User/ForgotIdPw/ForgotId';
 import ForgotPw from './pages/User/ForgotIdPw/ForgotPw';
-import MainHome from './pages/MainHome'; 
+import MainHome from './pages/User/MainHome/MainHome'; 
 import Choice from './pages/Choice';
 import Schedule from './pages/User/Schedule/Schedule';
 import Mypage from './pages/User/MyPage/Mypage';
