@@ -18,7 +18,7 @@ import MeetingMain from './pages/Meeting/MeetingMain';
 import MeetingMakeRoom from './pages/Meeting/MeetingMakeRoom';
 import MeetingWait from './pages/Meeting/MeetingWait';
 import Meeting from './pages/Meeting/Meeting';
-import Reserve from './pages/Reserve';
+import Reserve from './pages/Reserve/Reserve';
 import Mission from './pages/Mission';
 import Note from './pages/Note';
 import Alarm from './pages/Alarm';
