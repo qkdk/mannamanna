@@ -1,17 +1,17 @@
 package com.ssafy.manna.member.controller;
 
+import com.ssafy.manna.global.common.dto.MailDto;
+import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
-import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
-import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
-import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
-import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.request.*;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
+import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -99,24 +99,60 @@ public class MemberController {
 
     //아이디 찾기
     @PostMapping("/user/findId")
-    public ResponseEntity<MemberFindIdResponse> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
+    public ResponseEntity<?> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
         Optional<Member> findMember = memberService.findMemberByNameAndEmail(memberFindIdRequest);
+        ResponseTemplate<?> body;
         if(findMember.isPresent()){
             String findId = findMember.get().getId();
             MemberFindIdResponse memberFindIdResponse = new MemberFindIdResponse(findId);
-            return ResponseEntity.ok(memberFindIdResponse);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .data(memberFindIdResponse)
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
         }
         else{
-            return ResponseEntity.notFound().build();
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("가입한 정보가 없습니다. 다시 입력해주세요.")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
     }
 
     //비밀번호 찾기
-    @GetMapping("/user/findPwd")
-    public ResponseEntity<MemberFindPwdResponse> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
+    @PostMapping("/user/findPwd")
+    public ResponseEntity<?> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
 
-        MemberFindPwdResponse findPwdDto = memberService.findPwd(memberFindPwdRequest);
-        return null;
+        Optional<Member> findMember = memberService.findMemberByIdAndEmail(memberFindPwdRequest);
+        ResponseTemplate<?> body;
+        if(findMember.isPresent()){
+            //임시 비밀번호 생성
+            String findId = findMember.get().getId();
+            String emailId = memberFindPwdRequest.getEmailId();
+            String emailDomain = memberFindPwdRequest.getEmailDomain();
+            //디비 업데이트
+            String tempPwd = memberService.updatePwd(findId);
+            //이메일 만들기
+            MailDto mailDto = memberService.createMail(emailId,emailDomain,tempPwd);
+            //이메일 발송
+            memberService.sendMail(mailDto);
+
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("임시비밀번호 이메일 발송 완료")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }
+        else{
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("가입한 정보가 없습니다. 다시 입력해주세요.")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
 

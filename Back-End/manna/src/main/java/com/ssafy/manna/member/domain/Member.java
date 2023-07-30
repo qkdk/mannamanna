@@ -43,6 +43,11 @@ public class Member extends BaseTimeEntity {
 //        this.pwd = passwordEncoder.encode(pwd);
 //    }
 
+    //비밀번호 수정
+    public void updatePassword(String pwd){
+        this.pwd = pwd;
+    }
+
 
 
 }
