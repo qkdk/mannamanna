@@ -28,11 +28,11 @@ public class Member extends BaseTimeEntity {
     private UserRole role;      //ROLE
 
     //회원 정보 매핑
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MemberDetail memberDetail;
 
     //프로필 사진 매핑
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<ProfilePicture> profilePicture;
 
 
