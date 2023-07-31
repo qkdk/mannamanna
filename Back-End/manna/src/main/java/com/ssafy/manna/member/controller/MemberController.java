@@ -1,16 +1,26 @@
 package com.ssafy.manna.member.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.manna.global.common.dto.AddressDto;
 import com.ssafy.manna.global.common.dto.MailDto;
+import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.domain.MemberAddress;
+import com.ssafy.manna.member.domain.MemberDetail;
+import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.*;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
 import io.swagger.models.Response;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -82,17 +92,43 @@ public class MemberController {
         }
     }
 
-    //마이페이지 조회
-    @GetMapping("/user/mypage/{id}")
-    public ResponseEntity<MemberInfoResponse> myPage(@Validated @PathVariable("id") String id){
-        try{
-            //id로 member 조회
-            MemberInfoResponse memberInfoResponse = memberService.getInfo(id);
-            return ResponseEntity.ok(memberInfoResponse);
-        }
-        catch (Exception e){
-            return ResponseEntity.notFound().build();
-        }
+        //마이페이지 조회
+        @GetMapping("/user/mypage/{id}")
+        public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
+            ResponseTemplate<?> body;
+            Optional<Member> findMember = memberService.getInfo(id);
+
+            if(findMember.isPresent()){
+                Member member = findMember.get();
+                MemberDetail memberDetail = member.getMemberDetail();
+                MemberAddress memberAddress = memberDetail.getMemberAddress();
+                List<ProfilePicture> profilePictures= member.getProfilePicture();
+                List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
+                for(ProfilePicture profilePicture : profilePictures){
+                    ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
+                    profilePictureDtos.add(profilePictureDto);
+                }
+                MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
+                        member.getName(),memberDetail.getHeight(),memberAddress.getDetail(),
+                        memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
+                        memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
+                        profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
+                );
+
+                body = ResponseTemplate.builder()
+                        .result(true)
+                        .msg("회원 조회 완료")
+                        .data(memberInfoResponse)
+                        .build();
+                return new ResponseEntity<>(body,HttpStatus.OK);
+            }
+            else{
+                body = ResponseTemplate.builder()
+                        .result(false)
+                        .msg("Page error")
+                        .build();
+                return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+            }
     }
 
     //마이페이지 정보수정
@@ -103,7 +139,8 @@ public class MemberController {
             return ResponseEntity.ok(" 수정 성공");
         }
         catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+
+            return null;
         }
     }
 

@@ -68,8 +68,9 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public MemberInfoResponse getInfo(String id) throws Exception {
-        return null;
+    public Optional<Member> getInfo(String id) {
+
+        return memberRepository.findById(id);
     }
 
     @Override
@@ -92,44 +93,6 @@ public class MemberServiceImpl implements MemberService{
         return memberRepository.findById(memberFindPwdRequest.getId());
     }
 
-//    @Override
-//    public MemberFindPwdResponse (MemberFindIdOrPwdRequest memberFindPwdRequest) {
-//        return null;
-//    }
-
-    @Override
-    public MemberInfoResponse convertToMemberInfoDto(Member member) {
-        return null;
-    }
-
-    @Override
-    public MemberLoginResponse converToMemberLoginDto(Member member) {
-        return null;
-    }
-
-    @Override
-    public MemberInfoResponse convertToDto(Member member) {
-        //반환할 dto
-//        MemberInfoResponse memberInfoResponse = new MemberInfoResponse();
-//
-//        memberInfoResponse.setName(member.getName());
-//
-//        //MemberAddress : Entity
-//        MemberAddress memberAddress = member.getMemberDetail().getMemberAddress();
-//
-//        //MemberAddress->AddressDto 로 변환
-//        AddressDto addressDto = new AddressDto();
-//        addressDto.setDetail(memberAddress.getDetail());
-//        addressDto.setLatitude(memberAddress.getLatitude());
-//        addressDto.setLongitude(memberAddress.getLongitude());
-//        addressDto.setSidoId(memberAddress.getSido().getId());
-//        addressDto.setGugunId(memberAddress.getGugun().getId());
-//
-//        memberInfoResponse.setAddress(addressDto);
-//
-//        return memberInfoResponse;
-        return null;
-    }
 
     @Override
     public String updatePwd(String findId) {
