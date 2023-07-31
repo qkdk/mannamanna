@@ -35,16 +35,4 @@ public class MemberInfoResponse {
     private String introduction;
     // 마일리지
     private int mileage;
-
-
-
-
-
-
-
-
-
-
-
-
 }
