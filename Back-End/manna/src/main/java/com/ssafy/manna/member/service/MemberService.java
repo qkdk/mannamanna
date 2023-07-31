@@ -10,6 +10,7 @@ import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 
 
 public interface MemberService {
@@ -23,7 +24,7 @@ public interface MemberService {
     void delete(String pwd, String id);
 
     //정보조회
-    MemberInfoResponse getInfo(String id) throws Exception;
+    Optional<Member> getInfo(String id);
 
     Optional<Member> findOne(String insertedUserId);
 
@@ -33,13 +34,6 @@ public interface MemberService {
     Optional<Member> findMemberByNameAndEmail(MemberFindIdRequest memberFindIdRequest);
 
     Optional<Member> findMemberByIdAndEmail(MemberFindPwdRequest memberFindPwdRequest);
-
-    //converToDto
-    MemberInfoResponse convertToMemberInfoDto(Member member);
-
-    MemberLoginResponse converToMemberLoginDto(Member member);
-
-    MemberInfoResponse convertToDto(Member member);
 
     String updatePwd(String findId);
 
