@@ -27,6 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableWebMvc
 @Slf4j
+@RequestMapping("/user")
 public class MemberController {
     private final MemberService memberService;
 
@@ -38,18 +39,18 @@ public class MemberController {
 //    }
 
     //회원가입
-    @PostMapping("/user/regist")
-    public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
-        try {
-            log.info("회원가입");
-            // 회원가입 시 카카오 인증
-
-            memberService.signUp(memberSignUpRequest);
-            return ResponseEntity.ok("join success");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+//    @PostMapping("/user/regist")
+//    public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
+//        try {
+//            log.info("회원가입");
+//            // 회원가입 시 카카오 인증
+//
+//            memberService.signUp(memberSignUpRequest);
+//            return ResponseEntity.ok("join success");
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
 
     //로그인
 
@@ -60,7 +61,7 @@ public class MemberController {
 //    }
 
     //회원탈퇴
-    @DeleteMapping("/user/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<?> delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
         ResponseTemplate<?> body;
         try{
@@ -82,7 +83,7 @@ public class MemberController {
     }
 
     //마이페이지 정보 조회
-    @GetMapping("/user/mypage/{id}")
+    @GetMapping("/mypage/{id}")
     public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
         ResponseTemplate<?> body;
         Optional<Member> findMember = memberService.getInfo(id);
@@ -121,7 +122,7 @@ public class MemberController {
     }
 
     //마이페이지 정보수정
-    @PutMapping("/user/mypage/{id}")
+    @PutMapping("/mypage/{id}")
     public ResponseEntity<?> myPageEdit(@RequestBody  MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
         ResponseTemplate<?> body;
         Optional<Member> findMember = memberService.getInfo(id);
@@ -181,7 +182,7 @@ public class MemberController {
     }
 
     //아이디 찾기
-    @PostMapping("/user/findId")
+    @PostMapping("/findId")
     public ResponseEntity<?> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
         Optional<Member> findMember = memberService.findMemberByNameAndEmail(memberFindIdRequest);
         ResponseTemplate<?> body;
@@ -204,7 +205,7 @@ public class MemberController {
     }
 
     //비밀번호 찾기
-    @PostMapping("/user/findPwd")
+    @PostMapping("/findPwd")
     public ResponseEntity<?> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
 
         Optional<Member> findMember = memberService.findMemberByIdAndEmail(memberFindPwdRequest);
@@ -238,5 +239,58 @@ public class MemberController {
 
     }
 
+    //마이페이지 - 비밀번호 변경 - 확인
+    @PostMapping("/mypage/checkPwd")
+    public ResponseEntity<?> checkPassword(@RequestBody MemberCheckPwdRequest memberCheckPwdRequest){
+        Optional<Member> member = memberService.findOne(memberCheckPwdRequest.getId());
+        ResponseTemplate<?> body;
+        if(member.isPresent()){
+            Member checkMember = member.get();
+            if(memberCheckPwdRequest.getPwd().equals(checkMember.getPwd())){
+                //입력한 비번이랑 db 상 비밀번호가 같으면 - 비밀번호 변경으로
+                body = ResponseTemplate.builder()
+                        .result(true)
+                        .msg("비밀번호 확인 완료")
+                        .build();
+                return new ResponseEntity<>(body,HttpStatus.OK);
+            }
+            else{
+                body = ResponseTemplate.builder()
+                        .result(false)
+                        .msg("비밀번호가 틀렸습니다.")
+                        .build();
+                return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+            }
+        }
+        else{
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("회원정보가 없습니다.")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+        }
+    }
 
+    //마이페이지 비밀번호 변경
+    @PostMapping("/mypage/changePwd")
+    public ResponseEntity<?> changePassword(@RequestBody MemberCheckPwdRequest memberChangePwdRequest){
+        Optional<Member> member = memberService.findOne(memberChangePwdRequest.getId());
+        ResponseTemplate<?> body;
+        if(member.isPresent()){
+            Member checkMember = member.get();
+            checkMember.updatePassword(memberChangePwdRequest.getPwd());
+            body = ResponseTemplate.builder()
+                        .result(true)
+                        .msg("비밀번호 변경 완료")
+                        .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }
+        else{
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("비밀번호 변경 불가")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+        }
+    }
 }
