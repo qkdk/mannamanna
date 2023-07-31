@@ -62,13 +62,23 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping("/user/delete")
-    public ResponseEntity<String> delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
+    public ResponseEntity<?> delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
+        ResponseTemplate<?> body;
         try{
-            memberService.delete(memberDeleteRequest.getId(), memberDeleteRequest.getPwd());
-            return ResponseEntity.ok("delete success");
+            //회원 탈퇴시 비밀번호 입력받고 일치하면 회원 탈퇴.
+            memberService.delete(memberDeleteRequest.getPwd(),memberDeleteRequest.getId());
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("회원 탈퇴가 완료되었습니다.")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
         }
         catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("비밀번호가 틀렸습니다. 다시 입력해주세요.")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
     }
 
