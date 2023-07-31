@@ -3,12 +3,15 @@ package com.ssafy.manna.member.service;
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberDetail;
+import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.repository.MemberRepository;
 import java.util.Optional;
+
+import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -21,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
+    private final ProfilePictureRepository profilePictureRepository;
 
     private final JavaMailSender javaMailSender;
 
@@ -149,5 +153,10 @@ public class MemberServiceImpl implements MemberService{
         message.setText(mailDto.getMessage());
         message.setFrom(sender);
         javaMailSender.send(message);
+    }
+
+    @Override
+    public Optional<ProfilePicture> findProfilePictureById(Integer id) {
+        return profilePictureRepository.findById(id);
     }
 }

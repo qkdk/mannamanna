@@ -2,6 +2,7 @@ package com.ssafy.manna.member.service;
 
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
@@ -43,4 +44,6 @@ public interface MemberService {
     public MailDto createMail(String memberEmail, String memberEmailDomain, String tempPwd);
 
     void sendMail(MailDto mailDto);
+
+    Optional<ProfilePicture> findProfilePictureById(Integer id);
 }

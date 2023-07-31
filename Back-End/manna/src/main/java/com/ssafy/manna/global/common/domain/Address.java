@@ -36,4 +36,9 @@ public class Address extends BaseTimeEntity {
     private Double latitude;
     private Double longitude;
 
+
+    public void updateDetail(String detail) {
+        this.detail = detail;
+    }
+
 }

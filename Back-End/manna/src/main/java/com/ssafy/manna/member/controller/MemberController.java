@@ -1,7 +1,5 @@
 package com.ssafy.manna.member.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.manna.global.common.dto.AddressDto;
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.global.util.ResponseTemplate;
@@ -11,28 +9,18 @@ import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.*;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
-import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
-import io.swagger.models.Response;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.text.html.Option;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,6 +29,7 @@ import java.util.Optional;
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
+
 
     //임시 매핑
 //    @PostMapping("/here")
@@ -133,23 +122,49 @@ public class MemberController {
 
     //마이페이지 정보수정
     @PutMapping("/user/mypage/{id}")
-    public ResponseEntity<?> myPageEdit(MemberUpdateRequest memberUpdateRequest,@Validated @PathVariable("id") String id){
+    public ResponseEntity<?> myPageEdit(@RequestBody  MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
         ResponseTemplate<?> body;
         Optional<Member> findMember = memberService.getInfo(id);
         if(findMember.isPresent()){
             // Request DTO의 값으로 Member Entity 업데이트
             Member member = findMember.get();
             MemberDetail memberDetail = member.getMemberDetail();
-
+            MemberAddress memberAddress = memberDetail.getMemberAddress();
             memberDetail.updateHeight(memberUpdateRequest.getHeight());
             memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
             memberDetail.updateJob(memberUpdateRequest.getJob());
             memberDetail.updateMbti(memberUpdateRequest.getMbti());
-            memberDetail.updateIsDrinker(memberUpdateRequest.isDrinker());
-            memberDetail.updateIsSmoker(memberUpdateRequest.isSmoker());
-            memberDetail.updateIsBlockingFriend(memberUpdateRequest.isBlockingFriend());
-            memberUpdateRequest.getDetailAddress();
+            memberDetail.updateIsDrinker(memberUpdateRequest.getIsDrinker());
+            memberDetail.updateIsSmoker(memberUpdateRequest.getIsSmoker());
+            memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsSmoker());
+            memberDetail.updateReligion(memberUpdateRequest.getReligion());
 
+            //사진 업데이트
+            List<ProfilePicture> profilePictures= member.getProfilePicture();
+            List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
+
+            //dto에서 데이터 꺼내서 profilePictures 를 업데이트
+            for(ProfilePictureDto profilePicture : profilePictureDtos){
+                Integer pictureId = profilePicture.getId();
+                String path = profilePicture.getPath();
+                String name = profilePicture.getName();
+                Integer priority = profilePicture.getPriority();
+
+                //findById 로 entity 불러오공
+                Optional<ProfilePicture> findProfilePic = memberService.findProfilePictureById(pictureId);
+                if(findProfilePic.isPresent()){
+                    ProfilePicture pic = findProfilePic.get();
+                    pic.updatePath(path);
+                    pic.updateName(name);
+                    pic.updatePriority(priority);
+                }else {
+                    throw new RuntimeException("Wrong pic id");
+                }
+
+            }
+
+            //주소 업데이트 - 추후 수정
+            memberAddress.updateDetail( memberUpdateRequest.getDetailAddress());
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
