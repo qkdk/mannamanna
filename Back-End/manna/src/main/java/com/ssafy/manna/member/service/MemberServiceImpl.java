@@ -3,7 +3,6 @@ package com.ssafy.manna.member.service;
 import com.ssafy.manna.global.common.domain.Address;
 import com.ssafy.manna.global.common.domain.Gugun;
 import com.ssafy.manna.global.common.domain.Sido;
-import com.ssafy.manna.global.common.repository.AddressRepository;
 import com.ssafy.manna.global.common.repository.GugunRepository;
 import com.ssafy.manna.global.common.repository.SidoRepository;
 import com.ssafy.manna.member.Enums.UserRole;
@@ -31,7 +30,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberDetailRepository memberDetailRepository;
-    private final AddressRepository AddressRepository;
     private final SidoRepository sidoRepository;
     private final GugunRepository gugunRepository;
 
@@ -42,23 +40,15 @@ public class MemberServiceImpl implements MemberService {
             throw new Exception("이미 존재하는 이메일입니다.");
         }
 
-        System.out.println("before: sido");
-        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido()).orElseThrow(
-            () -> new Exception("일치하는 시도가 없습니다.")
-        );
+        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
+            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
 
-        System.out.println("before: gugun");
         Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-            .orElseThrow(
-                () -> new Exception("일치하는 구군이 없습니다.")
-            );
+            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
 
-        System.out.println("before: address");
-        Address address = new Address(sido, gugun,
-            memberSignUpRequest.getDetail(),
+        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
             memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
 
-        System.out.println("before: member");
         Member member = Member.builder()
             .id(memberSignUpRequest.getId())
             .pwd(memberSignUpRequest.getPwd())
@@ -87,7 +77,6 @@ public class MemberServiceImpl implements MemberService {
             .build();
 
         memberDetailRepository.save(memberDetail);
-        System.out.println("after: saveMemberDetail");
     }
 
     @Override
