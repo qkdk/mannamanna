@@ -7,8 +7,6 @@ import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
-import com.ssafy.manna.member.dto.response.MemberInfoResponse;
-import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import com.ssafy.manna.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +40,8 @@ public class MemberServiceImpl implements MemberService{
 
         //해당 id를 가진 member를 찾아서 return
         Member member = memberRepository.findById(id).orElseThrow(()->new RuntimeException("Member not found"));
-
         MemberDetail memberDetail = member.getMemberDetail();
+
 
 
     }

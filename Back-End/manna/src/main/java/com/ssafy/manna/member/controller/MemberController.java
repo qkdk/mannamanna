@@ -92,55 +92,76 @@ public class MemberController {
         }
     }
 
-        //마이페이지 조회
-        @GetMapping("/user/mypage/{id}")
-        public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
-            ResponseTemplate<?> body;
-            Optional<Member> findMember = memberService.getInfo(id);
+    //마이페이지 정보 조회
+    @GetMapping("/user/mypage/{id}")
+    public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
+        ResponseTemplate<?> body;
+        Optional<Member> findMember = memberService.getInfo(id);
 
-            if(findMember.isPresent()){
-                Member member = findMember.get();
-                MemberDetail memberDetail = member.getMemberDetail();
-                MemberAddress memberAddress = memberDetail.getMemberAddress();
-                List<ProfilePicture> profilePictures= member.getProfilePicture();
-                List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
-                for(ProfilePicture profilePicture : profilePictures){
-                    ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
-                    profilePictureDtos.add(profilePictureDto);
-                }
-                MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
-                        member.getName(),memberDetail.getHeight(),memberAddress.getDetail(),
-                        memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
-                        memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
-                        profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
-                );
+        if(findMember.isPresent()){
+            Member member = findMember.get();
+            MemberDetail memberDetail = member.getMemberDetail();
+            MemberAddress memberAddress = memberDetail.getMemberAddress();
+            List<ProfilePicture> profilePictures= member.getProfilePicture();
+            List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
+            for(ProfilePicture profilePicture : profilePictures){
+                ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
+                profilePictureDtos.add(profilePictureDto);
+            }
+            MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
+                    member.getName(),memberDetail.getHeight(),memberAddress.getDetail(),
+                    memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
+                    memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
+                    profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
+            );
 
-                body = ResponseTemplate.builder()
-                        .result(true)
-                        .msg("회원 조회 완료")
-                        .data(memberInfoResponse)
-                        .build();
-                return new ResponseEntity<>(body,HttpStatus.OK);
-            }
-            else{
-                body = ResponseTemplate.builder()
-                        .result(false)
-                        .msg("Page error")
-                        .build();
-                return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
-            }
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("회원 조회 완료")
+                    .data(memberInfoResponse)
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }
+        else{
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("Page error")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+        }
     }
 
     //마이페이지 정보수정
     @PutMapping("/user/mypage/{id}")
-    public ResponseEntity<String> myPageEdit(MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
-        try{
-            memberService.update(memberUpdateRequest,id);
-            return ResponseEntity.ok(" 수정 성공");
-        }
-        catch (Exception e){
+    public ResponseEntity<?> myPageEdit(MemberUpdateRequest memberUpdateRequest,@Validated @PathVariable("id") String id){
+        ResponseTemplate<?> body;
+        Optional<Member> findMember = memberService.getInfo(id);
+        if(findMember.isPresent()){
+            // Request DTO의 값으로 Member Entity 업데이트
+            Member member = findMember.get();
+            MemberDetail memberDetail = member.getMemberDetail();
 
-            return null;
+            memberDetail.updateHeight(memberUpdateRequest.getHeight());
+            memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
+            memberDetail.updateJob(memberUpdateRequest.getJob());
+            memberDetail.updateMbti(memberUpdateRequest.getMbti());
+            memberDetail.updateIsDrinker(memberUpdateRequest.isDrinker());
+            memberDetail.updateIsSmoker(memberUpdateRequest.isSmoker());
+            memberDetail.updateIsBlockingFriend(memberUpdateRequest.isBlockingFriend());
+            memberUpdateRequest.getDetailAddress();
+
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("회원 수정 완료")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }
+        else {
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("회원 수정 오류")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
     }
 
