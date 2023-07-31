@@ -1,8 +1,6 @@
 package com.ssafy.manna.global.common.domain;
 
-import com.ssafy.manna.global.common.domain.BaseTimeEntity;
-import com.ssafy.manna.global.common.domain.Gugun;
-import com.ssafy.manna.global.common.domain.Sido;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 @Getter
 public class Address extends BaseTimeEntity {
 
@@ -36,4 +35,11 @@ public class Address extends BaseTimeEntity {
     private Double latitude;
     private Double longitude;
 
+    public Address(Sido sido, Gugun gugun, String detail, Double latitude, Double longitude) {
+        this.sido = sido;
+        this.gugun = gugun;
+        this.detail = detail;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
 }

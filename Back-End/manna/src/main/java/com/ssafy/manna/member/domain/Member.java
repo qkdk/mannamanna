@@ -7,12 +7,15 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -37,8 +40,8 @@ public class Member extends BaseTimeEntity {
     private MemberDetail memberDetail;
 
     //프로필 사진 매핑
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private ProfilePicture profilePicture;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<ProfilePicture> profilePictures;
 
 
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)

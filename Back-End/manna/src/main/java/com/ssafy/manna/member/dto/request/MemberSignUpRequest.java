@@ -1,14 +1,18 @@
 package com.ssafy.manna.member.dto.request;
 
-import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.domain.MemberDetail;
-import com.ssafy.manna.member.domain.ProfilePicture;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class MemberSignUpRequest {
+
     private String id;
     private String pwd;
     private String name;
@@ -26,5 +30,11 @@ public class MemberSignUpRequest {
     private String introduction;
     private boolean isBlockingFriend;
 
+    // 추후 변경 가능성이 있는 주소 필드
+    private String sido;
+    private String gugun;
+    private String detail;
+    private Double latitude;
+    private Double longitude;
 
 }

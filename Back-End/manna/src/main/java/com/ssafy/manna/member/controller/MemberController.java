@@ -3,7 +3,6 @@ package com.ssafy.manna.member.controller;
 import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
-import com.ssafy.manna.member.dto.request.MemberLoginRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
@@ -25,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequiredArgsConstructor
 @EnableWebMvc
 public class MemberController {
+
     private final MemberService memberService;
 
     //회원가입
@@ -49,33 +49,35 @@ public class MemberController {
 
     //회원탈퇴
     @DeleteMapping("/user/delete")
-    public void delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
+    public void delete(@RequestBody MemberDeleteRequest memberDeleteRequest) {
         memberService.delete(memberDeleteRequest.getId(), memberDeleteRequest.getPwd());
     }
 
     //마이페이지 조회
     @GetMapping("/user/mypage/{id}")
-    public void myPage(@Validated  @PathVariable("id")String id){
+    public void myPage(@Validated @PathVariable("id") String id) {
 
     }
 
     //마이페이지 정보수정
     @PutMapping("/user/mypage")
-    public void myPageEdit(MemberUpdateRequest memberUpdateRequest){
+    public void myPageEdit(MemberUpdateRequest memberUpdateRequest) {
 
     }
 
     //아이디 찾기
     @GetMapping("/user/findId")
 
-    public ResponseEntity<MemberFindIdResponse> findId(@RequestBody MemberFindIdRequest memberFindIdRequest){
+    public ResponseEntity<MemberFindIdResponse> findId(
+        @RequestBody MemberFindIdRequest memberFindIdRequest) {
         MemberFindIdResponse findIdDto = memberService.findId(memberFindIdRequest);
         return null;
     }
 
     //비밀번호 찾기
     @GetMapping("/user/findPwd")
-    public ResponseEntity<MemberFindPwdResponse> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
+    public ResponseEntity<MemberFindPwdResponse> findPwd(
+        @RequestBody MemberFindPwdRequest memberFindPwdRequest) {
 
 //        MemberFindPwdResponse findPwdDto = memberService.findPwd()
         return null;

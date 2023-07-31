@@ -1,10 +1,12 @@
 package com.ssafy.manna.member.domain;
 
+import com.ssafy.manna.global.common.domain.Address;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -20,11 +22,14 @@ import lombok.NoArgsConstructor;
 public class MemberDetail extends BaseTimeEntity {
 
     @Id
+    private String id;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id")
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private MemberAddress memberAddress;
+    private Address address;
 
     private String tel;                 //전화번호
     private String birth;               //생년월일
