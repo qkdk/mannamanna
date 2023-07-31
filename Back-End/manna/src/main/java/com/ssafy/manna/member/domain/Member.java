@@ -47,6 +47,9 @@ public class Member extends BaseTimeEntity {
     public void updatePassword(String pwd){
         this.pwd = pwd;
     }
+    public void updateProfilePicture(List<ProfilePicture> profilePictures){
+        this.profilePicture = profilePictures;
+    }
 
 
 
