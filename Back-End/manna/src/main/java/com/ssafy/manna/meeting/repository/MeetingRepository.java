@@ -1,5 +1,8 @@
 package com.ssafy.manna.meeting.repository;
 
-public class MeetingRepository {
+import com.ssafy.manna.meeting.domain.Meeting;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MeetingRepository extends JpaRepository<Meeting, Integer> {
 
 }
