@@ -115,14 +115,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void delete(String pwd, String id) {
         Member delMember = memberRepository.findById(id).orElseThrow(()-> new RuntimeException("Member not found"));
-        if(delMember.getPwd().equals(pwd)){
-            //입력한 비밀번호가 같으면 삭제 진행
-            memberRepository.delete(delMember);
+        if(passwordEncoder.matches(pwd,delMember.getPwd())){
+            //입력한 비밀번호가 같으면 삭제 진행 - User role 을 Deleted로 변경
+            delMember.updateRole("DELETED");
+
         }
         else{
             //입력한 비밀번호가 틀리면 throw Error
             throw new RuntimeException("Password Incorrect");
-
         }
     }
 

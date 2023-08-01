@@ -45,15 +45,16 @@ public class SecurityConfig {
 //        http.sessionManagement(AbstractHttpConfigurer::disable);
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests(authorize -> authorize
-                .anyRequest().permitAll()
+                        .anyRequest().permitAll()
 //            .requestMatchers("/user/login").permitAll()
 //            .requestMatchers("/user/regist").permitAll()
 //            .anyRequest().authenticated()
+
         );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(),
-            CustomJsonUsernamePasswordAuthenticationFilter.class);
+                CustomJsonUsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -83,14 +84,14 @@ public class SecurityConfig {
     @Bean
     public Filter customJsonUsernamePasswordAuthenticationFilter() {
         CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
-            = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
 
         customJsonUsernamePasswordLoginFilter.setAuthenticationManager(
-            authenticateManager());
+                authenticateManager());
         customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(
-            loginSuccessHandler());
+                loginSuccessHandler());
         customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(
-            loginFailureHandler());
+                loginFailureHandler());
         return customJsonUsernamePasswordLoginFilter;
     }
 
