@@ -106,13 +106,13 @@ public class JwtService {
         response.setHeader(refreshHeader, refreshToken);
     }
 
-    public void updateRefreshToken(String id, String refreshToken) {
-        memberRepository.findById(id)
-            .ifPresentOrElse(
-                member -> member.updateRefreshToken(refreshToken),
-                () -> new Exception("일치하는 회원이 없습니다.")
-            );
-    }
+//    public void updateRefreshToken(String id, String refreshToken) {
+//        memberRepository.findById(id)
+//            .ifPresentOrElse(
+//                member -> member.updateRefreshToken(refreshToken),
+//                () -> new Exception("일치하는 회원이 없습니다.")
+//            );
+//    }
 
     //    토큰이 유효한지 검사하는것, 회원정보가 일치하는지 검사하는것이 아님
     public boolean isTokenValid(String token) {
