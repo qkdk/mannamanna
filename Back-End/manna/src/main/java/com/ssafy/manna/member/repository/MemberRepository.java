@@ -4,7 +4,7 @@ import com.ssafy.manna.member.domain.Member;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MemberRepository extends JpaRepository<Member,String> {
+public interface MemberRepository extends JpaRepository<Member, String> {
 
     Optional<Member> findById(String id);   //id로 조회
 

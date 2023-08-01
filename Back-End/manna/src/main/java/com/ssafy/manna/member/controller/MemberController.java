@@ -8,6 +8,11 @@ import com.ssafy.manna.member.domain.MemberAddress;
 import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.*;
+import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
+import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
+import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
+import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
+import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.service.MemberService;
@@ -29,28 +34,20 @@ import java.util.Optional;
 @Slf4j
 @RequestMapping("/user")
 public class MemberController {
+
     private final MemberService memberService;
 
-
-    //임시 매핑
-//    @PostMapping("/here")
-//    public void imsi(){
-//        log.info("임시 로그");
-//    }
-
     //회원가입
-//    @PostMapping("/user/regist")
-//    public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
-//        try {
-//            log.info("회원가입");
-//            // 회원가입 시 카카오 인증
-//
-//            memberService.signUp(memberSignUpRequest);
-//            return ResponseEntity.ok("join success");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
+    @PostMapping("/user/regist")
+    public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
+        try {
+            // 회원가입 시 카카오 인증
+            memberService.signUp(memberSignUpRequest);
+            return ResponseEntity.ok("join success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     //로그인
 

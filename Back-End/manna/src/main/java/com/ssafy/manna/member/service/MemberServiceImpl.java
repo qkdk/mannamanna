@@ -1,6 +1,12 @@
 package com.ssafy.manna.member.service;
 
 import com.ssafy.manna.global.common.dto.MailDto;
+import com.ssafy.manna.global.common.domain.Address;
+import com.ssafy.manna.global.common.domain.Gugun;
+import com.ssafy.manna.global.common.domain.Sido;
+import com.ssafy.manna.global.common.repository.GugunRepository;
+import com.ssafy.manna.global.common.repository.SidoRepository;
+import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.domain.ProfilePicture;
@@ -8,11 +14,16 @@ import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
 import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
+import com.ssafy.manna.member.dto.response.MemberInfoResponse;
+import com.ssafy.manna.member.dto.response.MemberLoginResponse;
+import com.ssafy.manna.member.repository.MemberDetailRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
 import java.util.Optional;
 
 import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,8 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MemberServiceImpl implements MemberService{
+@Slf4j
+public class MemberServiceImpl implements MemberService {
+
     private final MemberRepository memberRepository;
+    private final MemberDetailRepository memberDetailRepository;
+    private final SidoRepository sidoRepository;
+    private final GugunRepository gugunRepository;
     private final ProfilePictureRepository profilePictureRepository;
 
     private final JavaMailSender javaMailSender;
@@ -32,11 +48,48 @@ public class MemberServiceImpl implements MemberService{
     private String sender;
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
-//
+        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
+            log.info("이미 있는 회원입니다.");
+            throw new Exception("이미 존재하는 이메일입니다.");
+        }
 
-//        memberRepository.save(member);
+        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
+            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
 
-//        memberRepository.save(memberSignUpRequest);
+        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
+            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
+
+        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
+            memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
+
+        Member member = Member.builder()
+            .id(memberSignUpRequest.getId())
+            .pwd(memberSignUpRequest.getPwd())
+            .gender(memberSignUpRequest.getGender())
+            .name(memberSignUpRequest.getName())
+            .role(UserRole.ROLE_USER)
+            .build();
+
+        MemberDetail memberDetail = MemberDetail.builder()
+            .id(member.getId())
+            .member(member)
+            .address(address)
+            .tel(memberSignUpRequest.getTel())
+            .birth(memberSignUpRequest.getBirth())
+            .emailId(memberSignUpRequest.getEmailId())
+            .emailDomain(memberSignUpRequest.getEmailDomain())
+            .height(memberSignUpRequest.getHeight())
+            .job(memberSignUpRequest.getJob())
+            .isSmoker(memberSignUpRequest.isSmoker())
+            .isDrinker(memberSignUpRequest.isDrinker())
+            .mbti(memberSignUpRequest.getMbti())
+            .religion(memberSignUpRequest.getReligion())
+            .introduction(memberSignUpRequest.getIntroduction())
+            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
+            .mileage(0)
+            .build();
+
+        memberDetailRepository.save(memberDetail);
     }
 
     @Override
