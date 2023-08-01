@@ -1,10 +1,10 @@
 package com.ssafy.manna.member.controller;
 
+import com.ssafy.manna.global.common.domain.Address;
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.domain.MemberAddress;
 import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.*;
@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -36,9 +37,10 @@ import java.util.Optional;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     //회원가입
-    @PostMapping("/user/regist")
+    @PostMapping("/regist")
     public ResponseEntity<String> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
         try {
             // 회원가입 시 카카오 인증
@@ -88,8 +90,8 @@ public class MemberController {
         if(findMember.isPresent()){
             Member member = findMember.get();
             MemberDetail memberDetail = member.getMemberDetail();
-            MemberAddress memberAddress = memberDetail.getMemberAddress();
-            List<ProfilePicture> profilePictures= member.getProfilePicture();
+            Address memberAddress = memberDetail.getAddress();
+            List<ProfilePicture> profilePictures= member.getProfilePictures();
             List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
             for(ProfilePicture profilePicture : profilePictures){
                 ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
@@ -127,7 +129,7 @@ public class MemberController {
             // Request DTO의 값으로 Member Entity 업데이트
             Member member = findMember.get();
             MemberDetail memberDetail = member.getMemberDetail();
-            MemberAddress memberAddress = memberDetail.getMemberAddress();
+            Address address = member.getMemberDetail().getAddress();
             memberDetail.updateHeight(memberUpdateRequest.getHeight());
             memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
             memberDetail.updateJob(memberUpdateRequest.getJob());
@@ -138,7 +140,7 @@ public class MemberController {
             memberDetail.updateReligion(memberUpdateRequest.getReligion());
 
             //사진 업데이트
-            List<ProfilePicture> profilePictures= member.getProfilePicture();
+            List<ProfilePicture> profilePictures= member.getProfilePictures();
             List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
 
             //dto에서 데이터 꺼내서 profilePictures 를 업데이트
@@ -162,7 +164,7 @@ public class MemberController {
             }
 
             //주소 업데이트 - 추후 수정
-            memberAddress.updateDetail( memberUpdateRequest.getDetailAddress());
+            address.updateDetail( memberUpdateRequest.getDetailAddress());
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
@@ -275,7 +277,7 @@ public class MemberController {
         ResponseTemplate<?> body;
         if(member.isPresent()){
             Member checkMember = member.get();
-            checkMember.updatePassword(memberChangePwdRequest.getPwd());
+            checkMember.updatePassword(passwordEncoder,memberChangePwdRequest.getPwd());
             body = ResponseTemplate.builder()
                         .result(true)
                         .msg("비밀번호 변경 완료")

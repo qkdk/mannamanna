@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ public class MemberServiceImpl implements MemberService {
     private final SidoRepository sidoRepository;
     private final GugunRepository gugunRepository;
     private final ProfilePictureRepository profilePictureRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender javaMailSender;
 
@@ -67,8 +69,10 @@ public class MemberServiceImpl implements MemberService {
             .pwd(memberSignUpRequest.getPwd())
             .gender(memberSignUpRequest.getGender())
             .name(memberSignUpRequest.getName())
-            .role(UserRole.ROLE_USER)
+            .role(UserRole.USER)
             .build();
+
+        member.passwordEncode(passwordEncoder);
 
         MemberDetail memberDetail = MemberDetail.builder()
             .id(member.getId())
@@ -156,7 +160,7 @@ public class MemberServiceImpl implements MemberService {
             // 임시 비밀번호 생성
             Member member= findMember.get();
             String encodedPassword = this.createTempPwd();
-            member.updatePassword(encodedPassword);
+            member.updatePassword(passwordEncoder,encodedPassword);
 
             memberRepository.save(member);
 

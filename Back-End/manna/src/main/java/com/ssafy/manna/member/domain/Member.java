@@ -48,6 +48,9 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<ProfilePicture> profilePictures;
 
+    public void passwordEncode(PasswordEncoder passwordEncoder){
+        this.pwd = passwordEncoder.encode(this.pwd);
+    }
 
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
     //1. 비밀번호 수정
@@ -55,7 +58,7 @@ public class Member extends BaseTimeEntity {
         this.pwd = passwordEncoder.encode(pwd);
     }
     public void updateProfilePicture(List<ProfilePicture> profilePictures){
-        this.profilePicture = profilePictures;
+        this.profilePictures = profilePictures;
     }
 
 
