@@ -105,6 +105,7 @@ CREATE TABLE IF NOT EXISTS `manna`.`member` (
   `name` VARCHAR(100) NOT NULL,
   `gender` VARCHAR(20) NOT NULL,
   `role` VARCHAR(20) NOT NULL,
+  `refresh_token` VARCHAR(256) NOT NULL,
   `created_date` DATETIME NOT NULL,
   `last_modified_date` DATETIME NOT NULL,
   PRIMARY KEY (`id`))
