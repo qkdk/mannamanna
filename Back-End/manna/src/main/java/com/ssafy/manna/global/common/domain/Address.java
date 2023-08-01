@@ -35,6 +35,11 @@ public class Address extends BaseTimeEntity {
     private Double latitude;
     private Double longitude;
 
+
+    public void updateDetail(String detail) {
+        this.detail = detail;
+    }
+
     public Address(Sido sido, Gugun gugun, String detail, Double latitude, Double longitude) {
         this.sido = sido;
         this.gugun = gugun;

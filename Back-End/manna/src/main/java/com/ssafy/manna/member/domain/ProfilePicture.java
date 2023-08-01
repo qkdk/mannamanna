@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,16 +21,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ProfilePicture extends BaseTimeEntity {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name="id")
-    @Id
+    @JoinColumn(name="member_id")
     private Member member;
     private String path;
     private String name;
     private int priority;
 
     //프로필 사진 변경
-    public void updateImgPath(String path){
+    public void updatePath(String path){
         this.path = path;
     }
+    public void updateName(String name){this.name = name;}
+    public void updatePriority(int priority){this.priority=priority;}
 }

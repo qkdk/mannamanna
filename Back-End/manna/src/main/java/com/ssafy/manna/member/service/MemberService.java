@@ -1,13 +1,17 @@
 package com.ssafy.manna.member.service;
 
+import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
+import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
 import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
-import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
+import com.ssafy.manna.member.dto.response.MemberFindPwdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import java.util.Optional;
+import javax.swing.text.html.Option;
 
 
 public interface MemberService {
@@ -21,20 +25,25 @@ public interface MemberService {
     void delete(String pwd, String id);
 
     //정보조회
-    MemberInfoResponse getInfo(String id) throws Exception;
+    Optional<Member> getInfo(String id);
 
     Optional<Member> findOne(String insertedUserId);
 
-    //Id로 회원 찾기
-
-
 //    void signUp(String id, String pwd);
 
-    //ID찾기
-    MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest);
-    //converToDto
-    MemberInfoResponse convertToMemberInfoDto(Member member);
-    MemberLoginResponse converToMemberLoginDto(Member member);
+    //이름이랑 mail로 member 찾기
+    Optional<Member> findMemberByNameAndEmail(MemberFindIdRequest memberFindIdRequest);
 
-    MemberInfoResponse convertToDto(Member member);
+    Optional<Member> findMemberByIdAndEmail(MemberFindPwdRequest memberFindPwdRequest);
+
+    String updatePwd(String findId);
+
+    //임시 비밀번호 생성 , mail 보내기
+    String createTempPwd();
+
+    public MailDto createMail(String memberEmail, String memberEmailDomain, String tempPwd);
+
+    void sendMail(MailDto mailDto);
+
+    Optional<ProfilePicture> findProfilePictureById(Integer id);
 }

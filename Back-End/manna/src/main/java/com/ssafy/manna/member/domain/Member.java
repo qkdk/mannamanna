@@ -1,6 +1,8 @@
 package com.ssafy.manna.member.domain;
 
+import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
+import jakarta.persistence.*;
 import com.ssafy.manna.member.Enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +17,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -49,6 +54,11 @@ public class Member extends BaseTimeEntity {
     public void updatePassword(PasswordEncoder passwordEncoder, String pwd) {
         this.pwd = passwordEncoder.encode(pwd);
     }
+    public void updateProfilePicture(List<ProfilePicture> profilePictures){
+        this.profilePicture = profilePictures;
+    }
+
+
 
     public void updateRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
