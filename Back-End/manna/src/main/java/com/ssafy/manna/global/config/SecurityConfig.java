@@ -1,13 +1,15 @@
 package com.ssafy.manna.global.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.manna.global.jwt.JwtService;
-import com.ssafy.manna.global.handler.LoginFailureHandler;
-import com.ssafy.manna.member.service.LoginService;
-import com.ssafy.manna.global.handler.LoginSuccessHandler;
 import com.ssafy.manna.global.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.ssafy.manna.global.handler.LoginFailureHandler;
+import com.ssafy.manna.global.handler.LoginSuccessHandler;
+import com.ssafy.manna.global.jwt.JwtService;
 import com.ssafy.manna.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import com.ssafy.manna.member.repository.MemberRepository;
+import com.ssafy.manna.member.service.LoginService;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -36,15 +38,17 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.cors(withDefaults());
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.formLogin(AbstractHttpConfigurer::disable);
         http.csrf(AbstractHttpConfigurer::disable);
 //        http.sessionManagement(AbstractHttpConfigurer::disable);
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests(authorize -> authorize
-            .requestMatchers("/user/login").permitAll()
-            .requestMatchers("/user/regist").permitAll()
-            .anyRequest().authenticated()
+                .anyRequest().permitAll()
+//            .requestMatchers("/user/login").permitAll()
+//            .requestMatchers("/user/regist").permitAll()
+//            .anyRequest().authenticated()
         );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
