@@ -1,4 +1,4 @@
-package com.ssafy.manna.global;
+package com.ssafy.manna.global.auth.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

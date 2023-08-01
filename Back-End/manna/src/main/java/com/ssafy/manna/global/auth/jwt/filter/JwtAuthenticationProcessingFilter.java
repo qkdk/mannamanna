@@ -1,6 +1,6 @@
-package com.ssafy.manna.global.jwt.filter;
+package com.ssafy.manna.global.auth.jwt.filter;
 
-import com.ssafy.manna.global.jwt.JwtService;
+import com.ssafy.manna.global.auth.jwt.JwtService;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
 import jakarta.servlet.FilterChain;

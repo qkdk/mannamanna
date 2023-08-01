@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.jwt;
+package com.ssafy.manna.global.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
