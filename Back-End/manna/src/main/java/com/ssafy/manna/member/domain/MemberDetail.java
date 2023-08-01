@@ -1,11 +1,7 @@
 package com.ssafy.manna.member.domain;
 
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +17,11 @@ public class MemberDetail extends BaseTimeEntity {
 
     @Id
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="id")
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="address_member_id")
     private MemberAddress memberAddress;
 
     private String tel;                 //전화번호
@@ -46,11 +44,32 @@ public class MemberDetail extends BaseTimeEntity {
     public void updateHeight(int height) {
         this.height = height;
     }
-
     public void updateJob(String job) {
         this.job = job;
     }
+    public void updateIsSmoker(boolean isSmoker){
+        this.isSmoker = isSmoker;
+    }
+    public void updateIsDrinker(boolean isDrinker){
+        this.isDrinker = isDrinker;
+    }
+    public void updateMbti(String mbti){
+        this.mbti = mbti;
+    }
+    public void updateReligion(String religion){
+        this.religion = religion;
+    }
+    public void updateIntroduction(String introduction){
+        this.introduction = introduction;
+    }
 
-    //주소 수정 추후 추가
+    public void updateIsBlockingFriend(boolean isBlockingFriend){
+        this.isBlockingFriend = isBlockingFriend;
+    }
+
+    public void updateMileage(int mileage){
+        this.mileage = mileage;
+    }
+
 
 }

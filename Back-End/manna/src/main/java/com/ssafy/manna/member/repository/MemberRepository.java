@@ -11,5 +11,11 @@ public interface MemberRepository extends JpaRepository<Member,String> {
     //중복 id 조회
     boolean existsById(String id);
 
-//    Optional<Member> findByRefreshToken(String refreshToken);
+    //이름, email id, email domain 으로 조회
+
+    Optional<Member> findByNameAndMemberDetailEmailIdAndMemberDetailEmailDomain(
+            String name, String emailId, String emailDomain
+    );
+
+    //Optional<Member> findByRefreshToken(String refreshToken);
 }
