@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.jwt;
+package com.ssafy.manna.global.auth.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -68,8 +68,9 @@ public class JwtService {
         String refreshToken) {
         response.setStatus(HttpServletResponse.SC_OK);
 
-        response.setHeader(accessHeader, accessToken);
-        log.info("재발급된 Access Token : {}", accessToken);
+        setAccessTokenHeader(response, accessToken);
+        setRefreshTokenHeader(response, refreshToken);
+        log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
     public Optional<String> extractAccessToken(HttpServletRequest request) {
@@ -105,16 +106,16 @@ public class JwtService {
         response.setHeader(refreshHeader, refreshToken);
     }
 
-    public void updateRefreshToken(String id, String refreshToken) {
-        memberRepository.findById(id)
-            .ifPresentOrElse(
-                member -> member.updateRefreshToken(refreshToken),
-                () -> new Exception("일치하는 회원이 없습니다.")
-            );
-    }
+//    public void updateRefreshToken(String id, String refreshToken) {
+//        memberRepository.findById(id)
+//            .ifPresentOrElse(
+//                member -> member.updateRefreshToken(refreshToken),
+//                () -> new Exception("일치하는 회원이 없습니다.")
+//            );
+//    }
 
-//    토큰이 유효한지 검사하는것, 회원정보가 일치하는지 검사하는것이 아님
-    public boolean isTokenValid(String token){
+    //    토큰이 유효한지 검사하는것, 회원정보가 일치하는지 검사하는것이 아님
+    public boolean isTokenValid(String token) {
         try {
             JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
             return true;

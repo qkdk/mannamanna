@@ -1,8 +1,12 @@
 package com.ssafy.manna.member.controller;
 
 import com.ssafy.manna.global.common.domain.Address;
+import com.ssafy.manna.global.common.domain.Gugun;
+import com.ssafy.manna.global.common.domain.Sido;
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
+import com.ssafy.manna.global.common.repository.GugunRepository;
+import com.ssafy.manna.global.common.repository.SidoRepository;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberDetail;
@@ -15,6 +19,7 @@ import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
 import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
+import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +43,10 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+    private final SidoRepository sidoRepository;
+    private final GugunRepository gugunRepository;
+    private final MemberRepository memberRepository;
+
 
     //회원가입
     @PostMapping("/regist")
@@ -98,10 +107,13 @@ public class MemberController {
                 profilePictureDtos.add(profilePictureDto);
             }
             MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
-                    member.getName(),memberDetail.getHeight(),memberAddress.getDetail(),
+                    member.getName(),memberDetail.getHeight(),
                     memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
                     memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
                     profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
+                    ,memberAddress.getSido().getName(),
+                    memberAddress.getGugun().getName(),
+                    memberAddress.getDetail()
             );
 
             body = ResponseTemplate.builder()
@@ -129,15 +141,16 @@ public class MemberController {
             // Request DTO의 값으로 Member Entity 업데이트
             Member member = findMember.get();
             MemberDetail memberDetail = member.getMemberDetail();
-            Address address = member.getMemberDetail().getAddress();
+            Address address = memberDetail.getAddress();
             memberDetail.updateHeight(memberUpdateRequest.getHeight());
             memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
             memberDetail.updateJob(memberUpdateRequest.getJob());
             memberDetail.updateMbti(memberUpdateRequest.getMbti());
             memberDetail.updateIsDrinker(memberUpdateRequest.getIsDrinker());
             memberDetail.updateIsSmoker(memberUpdateRequest.getIsSmoker());
-            memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsSmoker());
             memberDetail.updateReligion(memberUpdateRequest.getReligion());
+            memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
+
 
             //사진 업데이트
             List<ProfilePicture> profilePictures= member.getProfilePictures();
@@ -163,8 +176,19 @@ public class MemberController {
 
             }
 
-            //주소 업데이트 - 추후 수정
-            address.updateDetail( memberUpdateRequest.getDetailAddress());
+            String detail = memberUpdateRequest.getDetail();
+            Double latitude = memberUpdateRequest.getLatitude();
+            Double longitude = memberUpdateRequest.getLongitude();
+
+            Optional<Sido> sidoEntity = sidoRepository.findByName(memberUpdateRequest.getSido());
+            System.out.println(memberUpdateRequest.getGugun());
+            Optional<Gugun> gugunEntity = gugunRepository.findByNameAndSido(memberUpdateRequest.getGugun(),sidoEntity.get());
+
+            if(sidoEntity.isPresent() && gugunEntity.isPresent()){
+                address.updateAddress(sidoEntity.get(),gugunEntity.get(),detail,latitude,longitude);
+            }
+
+            memberRepository.save(member);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")

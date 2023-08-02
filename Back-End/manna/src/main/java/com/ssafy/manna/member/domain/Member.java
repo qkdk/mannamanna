@@ -1,8 +1,6 @@
 package com.ssafy.manna.member.domain;
 
-import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
-import jakarta.persistence.*;
 import com.ssafy.manna.member.Enums.UserRole;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,10 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
@@ -48,7 +42,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<ProfilePicture> profilePictures;
 
-    public void passwordEncode(PasswordEncoder passwordEncoder){
+    public void passwordEncode(PasswordEncoder passwordEncoder) {
         this.pwd = passwordEncoder.encode(this.pwd);
     }
 
@@ -57,17 +51,13 @@ public class Member extends BaseTimeEntity {
     public void updatePassword(PasswordEncoder passwordEncoder, String pwd) {
         this.pwd = passwordEncoder.encode(pwd);
     }
-    public void updateProfilePicture(List<ProfilePicture> profilePictures){
+
+    public void updateProfilePicture(List<ProfilePicture> profilePictures) {
         this.profilePictures = profilePictures;
     }
 
 
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
-    }
-
-    public void updateRole(String role){
+    public void updateRole(String role) {
         this.role = UserRole.valueOf(role);
     }
 }

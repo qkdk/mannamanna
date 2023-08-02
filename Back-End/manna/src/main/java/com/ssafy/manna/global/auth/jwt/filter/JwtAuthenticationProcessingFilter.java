@@ -1,6 +1,8 @@
-package com.ssafy.manna.global.jwt.filter;
+package com.ssafy.manna.global.auth.jwt.filter;
 
-import com.ssafy.manna.global.jwt.JwtService;
+import com.ssafy.manna.global.auth.domain.RefreshToken;
+import com.ssafy.manna.global.auth.jwt.JwtService;
+import com.ssafy.manna.global.auth.repository.RefreshTokenRepository;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
 import jakarta.servlet.FilterChain;
@@ -27,6 +29,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
@@ -38,13 +41,17 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return;
         }
 
+        // 사용자 요청에서 RefreshToken 추출
         String refreshToken = jwtService.extractRefreshToken(request)
             .filter(jwtService::isTokenValid).orElse(null);
 
+        // 리프레시 토큰이 있다면
         if (refreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
             return;
         }
+
+        //  리프레시 토큰이 없다면
         if (refreshToken == null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
@@ -52,17 +59,19 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response,
         String refreshToken) {
-        memberRepository.findByRefreshToken(refreshToken).ifPresent(member -> {
-            String reIssuedRefreshToken = reIssueRefreshToken(member);
-            jwtService.sendAccessTokenAndRefreshToken(response,
-                jwtService.createAccessToken(member.getId()), reIssuedRefreshToken);
-        });
+
+        refreshTokenRepository.findById(refreshToken)
+            .ifPresent(token -> {
+                String reIssuedRefreshToken = reIssueRefreshToken(token);
+                jwtService.sendAccessTokenAndRefreshToken(response,
+                    jwtService.createAccessToken(token.getMemberId()), reIssuedRefreshToken);
+            });
     }
 
-    private String reIssueRefreshToken(Member member) {
+    private String reIssueRefreshToken(RefreshToken refreshToken) {
         String reIssuedRefreshToken = jwtService.createRefreshToken();
-        member.updateRefreshToken(reIssuedRefreshToken);
-        memberRepository.saveAndFlush(member);
+        refreshTokenRepository.save(
+            new RefreshToken(reIssuedRefreshToken, refreshToken.getMemberId()));
         return reIssuedRefreshToken;
     }
 
@@ -80,6 +89,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     public void saveAuthentication(Member myMember) {
         String password = myMember.getPwd();
+        // 추후 작업할 OAuth를 위한 로직
         if (password == null) {
             password = "22";
         }

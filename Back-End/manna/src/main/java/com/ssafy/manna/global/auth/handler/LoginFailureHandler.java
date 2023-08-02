@@ -1,4 +1,4 @@
-package com.ssafy.manna.global.handler;
+package com.ssafy.manna.global.auth.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
