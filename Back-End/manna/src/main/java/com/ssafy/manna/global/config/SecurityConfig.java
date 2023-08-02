@@ -45,10 +45,11 @@ public class SecurityConfig {
 //        http.sessionManagement(AbstractHttpConfigurer::disable);
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
-//            .requestMatchers("/user/login").permitAll()
-//            .requestMatchers("/user/regist").permitAll()
-//            .anyRequest().authenticated()
+//                .requestMatchers("/user/login").permitAll()
+//                .requestMatchers("/user/regist").permitAll()
+//                .requestMatchers("/user/findId").permitAll()
+                .requestMatchers("/**").permitAll()
+                .anyRequest().authenticated()
 
         );
 
