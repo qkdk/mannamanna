@@ -3,13 +3,14 @@ package com.ssafy.manna.global.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.manna.global.filter.CustomJsonUsernamePasswordAuthenticationFilter;
-import com.ssafy.manna.global.handler.LoginFailureHandler;
-import com.ssafy.manna.global.handler.LoginSuccessHandler;
-import com.ssafy.manna.global.jwt.JwtService;
-import com.ssafy.manna.global.jwt.filter.JwtAuthenticationProcessingFilter;
+import com.ssafy.manna.global.auth.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.ssafy.manna.global.auth.handler.LoginFailureHandler;
+import com.ssafy.manna.global.auth.handler.LoginSuccessHandler;
+import com.ssafy.manna.global.auth.jwt.JwtService;
+import com.ssafy.manna.global.auth.jwt.filter.JwtAuthenticationProcessingFilter;
+import com.ssafy.manna.global.auth.repository.RefreshTokenRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
-import com.ssafy.manna.member.service.LoginService;
+import com.ssafy.manna.global.auth.service.LoginService;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +34,7 @@ public class SecurityConfig {
     private final LoginService loginService;
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
     private final ObjectMapper objectMapper;
 
 
@@ -45,11 +47,12 @@ public class SecurityConfig {
 //        http.sessionManagement(AbstractHttpConfigurer::disable);
 //        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests(authorize -> authorize
-                        .anyRequest().permitAll()
-//            .requestMatchers("/user/login").permitAll()
-//            .requestMatchers("/user/regist").permitAll()
-//            .anyRequest().authenticated()
-
+            .requestMatchers("/swagger-ui/**").permitAll()
+            .requestMatchers("/swagger-resources/**").permitAll()
+            .requestMatchers("/v3/api-docs/**").permitAll()
+            .requestMatchers("/user/login").permitAll()
+            .requestMatchers("/user/regist").permitAll()
+            .anyRequest().authenticated()
         );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
@@ -97,7 +100,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        return new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+        return new JwtAuthenticationProcessingFilter(jwtService, memberRepository, refreshTokenRepository);
     }
 
 }

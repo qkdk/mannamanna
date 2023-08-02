@@ -1,6 +1,6 @@
-package com.ssafy.manna.global.handler;
+package com.ssafy.manna.global.auth.handler;
 
-import com.ssafy.manna.global.jwt.JwtService;
+import com.ssafy.manna.global.auth.jwt.JwtService;
 import com.ssafy.manna.member.repository.MemberRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
