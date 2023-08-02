@@ -24,11 +24,8 @@ public class Meeting extends BaseStartEndEntity {
     private Integer id;
 
     private String name;
-
     private String host;
-
     private String game;
-
     private Boolean isOpenProfile;
     private Integer level;
 
