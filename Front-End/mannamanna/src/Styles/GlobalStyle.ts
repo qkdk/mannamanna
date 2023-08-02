@@ -1,4 +1,4 @@
-// Globalstyles.ts
+
 import { createGlobalStyle } from 'styled-components';
 import { reset } from 'styled-reset';
 import background from '../asset/image/back.jpg';
