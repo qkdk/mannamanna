@@ -161,8 +161,7 @@ public class MemberController {
         Optional<Member> member = memberService.findOne(memberCheckPwdRequest.getId());
         ResponseTemplate<?> body;
         if(member.isPresent()){
-            Member checkMember = member.get();
-            if(memberCheckPwdRequest.getPwd().equals(checkMember.getPwd())){
+            if(passwordEncoder.matches(memberCheckPwdRequest.getPwd(), member.get().getPwd())){
                 body = ResponseTemplate.builder()
                         .result(true)
                         .msg("비밀번호 확인 완료")
