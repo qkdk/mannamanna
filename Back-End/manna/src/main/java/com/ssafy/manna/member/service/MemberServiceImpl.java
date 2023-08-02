@@ -22,13 +22,12 @@ import com.ssafy.manna.member.repository.MemberDetailRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import com.ssafy.manna.member.repository.ProfilePictureRepository;
-import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,19 +60,17 @@ public class MemberServiceImpl implements MemberService {
     private String uploadDir;
 
     @Override
-    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
+    public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
             log.info("이미 있는 회원입니다.");
             throw new Exception("이미 존재하는 이메일입니다.");
         }
 
-//        //사진 저장
-//        String memberId = memberSignUpRequest.getId();
-//        MultipartFile[] profilePictures = memberSignUpRequest.getProfilePictures();
-
-//        for(MultipartFile profilePicture:profilePictures){
-//            String imagePath = uploadDir+ File.separator+memberId+
-//        }
+//      //사진 저장
+        int[] priorities = new int[3];
+        priorities[0] = memberSignUpRequest.getPriority1();
+        priorities[1] = memberSignUpRequest.getPriority2();
+        priorities[2] = memberSignUpRequest.getPriority3();
 
         Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
             .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
@@ -114,7 +111,19 @@ public class MemberServiceImpl implements MemberService {
             .build();
 
         memberDetailRepository.save(memberDetail);
+
+        for(int i=0;i<3;i++){
+            String path = storeFile(multipartFiles[i]);
+            ProfilePicture profilePicture = ProfilePicture.builder()
+                    .member(member)
+                    .path(path)
+                    .name(multipartFiles[i].getOriginalFilename())
+                    .priority(priorities[i])
+                    .build();
+            profilePictureRepository.save(profilePicture);
+        }
     }
+
 
     @Override
     public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
@@ -321,5 +330,13 @@ public class MemberServiceImpl implements MemberService {
         this.sendMail(mailDto);
     }
 
+    @Override
+    public String storeFile(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String filePath = uploadDir + File.separator + fileName;
+        File destFile = new File(filePath);
+        file.transferTo(destFile);
+        return filePath;
+    }
 
 }
