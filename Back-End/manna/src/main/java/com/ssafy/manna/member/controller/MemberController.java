@@ -73,7 +73,7 @@ public class MemberController {
     public ResponseEntity<?> delete(@RequestBody MemberDeleteRequest memberDeleteRequest){
         ResponseTemplate<?> body;
         try{
-            //회원 탈퇴시 비밀번호 입력받고 일치하면 회원 탈퇴.
+            //회원 탈퇴시 비밀번호 입력받고 일치하면 회원 탈퇴.(DB Role을 DELETED로 바꿔주기)
             memberService.delete(memberDeleteRequest.getPwd(),memberDeleteRequest.getId());
             body = ResponseTemplate.builder()
                     .result(true)
