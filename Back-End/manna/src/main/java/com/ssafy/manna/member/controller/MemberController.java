@@ -1,12 +1,7 @@
 package com.ssafy.manna.member.controller;
 
-import com.ssafy.manna.global.common.domain.Address;
-import com.ssafy.manna.global.common.dto.MailDto;
-import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.domain.MemberDetail;
-import com.ssafy.manna.member.domain.ProfilePicture;
 import com.ssafy.manna.member.dto.request.*;
 import com.ssafy.manna.member.dto.request.MemberDeleteRequest;
 import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
@@ -24,9 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -50,14 +42,6 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-    //로그인
-
-//    @PostMapping("/user/login")
-//    public void login(@RequestBody MemberLoginRequest memberLoginRequest){
-//        //로그인
-//
-//    }
 
     //회원탈퇴
     @DeleteMapping("/delete")
@@ -85,25 +69,9 @@ public class MemberController {
     @GetMapping("/mypage/{id}")
     public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.getInfo(id);
-
+        Optional<Member> findMember = memberService.findOne(id);
         if(findMember.isPresent()){
-            Member member = findMember.get();
-            MemberDetail memberDetail = member.getMemberDetail();
-            Address memberAddress = memberDetail.getAddress();
-            List<ProfilePicture> profilePictures= member.getProfilePictures();
-            List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
-            for(ProfilePicture profilePicture : profilePictures){
-                ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
-                profilePictureDtos.add(profilePictureDto);
-            }
-            MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
-                    member.getName(),memberDetail.getHeight(),memberAddress.getDetail(),
-                    memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
-                    memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
-                    profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
-            );
-
+            MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember.get());
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 조회 완료")
@@ -124,47 +92,9 @@ public class MemberController {
     @PutMapping("/mypage/{id}")
     public ResponseEntity<?> myPageEdit(@RequestBody  MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.getInfo(id);
+        Optional<Member> findMember = memberService.findOne(id);
         if(findMember.isPresent()){
-            // Request DTO의 값으로 Member Entity 업데이트
-            Member member = findMember.get();
-            MemberDetail memberDetail = member.getMemberDetail();
-            Address address = member.getMemberDetail().getAddress();
-            memberDetail.updateHeight(memberUpdateRequest.getHeight());
-            memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
-            memberDetail.updateJob(memberUpdateRequest.getJob());
-            memberDetail.updateMbti(memberUpdateRequest.getMbti());
-            memberDetail.updateIsDrinker(memberUpdateRequest.getIsDrinker());
-            memberDetail.updateIsSmoker(memberUpdateRequest.getIsSmoker());
-            memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsSmoker());
-            memberDetail.updateReligion(memberUpdateRequest.getReligion());
-
-            //사진 업데이트
-            List<ProfilePicture> profilePictures= member.getProfilePictures();
-            List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
-
-            //dto에서 데이터 꺼내서 profilePictures 를 업데이트
-            for(ProfilePictureDto profilePicture : profilePictureDtos){
-                Integer pictureId = profilePicture.getId();
-                String path = profilePicture.getPath();
-                String name = profilePicture.getName();
-                Integer priority = profilePicture.getPriority();
-
-                //findById 로 entity 불러오공
-                Optional<ProfilePicture> findProfilePic = memberService.findProfilePictureById(pictureId);
-                if(findProfilePic.isPresent()){
-                    ProfilePicture pic = findProfilePic.get();
-                    pic.updatePath(path);
-                    pic.updateName(name);
-                    pic.updatePriority(priority);
-                }else {
-                    throw new RuntimeException("Wrong pic id");
-                }
-
-            }
-
-            //주소 업데이트 - 추후 수정
-            address.updateDetail( memberUpdateRequest.getDetailAddress());
+            memberService.updateInfo(findMember.get(),memberUpdateRequest);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
@@ -206,21 +136,10 @@ public class MemberController {
     //비밀번호 찾기
     @PostMapping("/findPwd")
     public ResponseEntity<?> findPwd(@RequestBody MemberFindPwdRequest memberFindPwdRequest){
-
         Optional<Member> findMember = memberService.findMemberByIdAndEmail(memberFindPwdRequest);
         ResponseTemplate<?> body;
         if(findMember.isPresent()){
-            //임시 비밀번호 생성
-            String findId = findMember.get().getId();
-            String emailId = memberFindPwdRequest.getEmailId();
-            String emailDomain = memberFindPwdRequest.getEmailDomain();
-            //디비 업데이트
-            String tempPwd = memberService.updatePwd(findId);
-            //이메일 만들기
-            MailDto mailDto = memberService.createMail(emailId,emailDomain,tempPwd);
-            //이메일 발송
-            memberService.sendMail(mailDto);
-
+            memberService.findPwd(findMember.get(),memberFindPwdRequest);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("임시비밀번호 이메일 발송 완료")
@@ -234,11 +153,9 @@ public class MemberController {
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
-
-
     }
 
-    //마이페이지 - 비밀번호 변경 - 확인
+    //마이페이지 - 비밀번호 변경 전 현재 비밀번호 확인
     @PostMapping("/mypage/checkPwd")
     public ResponseEntity<?> checkPassword(@RequestBody MemberCheckPwdRequest memberCheckPwdRequest){
         Optional<Member> member = memberService.findOne(memberCheckPwdRequest.getId());
@@ -246,7 +163,6 @@ public class MemberController {
         if(member.isPresent()){
             Member checkMember = member.get();
             if(memberCheckPwdRequest.getPwd().equals(checkMember.getPwd())){
-                //입력한 비번이랑 db 상 비밀번호가 같으면 - 비밀번호 변경으로
                 body = ResponseTemplate.builder()
                         .result(true)
                         .msg("비밀번호 확인 완료")
@@ -279,9 +195,9 @@ public class MemberController {
             Member checkMember = member.get();
             checkMember.updatePassword(passwordEncoder,memberChangePwdRequest.getPwd());
             body = ResponseTemplate.builder()
-                        .result(true)
-                        .msg("비밀번호 변경 완료")
-                        .build();
+                    .result(true)
+                    .msg("비밀번호 변경 완료")
+                    .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
         }
         else{
