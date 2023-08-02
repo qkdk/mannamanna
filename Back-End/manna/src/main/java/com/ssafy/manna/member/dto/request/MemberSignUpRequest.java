@@ -1,10 +1,15 @@
 package com.ssafy.manna.member.dto.request;
 
+import com.ssafy.manna.global.common.dto.ProfilePictureDto;
+import jakarta.mail.Multipart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 @Getter
@@ -37,4 +42,8 @@ public class MemberSignUpRequest {
     private Double latitude;
     private Double longitude;
 
+    //회원 프로필 사진 3개
+//    private List<ProfilePictureDto> profilePictures;
+
+    private MultipartFile[] profilePictures;
 }

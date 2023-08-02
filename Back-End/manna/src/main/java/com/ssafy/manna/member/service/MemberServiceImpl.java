@@ -24,8 +24,10 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.ssafy.manna.member.repository.ProfilePictureRepository;
+import jakarta.mail.Multipart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +36,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +60,13 @@ public class MemberServiceImpl implements MemberService {
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
             log.info("이미 있는 회원입니다.");
             throw new Exception("이미 존재하는 이메일입니다.");
+        }
+
+        //사진
+        MultipartFile[] profilePictures = memberSignUpRequest.getProfilePictures();
+        for(MultipartFile profilePicture:profilePictures){
+            String saveFolder = "";
+            String saveFileName = UUID.randomUUID().toString()+"_"+profilePicture.getOriginalFilename();
         }
 
         Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
@@ -223,8 +233,8 @@ public class MemberServiceImpl implements MemberService {
         List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
 
         for(ProfilePicture profilePicture : profilePictures){
-            ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
-            profilePictureDtos.add(profilePictureDto);
+//            ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
+//            profilePictureDtos.add(profilePictureDto);
         }
 
         MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
@@ -259,7 +269,7 @@ public class MemberServiceImpl implements MemberService {
 
         //dto에서 데이터 꺼내서 profilePictures 를 업데이트
         for(ProfilePictureDto profilePicture : profilePictureDtos){
-            Integer pictureId = profilePicture.getId();
+//            Integer pictureId = profilePicture.getId();
             String path = profilePicture.getPath();
             String name = profilePicture.getName();
             Integer priority = profilePicture.getPriority();
