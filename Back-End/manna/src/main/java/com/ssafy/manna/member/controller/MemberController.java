@@ -31,10 +31,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final SidoRepository sidoRepository;
-    private final GugunRepository gugunRepository;
-    private final MemberRepository memberRepository;
-
 
     //회원가입
     @PostMapping("/regist")
