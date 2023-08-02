@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfilePictureDto {
 
-//    private Integer id;         //사진 id
+    private Integer id;         //사진 id
     private String path;        //사진 경로
     private String name;        //사진 이름
     private Integer priority;   //우선순위

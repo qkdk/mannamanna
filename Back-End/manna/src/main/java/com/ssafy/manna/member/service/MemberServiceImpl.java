@@ -21,6 +21,7 @@ import com.ssafy.manna.member.dto.response.MemberLoginResponse;
 import com.ssafy.manna.member.repository.MemberDetailRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -55,6 +56,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Value("${spring.mail.username}")
     private String sender;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
@@ -62,12 +67,13 @@ public class MemberServiceImpl implements MemberService {
             throw new Exception("이미 존재하는 이메일입니다.");
         }
 
-        //사진
-        MultipartFile[] profilePictures = memberSignUpRequest.getProfilePictures();
-        for(MultipartFile profilePicture:profilePictures){
-            String saveFolder = "";
-            String saveFileName = UUID.randomUUID().toString()+"_"+profilePicture.getOriginalFilename();
-        }
+//        //사진 저장
+//        String memberId = memberSignUpRequest.getId();
+//        MultipartFile[] profilePictures = memberSignUpRequest.getProfilePictures();
+
+//        for(MultipartFile profilePicture:profilePictures){
+//            String imagePath = uploadDir+ File.separator+memberId+
+//        }
 
         Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
             .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
@@ -269,7 +275,7 @@ public class MemberServiceImpl implements MemberService {
 
         //dto에서 데이터 꺼내서 profilePictures 를 업데이트
         for(ProfilePictureDto profilePicture : profilePictureDtos){
-//            Integer pictureId = profilePicture.getId();
+            Integer pictureId = profilePicture.getId();
             String path = profilePicture.getPath();
             String name = profilePicture.getName();
             Integer priority = profilePicture.getPriority();

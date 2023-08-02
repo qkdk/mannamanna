@@ -14,6 +14,7 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,6 +32,10 @@ public class MemberController {
 
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
 
     //회원가입
     @PostMapping("/regist")
