@@ -6,20 +6,24 @@ import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducers';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 const container =document.getElementById('root');
 if(!container) throw new Error('Failed to find the root element');
 const root=ReactDOM.createRoot(container);
 const queryClient =new QueryClient();
 
-const store= configureStore({reducer:rootReducer});
+const store= configureStore({reducer:rootReducer}); 
 root.render(
-  <QueryClientProvider client={queryClient}>
-  <Provider store={store}>
     <BrowserRouter>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <QueryClientProvider client={queryClient}>
+  <Provider store={store}>
     <App />
-    </BrowserRouter>
-   </Provider>
+    </Provider>
    </QueryClientProvider>
+    </LocalizationProvider>
+    </BrowserRouter>
 
 );
+ 
