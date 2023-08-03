@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDetailRepository memberDetailRepository;
     private final SidoRepository sidoRepository;
     private final GugunRepository gugunRepository;
-    private final ProfilePictureRepository profilePictureRepository;
+//    private final ProfilePictureRepository profilePictureRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender javaMailSender;
@@ -70,69 +70,118 @@ public class MemberServiceImpl implements MemberService {
     private String serverDomain;
 
     @Override
-    public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
+    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
+
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
             log.info("이미 있는 회원입니다.");
             throw new Exception("이미 존재하는 이메일입니다.");
         }
 
-//      //사진 저장
-        int[] priorities = new int[3];
-        priorities[0] = memberSignUpRequest.getPriority1();
-        priorities[1] = memberSignUpRequest.getPriority2();
-        priorities[2] = memberSignUpRequest.getPriority3();
-
         Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
-            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
+                .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
 
         Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
+                .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
 
         Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
-            memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
+                memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
 
         Member member = Member.builder()
-            .id(memberSignUpRequest.getId())
-            .pwd(memberSignUpRequest.getPwd())
-            .gender(memberSignUpRequest.getGender())
-            .name(memberSignUpRequest.getName())
-            .role(UserRole.USER)
-            .build();
+                .id(memberSignUpRequest.getId())
+                .pwd(memberSignUpRequest.getPwd())
+                .gender(memberSignUpRequest.getGender())
+                .name(memberSignUpRequest.getName())
+                .role(UserRole.USER)
+                .build();
 
         member.passwordEncode(passwordEncoder);
 
         MemberDetail memberDetail = MemberDetail.builder()
-            .id(member.getId())
-            .member(member)
-            .address(address)
-            .tel(memberSignUpRequest.getTel())
-            .birth(memberSignUpRequest.getBirth())
-            .emailId(memberSignUpRequest.getEmailId())
-            .emailDomain(memberSignUpRequest.getEmailDomain())
-            .height(memberSignUpRequest.getHeight())
-            .job(memberSignUpRequest.getJob())
-            .isSmoker(memberSignUpRequest.isSmoker())
-            .isDrinker(memberSignUpRequest.isDrinker())
-            .mbti(memberSignUpRequest.getMbti())
-            .religion(memberSignUpRequest.getReligion())
-            .introduction(memberSignUpRequest.getIntroduction())
-            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
-            .mileage(0)
-            .build();
-
+                .id(member.getId())
+                .member(member)
+                .address(address)
+                .tel(memberSignUpRequest.getTel())
+                .birth(memberSignUpRequest.getBirth())
+                .emailId(memberSignUpRequest.getEmailId())
+                .emailDomain(memberSignUpRequest.getEmailDomain())
+                .height(memberSignUpRequest.getHeight())
+                .job(memberSignUpRequest.getJob())
+                .isSmoker(memberSignUpRequest.isSmoker())
+                .isDrinker(memberSignUpRequest.isDrinker())
+                .mbti(memberSignUpRequest.getMbti())
+                .religion(memberSignUpRequest.getReligion())
+                .introduction(memberSignUpRequest.getIntroduction())
+                .isBlockingFriend(false)            //isBlockingFriend 기본값 false
+                .mileage(0)
+                .build();
         memberDetailRepository.save(memberDetail);
-
-        for(int i=0;i<3;i++){
-            String path = storeFile(multipartFiles[i]);
-            ProfilePicture profilePicture = ProfilePicture.builder()
-                    .member(member)
-                    .path(path)
-                    .name(multipartFiles[i].getOriginalFilename())
-                    .priority(priorities[i])
-                    .build();
-            profilePictureRepository.save(profilePicture);
-        }
     }
+
+//    @Override
+//    public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
+//        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
+//            log.info("이미 있는 회원입니다.");
+//            throw new Exception("이미 존재하는 이메일입니다.");
+//        }
+//
+////      //사진 저장
+//        int[] priorities = new int[3];
+//        priorities[0] = memberSignUpRequest.getPriority1();
+//        priorities[1] = memberSignUpRequest.getPriority2();
+//        priorities[2] = memberSignUpRequest.getPriority3();
+//
+//        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
+//            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
+//
+//        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
+//            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
+//
+//        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
+//            memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
+//
+//        Member member = Member.builder()
+//            .id(memberSignUpRequest.getId())
+//            .pwd(memberSignUpRequest.getPwd())
+//            .gender(memberSignUpRequest.getGender())
+//            .name(memberSignUpRequest.getName())
+//            .role(UserRole.USER)
+//            .build();
+//
+//        member.passwordEncode(passwordEncoder);
+//
+//        MemberDetail memberDetail = MemberDetail.builder()
+//            .id(member.getId())
+//            .member(member)
+//            .address(address)
+//            .tel(memberSignUpRequest.getTel())
+//            .birth(memberSignUpRequest.getBirth())
+//            .emailId(memberSignUpRequest.getEmailId())
+//            .emailDomain(memberSignUpRequest.getEmailDomain())
+//            .height(memberSignUpRequest.getHeight())
+//            .job(memberSignUpRequest.getJob())
+//            .isSmoker(memberSignUpRequest.isSmoker())
+//            .isDrinker(memberSignUpRequest.isDrinker())
+//            .mbti(memberSignUpRequest.getMbti())
+//            .religion(memberSignUpRequest.getReligion())
+//            .introduction(memberSignUpRequest.getIntroduction())
+//            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
+//            .mileage(0)
+//            .build();
+//        memberDetailRepository.save(memberDetail);
+//
+//
+//        for(int i=0;i<3;i++){
+//            String path = storeFile(multipartFiles[i]);
+//
+//            ProfilePicture profilePicture = ProfilePicture.builder()
+//                    .member(member)
+//                    .path(path)
+//                    .name(multipartFiles[i].getOriginalFilename())
+//                    .priority(priorities[i])
+//                    .build();
+//            profilePictureRepository.save(profilePicture);
+//        }
+//    }
 
 
     @Override
@@ -245,10 +294,10 @@ public class MemberServiceImpl implements MemberService {
         javaMailSender.send(message);
     }
 
-    @Override
-    public Optional<ProfilePicture> findProfilePictureById(Integer id) {
-        return profilePictureRepository.findById(id);
-    }
+//    @Override
+//    public Optional<ProfilePicture> findProfilePictureById(Integer id) {
+//        return profilePictureRepository.findById(id);
+//    }
 
     @Override
     public MemberInfoResponse getInfo(Member member) {
@@ -288,29 +337,29 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
 
-        //사진 업데이트
-        List<ProfilePicture> profilePictures= member.getProfilePictures();
-        List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
-
-        //dto에서 데이터 꺼내서 profilePictures 를 업데이트
-        for(ProfilePictureDto profilePicture : profilePictureDtos){
-            Integer pictureId = profilePicture.getId();
-            String path = profilePicture.getPath();
-            String name = profilePicture.getName();
-            Integer priority = profilePicture.getPriority();
-
-            //findById 로 entity 불러오공
-            Optional<ProfilePicture> findProfilePic = this.findProfilePictureById(pictureId);
-            if(findProfilePic.isPresent()){
-                ProfilePicture pic = findProfilePic.get();
-                pic.updatePath(path);
-                pic.updateName(name);
-                pic.updatePriority(priority);
-            }else {
-                throw new RuntimeException("Wrong pic id");
-            }
-
-        }
+//        //사진 업데이트
+//        List<ProfilePicture> profilePictures= member.getProfilePictures();
+//        List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
+//
+//        //dto에서 데이터 꺼내서 profilePictures 를 업데이트
+//        for(ProfilePictureDto profilePicture : profilePictureDtos){
+//            Integer pictureId = profilePicture.getId();
+//            String path = profilePicture.getPath();
+//            String name = profilePicture.getName();
+//            Integer priority = profilePicture.getPriority();
+//
+//            //findById 로 entity 불러오공
+////            Optional<ProfilePicture> findProfilePic = this.findProfilePictureById(pictureId);
+//            if(findProfilePic.isPresent()){
+//                ProfilePicture pic = findProfilePic.get();
+//                pic.updatePath(path);
+//                pic.updateName(name);
+//                pic.updatePriority(priority);
+//            }else {
+//                throw new RuntimeException("Wrong pic id");
+//            }
+//
+//        }
 
         String detail = memberUpdateRequest.getDetail();
         Double latitude = memberUpdateRequest.getLatitude();
@@ -346,6 +395,7 @@ public class MemberServiceImpl implements MemberService {
         String fileName = file.getOriginalFilename();
         String filePath = uploadDir + "/" + fileName;
         File destFile = new File(filePath);
+        System.out.println(serverDomain + "/manna/upload/member/" + fileName);
 
         // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
         File directory = destFile.getParentFile();
@@ -354,6 +404,8 @@ public class MemberServiceImpl implements MemberService {
         }
 
         file.transferTo(destFile);
+
+
 
         return serverDomain + "/manna/upload/member/" + fileName;
 
