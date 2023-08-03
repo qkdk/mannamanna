@@ -392,8 +392,8 @@ public class MemberServiceImpl implements MemberService {
 
         // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
         // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 디렉토리 생성
-        String userHomeDir = System.getProperty("user.home");
-        String uploadDir = userHomeDir + "/manna/upload/member";
+//        String userHomeDir = System.getProperty("user.home");
+        String uploadDir = "/home/ubuntu/manna/upload/member";
         File directory = new File(uploadDir);
 
         String fileName = file.getOriginalFilename();
