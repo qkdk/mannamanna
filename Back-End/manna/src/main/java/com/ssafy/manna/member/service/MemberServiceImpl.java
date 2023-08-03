@@ -58,14 +58,16 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender javaMailSender;
-    @Autowired
-    private ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader;
 
     @Value("${spring.mail.username}")
     private String sender;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
+
+    @Value("${file.server-domain}")
+    private String serverDomain;
 
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
@@ -341,29 +343,30 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String storeFile(MultipartFile file) throws IOException {
 
-
         String fileName = file.getOriginalFilename();
-        Resource resource = resourceLoader.getResource("file:" + uploadDir + "/" + fileName);
-        WritableResource writableResource = (WritableResource) resource;
+        String filePath = uploadDir + "/" + fileName;
+        File destFile = new File(filePath);
 
-        try (OutputStream outputStream = writableResource.getOutputStream()) {
-            outputStream.write(file.getBytes());
+        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
+        File directory = destFile.getParentFile();
+        if (!directory.exists()) {
+            FileUtils.forceMkdir(directory);
         }
-//
+
+        file.transferTo(destFile);
+
+        return serverDomain + "/manna/upload/member/" + fileName;
+
 //        String fileName = file.getOriginalFilename();
-//        String filePath = uploadDir + File.separator + fileName;
-//        File destFile = new File(filePath);
+//        Resource resource = resourceLoader.getResource("file:" + uploadDir + "/" + fileName);
+//        WritableResource writableResource = (WritableResource) resource;
 //
-//        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
-//        File directory = destFile.getParentFile();
-//        if (!directory.exists()) {
-//            FileUtils.forceMkdir(directory);
+//        try (OutputStream outputStream = writableResource.getOutputStream()) {
+//            outputStream.write(file.getBytes());
 //        }
-//
-//        file.transferTo(destFile);
-//        return filePath;
-        return resource.getFile().getAbsolutePath();
+//        return resource.getFile().getAbsolutePath();
 
     }
+
 
 }
