@@ -19,9 +19,9 @@ import javax.swing.text.html.Option;
 
 public interface MemberService {
     //회원가입
-    void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception;
+//    void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception;
 
-//    void signUp(MemberSignUpRequest memberSignUpRequest, MultipartFile[] multipartFiles) throws  Exception;
+    void signUp(MemberSignUpRequest memberSignUpRequest, MultipartFile[] multipartFiles) throws  Exception;
     //정보 수정
     void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception;
 
