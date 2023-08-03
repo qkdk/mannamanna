@@ -23,6 +23,7 @@ import com.ssafy.manna.member.repository.MemberRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +31,12 @@ import java.util.Optional;
 import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.WritableResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,6 +58,8 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender javaMailSender;
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -332,11 +340,30 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String storeFile(MultipartFile file) throws IOException {
+
+
         String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + File.separator + fileName;
-        File destFile = new File(filePath);
-        file.transferTo(destFile);
-        return filePath;
+        Resource resource = resourceLoader.getResource("file:" + uploadDir + "/" + fileName);
+        WritableResource writableResource = (WritableResource) resource;
+
+        try (OutputStream outputStream = writableResource.getOutputStream()) {
+            outputStream.write(file.getBytes());
+        }
+//
+//        String fileName = file.getOriginalFilename();
+//        String filePath = uploadDir + File.separator + fileName;
+//        File destFile = new File(filePath);
+//
+//        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
+//        File directory = destFile.getParentFile();
+//        if (!directory.exists()) {
+//            FileUtils.forceMkdir(directory);
+//        }
+//
+//        file.transferTo(destFile);
+//        return filePath;
+        return resource.getFile().getAbsolutePath();
+
     }
 
 }
