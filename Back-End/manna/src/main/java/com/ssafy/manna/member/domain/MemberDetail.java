@@ -48,6 +48,7 @@ public class MemberDetail extends BaseTimeEntity {
     private boolean isBlockingFriend;   //지인차단 여부
     private int mileage;                //현재마일리지
 
+
     // 정보 수정 (비밀번호, 키, 주소, 직업, 프로필 사진)
     public void updateHeight(int height) {
         this.height = height;

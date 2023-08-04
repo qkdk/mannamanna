@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -46,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDetailRepository memberDetailRepository;
     private final SidoRepository sidoRepository;
     private final GugunRepository gugunRepository;
-//    private final ProfilePictureRepository profilePictureRepository;
+    private final ProfilePictureRepository profilePictureRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final JavaMailSender javaMailSender;
@@ -58,121 +60,124 @@ public class MemberServiceImpl implements MemberService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    @Value("${file.server-domain}")
-    private String serverDomain;
-
-    @Override
-    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
-
-        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
-            log.info("이미 있는 회원입니다.");
-            throw new Exception("이미 존재하는 이메일입니다.");
-        }
-
-        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
-                .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
-
-        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-                .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
-
-        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
-                memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
-        Member member = Member.builder()
-                .id(memberSignUpRequest.getId())
-                .pwd(memberSignUpRequest.getPwd())
-                .gender(memberSignUpRequest.getGender())
-                .name(memberSignUpRequest.getName())
-                .role(UserRole.USER)
-                .build();
-
-        member.passwordEncode(passwordEncoder);
-
-        MemberDetail memberDetail = MemberDetail.builder()
-                .id(member.getId())
-                .member(member)
-                .address(address)
-                .tel(memberSignUpRequest.getTel())
-                .birth(memberSignUpRequest.getBirth())
-                .emailId(memberSignUpRequest.getEmailId())
-                .emailDomain(memberSignUpRequest.getEmailDomain())
-                .height(memberSignUpRequest.getHeight())
-                .job(memberSignUpRequest.getJob())
-                .isSmoker(memberSignUpRequest.isSmoker())
-                .isDrinker(memberSignUpRequest.isDrinker())
-                .mbti(memberSignUpRequest.getMbti())
-                .religion(memberSignUpRequest.getReligion())
-                .introduction(memberSignUpRequest.getIntroduction())
-                .isBlockingFriend(false)            //isBlockingFriend 기본값 false
-                .mileage(0)
-                .build();
-        memberDetailRepository.save(memberDetail);
-    }
+//    @Value("${file.server-domain}")
+//    private String serverDomain;
 
 //    @Override
-//    public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
+//    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
+//
 //        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
 //            log.info("이미 있는 회원입니다.");
 //            throw new Exception("이미 존재하는 이메일입니다.");
 //        }
 //
-////      //사진 저장
-//        int[] priorities = new int[3];
-//        priorities[0] = memberSignUpRequest.getPriority1();
-//        priorities[1] = memberSignUpRequest.getPriority2();
-//        priorities[2] = memberSignUpRequest.getPriority3();
-//
 //        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
-//            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
+//                .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
 //
 //        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-//            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
+//                .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
 //
 //        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
-//            memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
-//
+//                memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
 //        Member member = Member.builder()
-//            .id(memberSignUpRequest.getId())
-//            .pwd(memberSignUpRequest.getPwd())
-//            .gender(memberSignUpRequest.getGender())
-//            .name(memberSignUpRequest.getName())
-//            .role(UserRole.USER)
-//            .build();
+//                .id(memberSignUpRequest.getId())
+//                .pwd(memberSignUpRequest.getPwd())
+//                .gender(memberSignUpRequest.getGender())
+//                .name(memberSignUpRequest.getName())
+//                .role(UserRole.USER)
+//                .build();
 //
 //        member.passwordEncode(passwordEncoder);
 //
 //        MemberDetail memberDetail = MemberDetail.builder()
-//            .id(member.getId())
-//            .member(member)
-//            .address(address)
-//            .tel(memberSignUpRequest.getTel())
-//            .birth(memberSignUpRequest.getBirth())
-//            .emailId(memberSignUpRequest.getEmailId())
-//            .emailDomain(memberSignUpRequest.getEmailDomain())
-//            .height(memberSignUpRequest.getHeight())
-//            .job(memberSignUpRequest.getJob())
-//            .isSmoker(memberSignUpRequest.isSmoker())
-//            .isDrinker(memberSignUpRequest.isDrinker())
-//            .mbti(memberSignUpRequest.getMbti())
-//            .religion(memberSignUpRequest.getReligion())
-//            .introduction(memberSignUpRequest.getIntroduction())
-//            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
-//            .mileage(0)
-//            .build();
+//                .id(member.getId())
+//                .member(member)
+//                .address(address)
+//                .tel(memberSignUpRequest.getTel())
+//                .birth(memberSignUpRequest.getBirth())
+//                .emailId(memberSignUpRequest.getEmailId())
+//                .emailDomain(memberSignUpRequest.getEmailDomain())
+//                .height(memberSignUpRequest.getHeight())
+//                .job(memberSignUpRequest.getJob())
+//                .isSmoker(memberSignUpRequest.isSmoker())
+//                .isDrinker(memberSignUpRequest.isDrinker())
+//                .mbti(memberSignUpRequest.getMbti())
+//                .religion(memberSignUpRequest.getReligion())
+//                .introduction(memberSignUpRequest.getIntroduction())
+//                .isBlockingFriend(false)            //isBlockingFriend 기본값 false
+//                .mileage(0)
+//                .build();
 //        memberDetailRepository.save(memberDetail);
-//
-//
-//        for(int i=0;i<3;i++){
-//            String path = storeFile(multipartFiles[i]);
-//
-//            ProfilePicture profilePicture = ProfilePicture.builder()
-//                    .member(member)
-//                    .path(path)
-//                    .name(multipartFiles[i].getOriginalFilename())
-//                    .priority(priorities[i])
-//                    .build();
-//            profilePictureRepository.save(profilePicture);
-//        }
 //    }
+
+    @Override
+    public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
+        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
+            log.info("이미 있는 회원입니다.");
+            throw new Exception("이미 존재하는 이메일입니다.");
+        }
+        System.out.println(memberSignUpRequest);
+
+//      //사진 저장
+        int[] priorities = new int[3];
+        priorities[0] = memberSignUpRequest.getPriority1();
+        priorities[1] = memberSignUpRequest.getPriority2();
+        priorities[2] = memberSignUpRequest.getPriority3();
+
+        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
+            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
+
+        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
+            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
+
+        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
+            memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
+
+        Member member = Member.builder()
+            .id(memberSignUpRequest.getId())
+            .pwd(memberSignUpRequest.getPwd())
+            .gender(memberSignUpRequest.getGender())
+            .name(memberSignUpRequest.getName())
+            .role(UserRole.USER)
+            .build();
+
+        member.passwordEncode(passwordEncoder);
+
+        MemberDetail memberDetail = MemberDetail.builder()
+            .id(member.getId())
+            .member(member)
+            .address(address)
+            .tel(memberSignUpRequest.getTel())
+            .birth(memberSignUpRequest.getBirth())
+            .emailId(memberSignUpRequest.getEmailId())
+            .emailDomain(memberSignUpRequest.getEmailDomain())
+            .height(memberSignUpRequest.getHeight())
+            .job(memberSignUpRequest.getJob())
+            .isSmoker(memberSignUpRequest.isSmoker())
+            .isDrinker(memberSignUpRequest.isDrinker())
+            .mbti(memberSignUpRequest.getMbti())
+            .religion(memberSignUpRequest.getReligion())
+            .introduction(memberSignUpRequest.getIntroduction())
+//            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
+                .isBlockingFriend(false)
+            .mileage(0)
+            .build();
+        memberDetailRepository.save(memberDetail);
+
+
+        for(int i=0;i<3;i++){
+            String path = storeFile(multipartFiles[i]);
+
+            System.out.println("path:"+path);
+            ProfilePicture profilePicture = ProfilePicture.builder()
+                    .member(member)
+                    .path(path)
+                    .name(multipartFiles[i].getOriginalFilename())
+                    .priority(priorities[i])
+                    .build();
+            profilePictureRepository.save(profilePicture);
+        }
+    }
 
 
     @Override
@@ -383,31 +388,32 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String storeFile(MultipartFile file) throws IOException {
 
-        String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + "/" + fileName;
-        File destFile = new File(filePath);
-        System.out.println(serverDomain + "/manna/upload/member/" + fileName);
+//        String rootDir = "/home/ubuntu";
 
-        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
-        File directory = destFile.getParentFile();
+        String fileName = file.getOriginalFilename();
+
+        File directory = new File(uploadDir);
+        String filePath = uploadDir +"/"+ fileName;
+        File destFile = new File(filePath);
+        System.out.println(filePath);
+
         if (!directory.exists()) {
-            FileUtils.forceMkdir(directory);
+            boolean mkdirsResult = directory.mkdirs();
+            if (mkdirsResult) {
+                System.out.println("디렉토리 생성 성공");
+            } else {
+                System.out.println("디렉토리 생성 실패");
+            }
         }
 
-        file.transferTo(destFile);
-
-
-
-        return serverDomain + "/manna/upload/member/" + fileName;
-
-//        String fileName = file.getOriginalFilename();
-//        Resource resource = resourceLoader.getResource("file:" + uploadDir + "/" + fileName);
-//        WritableResource writableResource = (WritableResource) resource;
-//
-//        try (OutputStream outputStream = writableResource.getOutputStream()) {
-//            outputStream.write(file.getBytes());
-//        }
-//        return resource.getFile().getAbsolutePath();
+        try {
+            file.transferTo(destFile);
+            log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+            return filePath;
+        } catch (IOException e) {
+            log.error("파일 저장 실패:", e);
+            throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+        }
 
     }
 

@@ -19,7 +19,7 @@ class GugunRepositoryTest {
 
     @Test
     public void 구군_조회_테스트() {
-        Sido sido = sidoRepository.findByName("서울").get();
+        Sido sido = sidoRepository.findByName("서울특별시").get();
 
         Gugun gugun = gugunRepository.findByNameAndSido("강남구", sido).get();
 

@@ -34,7 +34,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableWebMvc
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class MemberController {
 
     private final MemberService memberService;
@@ -48,39 +48,39 @@ public class MemberController {
     private ServletContext servletContext;
 
     //회원가입
-    @PostMapping(value="/regist")
-    public ResponseEntity<?> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
-        try {
-            // 회원가입 시 카카오 인증
-            memberService.signUp(memberSignUpRequest);
-            return ResponseEntity.ok("join success");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-
-    //회원가입(이미지 포함)
-
-
-//    @PostMapping(value="/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<String> join(
-//            @RequestPart("memberSignUpRequest") MemberSignUpRequest memberSignUpRequest,
-//            @RequestPart("profilePicture1") MultipartFile profilePicture1,
-//            @RequestPart("profilePicture2") MultipartFile profilePicture2,
-//            @RequestPart("profilePicture3") MultipartFile profilePicture3
-//    ) {
+//    @PostMapping(value="/regist")
+//    public ResponseEntity<?> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
 //        try {
-//            MultipartFile[] multipartFiles = new MultipartFile[3];
-//            multipartFiles[0] = profilePicture1;
-//            multipartFiles[1] = profilePicture2;
-//            multipartFiles[2] = profilePicture3;
 //            // 회원가입 시 카카오 인증
-//            memberService.signUp(memberSignUpRequest,multipartFiles);
+//            memberService.signUp(memberSignUpRequest);
 //            return ResponseEntity.ok("join success");
 //        } catch (Exception e) {
 //            return ResponseEntity.badRequest().body(e.getMessage());
 //        }
 //    }
+
+    //회원가입(이미지 포함)
+
+
+    @PostMapping(value="/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> join(
+            @RequestPart("memberSignUpRequest") MemberSignUpRequest memberSignUpRequest,
+            @RequestPart("profilePicture1") MultipartFile profilePicture1,
+            @RequestPart("profilePicture2") MultipartFile profilePicture2,
+            @RequestPart("profilePicture3") MultipartFile profilePicture3
+    ) {
+        try {
+            MultipartFile[] multipartFiles = new MultipartFile[3];
+            multipartFiles[0] = profilePicture1;
+            multipartFiles[1] = profilePicture2;
+            multipartFiles[2] = profilePicture3;
+            // 회원가입 시 카카오 인증
+            memberService.signUp(memberSignUpRequest,multipartFiles);
+            return ResponseEntity.ok("join success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {

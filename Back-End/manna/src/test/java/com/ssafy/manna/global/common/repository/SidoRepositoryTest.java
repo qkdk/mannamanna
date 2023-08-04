@@ -16,8 +16,8 @@ class SidoRepositoryTest {
 
     @Test
     public void 시도_조회_테스트() {
-        Sido sido = sidoRepository.findByName("서울").get();
+        Sido sido = sidoRepository.findByName("서울특별시").get();
 
-        Assertions.assertThat(sido.getName()).isEqualTo("서울");
+        Assertions.assertThat(sido.getName()).isEqualTo("서울특별시");
     }
 }
