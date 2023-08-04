@@ -34,7 +34,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @EnableWebMvc
 @Slf4j
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class MemberController {
 
     private final MemberService memberService;

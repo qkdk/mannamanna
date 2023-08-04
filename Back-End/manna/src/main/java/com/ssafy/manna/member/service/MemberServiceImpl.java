@@ -388,17 +388,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public String storeFile(MultipartFile file) throws IOException {
 
-//        System.out.println(serverDomain + "/manna/upload/member/" + fileName);
-
-        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 설정
-        // 업로드할 디렉토리에 쓰기 권한이 있는지 확인하고 없으면 디렉토리 생성
-//        String userHomeDir = System.getProperty("user.home");
-        String uploadDir = "/home/ubuntu/manna/upload/member";
-        File directory = new File(uploadDir);
+//        String rootDir = "/home/ubuntu";
 
         String fileName = file.getOriginalFilename();
-        String filePath = uploadDir + "/" + fileName;
+
+        File directory = new File(uploadDir);
+        String filePath = uploadDir +"/"+ fileName;
         File destFile = new File(filePath);
+        System.out.println(filePath);
 
         if (!directory.exists()) {
             boolean mkdirsResult = directory.mkdirs();
@@ -409,19 +406,14 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 
-        file.transferTo(destFile);
-
-        return filePath;
-//        return "/manna/upload/member/" + fileName;
-
-//        String fileName = file.getOriginalFilename();
-//        Resource resource = resourceLoader.getResource("file:" + uploadDir + "/" + fileName);
-//        WritableResource writableResource = (WritableResource) resource;
-//
-//        try (OutputStream outputStream = writableResource.getOutputStream()) {
-//            outputStream.write(file.getBytes());
-//        }
-//        return resource.getFile().getAbsolutePath();
+        try {
+            file.transferTo(destFile);
+            log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+            return filePath;
+        } catch (IOException e) {
+            log.error("파일 저장 실패:", e);
+            throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+        }
 
     }
 
