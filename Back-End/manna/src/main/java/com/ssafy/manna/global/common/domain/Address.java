@@ -23,23 +23,17 @@ public class Address extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Sido sido;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    private Gugun gugun;
-
+    private String sido;
+    private String gugun;
     private String detail;
-
     private Double latitude;
     private Double longitude;
-
+//    private String dtype;
 
     public void updateDetail(String detail) {
         this.detail = detail;
     }
-    public void updateAddress(Sido sido, Gugun gugun, String detail, Double latitude, Double longitude){
+    public void updateAddress(String sido, String gugun, String detail, Double latitude, Double longitude){
         this.sido = sido;
         this.gugun = gugun;
         this.detail = detail;
@@ -47,7 +41,7 @@ public class Address extends BaseTimeEntity {
         this.longitude = longitude;
     }
 
-    public Address(Sido sido, Gugun gugun, String detail, Double latitude, Double longitude) {
+    public Address(String sido, String gugun, String detail, Double latitude, Double longitude) {
         this.sido = sido;
         this.gugun = gugun;
         this.detail = detail;
