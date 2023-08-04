@@ -373,13 +373,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String storeFile(MultipartFile file) throws IOException {
-
-//        String rootDir = "/home/ubuntu";
-
+        String uploadDir = "/manna/upload/images/member/";
         String fileName = file.getOriginalFilename();
 
         File directory = new File(uploadDir);
-        String filePath = uploadDir +"/"+ fileName;
+        String filePath = uploadDir + fileName;
         File destFile = new File(filePath);
         System.out.println(filePath);
 
@@ -392,16 +390,43 @@ public class MemberServiceImpl implements MemberService {
             }
         }
 
-        try {
-            file.transferTo(destFile);
-            log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
-            return filePath;
-        } catch (IOException e) {
-            log.error("파일 저장 실패:", e);
-            throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-        }
-
+        file.transferTo(destFile);
+        log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+        return filePath;
     }
+
+//    @Override
+//    public String storeFile(MultipartFile file) throws IOException {
+//
+////        String rootDir = "/home/ubuntu";
+//
+//        String fileName = file.getOriginalFilename();
+//
+//        File directory = new File(uploadDir);
+//        String filePath = uploadDir +"/"+ fileName;
+//        File destFile = new File(filePath);
+//        System.out.println(filePath);
+//
+//        if (!directory.exists()) {
+//            boolean mkdirsResult = directory.mkdirs();
+//            if (mkdirsResult) {
+//                System.out.println("디렉토리 생성 성공");
+//            } else {
+//                System.out.println("디렉토리 생성 실패");
+//            }
+//        }
+//
+//        try {
+//            file.transferTo(destFile);
+//            log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+//            return filePath;
+//        } catch (IOException e) {
+//            log.error("파일 저장 실패:", e);
+//            throw new IOException("파일 저장 실패: " + e.getMessage(), e);
+//        }
+//
+//
+//    }
 
 
 }
