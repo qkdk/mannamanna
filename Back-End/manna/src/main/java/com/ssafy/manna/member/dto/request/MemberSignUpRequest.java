@@ -44,13 +44,13 @@ public class MemberSignUpRequest {
     private Double longitude;
 
     //회원 프로필 사진 3개
-    private MultipartFile profilePicture1;
+//    private MultipartFile profilePicture1;
     private Integer priority1;
 //
-    private MultipartFile profilePicture2;
+//    private MultipartFile profilePicture2;
     private Integer priority2;
 //
-    private MultipartFile profilePicture3;
+//    private MultipartFile profilePicture3;
     private Integer priority3;
 //
 
