@@ -47,6 +47,12 @@ public class MemberController {
     @Autowired
     private ServletContext servletContext;
 
+    //임시매핑
+    @PostMapping("/hello")
+    public ResponseEntity<String> imsi(){
+        return ResponseEntity.ok("success");
+    }
+
     //회원가입
 //    @PostMapping(value="/regist")
 //    public ResponseEntity<?> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
