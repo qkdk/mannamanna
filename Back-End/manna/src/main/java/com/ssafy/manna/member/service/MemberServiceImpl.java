@@ -5,8 +5,6 @@ import com.ssafy.manna.global.common.domain.Address;
 import com.ssafy.manna.global.common.domain.Gugun;
 import com.ssafy.manna.global.common.domain.Sido;
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
-import com.ssafy.manna.global.common.repository.GugunRepository;
-import com.ssafy.manna.global.common.repository.SidoRepository;
 import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberDetail;
@@ -28,7 +26,6 @@ import java.util.Optional;
 import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
@@ -46,8 +43,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MemberDetailRepository memberDetailRepository;
-    private final SidoRepository sidoRepository;
-    private final GugunRepository gugunRepository;
     private final ProfilePictureRepository profilePictureRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -118,19 +113,15 @@ public class MemberServiceImpl implements MemberService {
         }
         System.out.println(memberSignUpRequest);
 
-//      //사진 저장
+        //사진 저장
         int[] priorities = new int[3];
         priorities[0] = memberSignUpRequest.getPriority1();
         priorities[1] = memberSignUpRequest.getPriority2();
         priorities[2] = memberSignUpRequest.getPriority3();
 
-        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
-            .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
 
-        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-            .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
-
-        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
+        Address address = new Address(memberSignUpRequest.getSido(), memberSignUpRequest.getGugun(),
+                memberSignUpRequest.getDetail(),
             memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
 
         Member member = Member.builder()
@@ -160,7 +151,7 @@ public class MemberServiceImpl implements MemberService {
             .introduction(memberSignUpRequest.getIntroduction())
 //            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
                 .isBlockingFriend(false)
-            .mileage(0)
+            .mileage(1000)
             .build();
         memberDetailRepository.save(memberDetail);
 
@@ -312,8 +303,7 @@ public class MemberServiceImpl implements MemberService {
                 memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
                 memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
                 profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
-                ,memberAddress.getSido().getName(),
-                memberAddress.getGugun().getName(),
+                ,memberAddress.getSido(),memberAddress.getGugun(),
                 memberAddress.getDetail()
         );
         return memberInfoResponse;
@@ -358,16 +348,12 @@ public class MemberServiceImpl implements MemberService {
 //        }
 
         String detail = memberUpdateRequest.getDetail();
+        String sido = memberUpdateRequest.getSido();
+        String gugun = memberUpdateRequest.getGugun();
         Double latitude = memberUpdateRequest.getLatitude();
         Double longitude = memberUpdateRequest.getLongitude();
 
-        Optional<Sido> sidoEntity = sidoRepository.findByName(memberUpdateRequest.getSido());
-        System.out.println(memberUpdateRequest.getGugun());
-        Optional<Gugun> gugunEntity = gugunRepository.findByNameAndSido(memberUpdateRequest.getGugun(),sidoEntity.get());
-
-        if(sidoEntity.isPresent() && gugunEntity.isPresent()){
-            address.updateAddress(sidoEntity.get(),gugunEntity.get(),detail,latitude,longitude);
-        }
+        address.updateAddress(sido,gugun,detail,latitude,longitude);
 
         memberRepository.save(member);
     }
