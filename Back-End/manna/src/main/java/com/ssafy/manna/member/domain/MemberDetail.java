@@ -30,6 +30,7 @@ public class MemberDetail extends BaseTimeEntity {
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "member_address_id")
     private Address address;
 
     private String tel;                 //전화번호
