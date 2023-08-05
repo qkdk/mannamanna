@@ -135,6 +135,7 @@ public class MemberController {
         Optional<Member> findMember = memberService.findOne(id);
         if(findMember.isPresent()){
             MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember.get());
+
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 조회 완료")
@@ -273,20 +274,20 @@ public class MemberController {
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/member/img/{fileName}")
-    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
-        // 이미지 파일의 실제 경로
-        String imagePath = uploadDir + "/" + fileName;
-        // 이미지 파일을 Resource 객체로 읽어옴
-        Resource imageResource = (Resource) new FileSystemResource(imagePath);
-
-        // 파일을 읽어올 수 없는 경우 404 Not Found 응답
-        // 이미지 파일의 Content-Type을 추론하여 설정
-        String contentType = Files.probeContentType(Paths.get(imagePath));
-
-        // Response에 이미지 파일을 담아서 반환
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .body(imageResource);
-    }
+//    @GetMapping("/member/img/{fileName}")
+//    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
+//        // 이미지 파일의 실제 경로
+//        String imagePath = uploadDir + "/" + fileName;
+//        // 이미지 파일을 Resource 객체로 읽어옴
+//        Resource imageResource = (Resource) new FileSystemResource(imagePath);
+//
+//        // 파일을 읽어올 수 없는 경우 404 Not Found 응답
+//        // 이미지 파일의 Content-Type을 추론하여 설정
+//        String contentType = Files.probeContentType(Paths.get(imagePath));
+//
+//        // Response에 이미지 파일을 담아서 반환
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.parseMediaType(contentType))
+//                .body(imageResource);
+//    }
 }
