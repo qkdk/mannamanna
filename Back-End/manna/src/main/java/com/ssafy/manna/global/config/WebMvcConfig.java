@@ -16,7 +16,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         //ec2에서 설정을 /home/ubuntu/manna/member/upload
         //이미지 파일 저장된 경로 : 어쩌구/manna/upload/images/member/
         //domain/member/img/+imgname;
-        registry.addResourceHandler("/api/user/**")       //url패턴 설정
+        // domain/api/member/img/
+
+
+        registry.addResourceHandler("/member/img/**")       //url패턴 설정
                 .addResourceLocations("file:/home/ubuntu/manna/upload/images/member/");    //실제 파일 저장 경로
     }
 }
