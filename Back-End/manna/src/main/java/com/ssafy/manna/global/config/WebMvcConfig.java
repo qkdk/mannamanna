@@ -19,7 +19,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         // domain/api/member/img/
 
 
-        registry.addResourceHandler("/api/img/**")       //url패턴 설정
+        registry.addResourceHandler("/img/**")       //url패턴 설정
                 .addResourceLocations("file:/home/ubuntu/manna/upload/images/member/");    //실제 파일 저장 경로
     }
 }
