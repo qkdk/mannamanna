@@ -45,7 +45,6 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-    private final ResourceLoader resourceLoader;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
