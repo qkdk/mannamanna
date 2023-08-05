@@ -12,7 +12,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/member/**")
-                .addResourceLocations("file:" + uploadDir + "/");
+
+        //http://i9b205.p.ssafy.io/member/img/imgg3.jpg 을 통해 이미지에 접근
+        //file:실제 파일 저장 경로/
+        //ec2에서 설정을 /home/ubuntu/manna/member/upload
+        //이미지 파일 저장된 경로 : 어쩌구/manna/upload/images/member/
+        registry.addResourceHandler("/member/img/**")       //url패턴 설정
+                .addResourceLocations("file:/home/ubuntu/manna/upload/images/member/");    //실제 파일 저장 경로
     }
 }
