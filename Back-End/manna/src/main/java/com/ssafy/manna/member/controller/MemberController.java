@@ -12,11 +12,13 @@ import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.member.service.MemberService;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -268,5 +272,21 @@ public class MemberController {
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
+    }
+    @GetMapping("/member/img/{fileName}")
+    public ResponseEntity<Resource> getImage(@PathVariable String fileName) throws IOException {
+        // 이미지 파일의 실제 경로
+        String imagePath = uploadDir + "/" + fileName;
+        // 이미지 파일을 Resource 객체로 읽어옴
+        Resource imageResource = (Resource) new FileSystemResource(imagePath);
+
+        // 파일을 읽어올 수 없는 경우 404 Not Found 응답
+        // 이미지 파일의 Content-Type을 추론하여 설정
+        String contentType = Files.probeContentType(Paths.get(imagePath));
+
+        // Response에 이미지 파일을 담아서 반환
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(imageResource);
     }
 }
