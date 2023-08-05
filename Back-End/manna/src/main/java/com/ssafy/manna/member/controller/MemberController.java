@@ -12,13 +12,14 @@ import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.member.service.MemberService;
-import jakarta.annotation.Resource;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,7 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final ResourceLoader resourceLoader;
 
     @Value("${file.upload-dir}")
     private String uploadDir;
@@ -286,7 +288,6 @@ public class MemberController {
         String imagePath = "/home/ubuntu/manna/upload/images/member" + "/" + fileName;
         // 이미지 파일을 Resource 객체로 읽어옴
         Resource imageResource = (Resource) new FileSystemResource(imagePath);
-
         // 파일을 읽어올 수 없는 경우 404 Not Found 응답
         // 이미지 파일의 Content-Type을 추론하여 설정
         String contentType = Files.probeContentType(Paths.get(imagePath));
