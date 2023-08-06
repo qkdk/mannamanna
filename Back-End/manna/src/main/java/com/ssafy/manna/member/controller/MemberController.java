@@ -28,11 +28,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -48,9 +43,6 @@ public class MemberController {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
-    @Autowired
-    private ServletContext servletContext;
 
     //임시매핑
     @PostMapping("/hello")
