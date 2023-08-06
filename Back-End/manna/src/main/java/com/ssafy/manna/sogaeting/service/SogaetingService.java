@@ -1,5 +1,9 @@
 package com.ssafy.manna.sogaeting.service;
 
-public class SogaetingService {
+import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 
+public interface SogaetingService {
+
+    // 신고하기
+    void report(SogaetingReportRequest sogaetingReportRequest) throws Exception;
 }

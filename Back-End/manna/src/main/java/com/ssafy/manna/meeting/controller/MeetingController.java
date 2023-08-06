@@ -15,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequiredArgsConstructor
 @EnableWebMvc
 @Slf4j
-@RequestMapping("/meeting")
+@RequestMapping("/api/meeting")
 public class MeetingController {
 
     private final MeetingService meetingService;
