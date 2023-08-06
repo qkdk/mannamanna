@@ -16,8 +16,10 @@ public class NoteDetailResponse {
     private String receiver;
     //보내는이
     private String sender;
-    //노트아이디
+    //쪽지 아이디
     private int id;
+    //쪽지 제목
+    private String subject;
     //쪽지를 보낸시간
     private LocalDateTime date;
     //소개팅 쪽지 여부

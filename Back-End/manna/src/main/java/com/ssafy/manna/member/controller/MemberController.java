@@ -129,12 +129,11 @@ public class MemberController {
 
     //마이페이지 정보 조회
     @GetMapping("/mypage/{id}")
-    public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
+    public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) throws Exception {
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.findOne(id);
-        if(findMember.isPresent()){
-            MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember.get());
-
+        try{
+            Member findMember = memberService.findOne(id).orElseThrow(()->new Exception("회원 정보가 없습니다."));
+            MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 조회 완료")
@@ -142,10 +141,10 @@ public class MemberController {
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
         }
-        else{
+        catch(Exception e){
             body = ResponseTemplate.builder()
                     .result(false)
-                    .msg("Page error")
+                    .msg("회원 조회 실패")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
@@ -153,24 +152,28 @@ public class MemberController {
 
     //마이페이지 정보수정
     @PutMapping("/mypage/{id}")
-    public ResponseEntity<?> myPageEdit(@RequestBody  MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
+    public ResponseEntity<?> myPageEdit(@RequestBody MemberUpdateRequest memberUpdateRequest,
+                                        @PathVariable("id") String id,
+                                        MultipartFile[] multipartfiles)
+    {
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.findOne(id);
-        if(findMember.isPresent()){
-            memberService.updateInfo(findMember.get(),memberUpdateRequest);
+        Member findMember = null;
+        try {
+            findMember = memberService.findOne(id).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+            memberService.updateInfo(findMember,memberUpdateRequest,multipartfiles);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
-        }
-        else {
+        } catch (Exception e) {
             body = ResponseTemplate.builder()
                     .result(false)
                     .msg("회원 수정 오류")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
+
     }
 
     //아이디 찾기
@@ -224,8 +227,6 @@ public class MemberController {
         Optional<Member> member = memberService.findOne(memberCheckPwdRequest.getId());
         ResponseTemplate<?> body;
         if(member.isPresent()){
-            System.out.println("받은거:"+memberCheckPwdRequest.getPwd());
-            System.out.println("꺼낸거:"+member.get().getPwd());
             if(passwordEncoder.matches(memberCheckPwdRequest.getPwd(), member.get().getPwd())){
                 body = ResponseTemplate.builder()
                         .result(true)

@@ -40,4 +40,11 @@ public class Note {
 
     private Boolean isReject;
 
+    public void updateIsCheck(boolean isCheck){
+        this.isCheck = isCheck;
+    }
+
+    public void updateIsReject(boolean isReject){
+        this.isReject = isReject;
+    }
 }
