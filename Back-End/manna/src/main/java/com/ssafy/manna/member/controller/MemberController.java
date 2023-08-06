@@ -154,13 +154,19 @@ public class MemberController {
     @PutMapping("/mypage/{id}")
     public ResponseEntity<?> myPageEdit(@RequestBody MemberUpdateRequest memberUpdateRequest,
                                         @PathVariable("id") String id,
-                                        MultipartFile[] multipartfiles)
+                                        @RequestPart("profilePicture1") MultipartFile profilePicture1,
+                                        @RequestPart("profilePicture2") MultipartFile profilePicture2,
+                                        @RequestPart("profilePicture3") MultipartFile profilePicture3)
     {
         ResponseTemplate<?> body;
         Member findMember = null;
         try {
             findMember = memberService.findOne(id).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
-            memberService.updateInfo(findMember,memberUpdateRequest,multipartfiles);
+            MultipartFile[] multipartFiles = new MultipartFile[3];
+            multipartFiles[0] = profilePicture1;
+            multipartFiles[1] = profilePicture2;
+            multipartFiles[2] = profilePicture3;
+            memberService.updateInfo(findMember,memberUpdateRequest,multipartFiles);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
