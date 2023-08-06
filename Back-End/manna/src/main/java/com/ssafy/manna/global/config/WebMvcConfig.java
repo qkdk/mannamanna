@@ -20,6 +20,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
 
         registry.addResourceHandler("/img/**")       //url패턴 설정
-                .addResourceLocations("file:/home/ubuntu/manna/upload/images/member/");    //실제 파일 저장 경로
+                .addResourceLocations("file:////manna/upload/images/member/");    //실제 파일 저장 경로
     }
 }
