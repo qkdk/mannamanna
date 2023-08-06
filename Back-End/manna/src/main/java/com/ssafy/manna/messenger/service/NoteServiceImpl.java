@@ -49,4 +49,10 @@ public class NoteServiceImpl implements NoteService{
         noteRepository.save(note);
 
     }
+
+    @Override
+    public void deleteNote(int id) throws Exception {
+        Note deleteNote = noteRepository.findById(id).orElseThrow(()->new Exception("쪽지를 찾을 수 없습니다."));
+        noteRepository.delete(deleteNote);
+    }
 }
