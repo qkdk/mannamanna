@@ -152,7 +152,7 @@ public class MemberController {
 
     //마이페이지 정보수정
     @PutMapping("/mypage/{id}")
-    public ResponseEntity<?> myPageEdit(@RequestBody MemberUpdateRequest memberUpdateRequest,
+    public ResponseEntity<?> myPageEdit(@RequestPart("memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
                                         @PathVariable("id") String id,
                                         @RequestPart("profilePicture1") MultipartFile profilePicture1,
                                         @RequestPart("profilePicture2") MultipartFile profilePicture2,
