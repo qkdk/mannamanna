@@ -11,6 +11,4 @@ public interface RedisSessionRepository extends CrudRepository<Session, String> 
 
     @Override
     List<Session> findAll();
-
-    List<Session> findSessionByGender(String gender);
 }

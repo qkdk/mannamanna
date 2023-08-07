@@ -1,10 +1,11 @@
-package com.ssafy.manna.global;
+package com.ssafy.manna.global.handler;
+
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_GENDER;
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_USER_ID;
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_USER_NAME;
 
 import com.ssafy.manna.global.common.domain.Session;
-import com.ssafy.manna.global.common.enums.SessionEnum;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -24,14 +25,11 @@ public class WebSocketEventListener {
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         try {
-            String userName = headerAccessor.getNativeHeader(
-                SessionEnum.SOCKET_HEADER_USER_NAME.getValue()).get(0);
-            String gender = headerAccessor.getNativeHeader(
-                SessionEnum.SOCKET_HEADER_GENDER.getValue()).get(0);
-            String userId = headerAccessor.getNativeHeader(
-                SessionEnum.SOCKET_HEADER_USER_ID.getValue()).get(0);
-            headerAccessor.getSessionAttributes()
-                .put(SessionEnum.SOCKET_HEADER_USER_ID.getValue(), userId);
+            String userName = headerAccessor.getNativeHeader(SOCKET_HEADER_USER_NAME.getValue())
+                .get(0);
+            String gender = headerAccessor.getNativeHeader(SOCKET_HEADER_GENDER.getValue()).get(0);
+            String userId = headerAccessor.getNativeHeader(SOCKET_HEADER_USER_ID.getValue()).get(0);
+            headerAccessor.getSessionAttributes().put(SOCKET_HEADER_USER_ID.getValue(), userId);
 
             saveSession(userName, gender, userId);
         } catch (Exception e) {
@@ -44,15 +42,12 @@ public class WebSocketEventListener {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String userId = (String) headerAccessor.getSessionAttributes()
-            .get(SessionEnum.SOCKET_HEADER_USER_ID.getValue());
+            .get(SOCKET_HEADER_USER_ID.getValue());
         redisSessionRepository.deleteById(userId);
     }
 
     private void saveSession(String userName, String gender, String userId) {
-        Session socketSession = Session.builder()
-            .gender(gender)
-            .userId(userId)
-            .userName(userName)
+        Session socketSession = Session.builder().gender(gender).userId(userId).userName(userName)
             .build();
         redisSessionRepository.save(socketSession);
     }

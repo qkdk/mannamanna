@@ -5,6 +5,8 @@ public enum SessionEnum {
     SOCKET_HEADER_USER_NAME("userName"),
     SOCKET_HEADER_USER_ID("userId"),
     SOCKET_HEADER_GENDER("gender"),
+    GENDER_MALE("male"),
+    GENDER_FEMALE("female")
     ;
 
     private final String value;
