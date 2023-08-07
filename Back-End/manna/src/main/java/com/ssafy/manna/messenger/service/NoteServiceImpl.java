@@ -286,9 +286,18 @@ public class NoteServiceImpl implements NoteService{
         // 내용
         String content = receiver.getName() + "님이 소개팅 신청을 거절하셨습니다.";
 
-    }
+        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
+                .receiver(sender.getId())
+                .sender(receiver.getId())
+                .subject(subject)
+                .content(content)
+                .isSogae(false)
+                .date(LocalDateTime.now())
+                .build();
+        send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
 
-    //소개팅 수락
+        noteRepository.save(note);
+    }
 
 
 }
