@@ -158,6 +158,12 @@ public class NoteServiceImpl implements NoteService{
         List<Note> receivedNoteList = noteRepository.findAllByReceiverId(userId);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note receivedNote:receivedNoteList){
+            // 형식 지정
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환
+            LocalDateTime dateTime = receivedNote.getDate();
+            String formattedDateTime = dateTime.format(formatter);
+
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(receivedNote.getId())
                     .receiverId(receivedNote.getReceiver().getId())
@@ -166,7 +172,7 @@ public class NoteServiceImpl implements NoteService{
                     .senderName(receivedNote.getSender().getName())
                     .subject(receivedNote.getSubject())
                     .content(receivedNote.getContent())
-                    .date(receivedNote.getDate())
+                    .date(formattedDateTime)
                     .isSogae(receivedNote.getIsSogae())
                     .isCheck(receivedNote.getIsCheck())
                     .isReject(receivedNote.getIsReject())
@@ -182,6 +188,11 @@ public class NoteServiceImpl implements NoteService{
         List<Note> sentNoteList = noteRepository.findAllBySenderId(userId);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note sentNote:sentNoteList){
+            // 형식 지정
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환
+            LocalDateTime dateTime = sentNote.getDate();
+            String formattedDateTime = dateTime.format(formatter);
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(sentNote.getId())
                     .receiverId(sentNote.getReceiver().getId())
@@ -190,7 +201,7 @@ public class NoteServiceImpl implements NoteService{
                     .senderName(sentNote.getSender().getName())
                     .subject(sentNote.getSubject())
                     .content(sentNote.getContent())
-                    .date(sentNote.getDate())
+                    .date(formattedDateTime)
                     .isSogae(sentNote.getIsSogae())
                     .isCheck(sentNote.getIsCheck())
                     .isReject(sentNote.getIsReject())
