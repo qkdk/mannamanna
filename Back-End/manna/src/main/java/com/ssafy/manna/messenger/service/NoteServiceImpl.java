@@ -7,8 +7,6 @@ import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
 import com.ssafy.manna.messenger.dto.response.NoteListResponse;
-import com.ssafy.manna.messenger.dto.response.ReceivedNoteResponse;
-import com.ssafy.manna.messenger.dto.response.SentNoteResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
 import java.util.ArrayList;
@@ -16,13 +14,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.expression.ExpressionException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
