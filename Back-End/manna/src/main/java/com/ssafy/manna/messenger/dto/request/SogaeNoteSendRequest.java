@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Builder
 public class SogaeNoteSendRequest {
     // 소개팅 쪽지
-
     //받는이 - 이름
     private String receiver;
 
@@ -21,6 +20,6 @@ public class SogaeNoteSendRequest {
     private String sender;
 
     //date 날짜
-    private LocalDateTime date;
+    private String date;
 
  }

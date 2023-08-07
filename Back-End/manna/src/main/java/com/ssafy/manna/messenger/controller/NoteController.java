@@ -73,7 +73,6 @@ public class NoteController {
 
     }
 
-
     //쪽지 삭제
     @DeleteMapping("/{noteId}")
     public ResponseEntity<?> deleteNote(@PathVariable("noteId") int noteId) throws Exception {

@@ -23,6 +23,6 @@ public class NoteSendRequest {
     private String content;
     //소개팅 신청 여부
     private boolean isSogae;
-    //소개팅 신청 시간
+    //쪽지 보낸 시간
     private LocalDateTime date;
 }
