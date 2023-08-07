@@ -33,4 +33,9 @@ public interface NoteService {
     List<NoteListResponse> sentNoteList(String userId) throws Exception;
 
 
+    //소개팅 쪽지 수락
+    void acceptSogating(int noteId) throws Exception;
+
+    //소개팅 쪽지 거절
+    void refuseSogating(int noteId) throws Exception;
 }

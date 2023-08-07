@@ -148,6 +148,28 @@ public class NoteController {
         }
     }
 
+    //소개팅 쪽지 수락
+    @GetMapping("/sogae/accept/{noteId}")
+    public ResponseEntity<?> acceptSogaeting(@PathVariable("noteId") int noteId) {
+        try {
+            noteService.acceptSogating(noteId);
+            return ResponseEntity.ok("소개팅을 수락하셨습니다.");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    //소개팅 쪽지 거절
+    @GetMapping("/sogae/refuse/{noteId}")
+    public ResponseEntity<?> refuseSogaeting(@PathVariable("noteId") int noteId){
+        try {
+            noteService.refuseSogating(noteId);
+            return ResponseEntity.ok("소개팅을 거절하셨습니다.");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //새로운 쪽지 확인 - 내가 로그인하고 나서 생성된 쪽지가 있는지 보면 되는건가?
 
 
 }

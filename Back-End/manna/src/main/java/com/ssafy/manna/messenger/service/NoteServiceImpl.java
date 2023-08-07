@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cglib.core.Local;
 import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,7 +79,7 @@ public class NoteServiceImpl implements NoteService{
         //String으로 들어온 날짜 - 소개팅 날짜
         String dateString = sogaeNoteSendRequest.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
-        LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+        LocalDateTime scheduleTime = LocalDateTime.parse(dateString, formatter);
         // -> 스케줄에 추가할 때 LocalDateTime 형식으로 저장해야 하므로
 
         // 내용
@@ -143,6 +144,8 @@ public class NoteServiceImpl implements NoteService{
         //보낸이
         Member sender = note.getSender();
 
+        //읽음 처리
+        note.updateIsCheck(true);
         //상대방 프로필 표출
 
         SogaeNoteDetailResponse sogaeNoteDetailResponse = new SogaeNoteDetailResponse().builder()
@@ -215,4 +218,71 @@ public class NoteServiceImpl implements NoteService{
         }
         return noteListResponses;
     }
+
+    @Override
+    public void acceptSogating(int noteId) throws Exception {
+        Note note = noteRepository.findById(noteId).orElseThrow(()->new Exception("쪽지가 존재하지 않습니다."));
+        //isRead= true,isReject= false;
+        //1. 쪽지 상태 update
+        note.updateIsCheck(true);
+        note.updateIsReject(false);
+        //2.  스케줄에 추가해주기
+        //2-1. 신청자(sender) 의 스케줄에 추가
+        //2-2. 상대방(receiver) 의 스케줄에 추가.
+
+        //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
+        // 받는이
+        Member receiver = note.getReceiver();
+        // 보내는이
+        Member sender = note.getSender();
+        // 제목
+        String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
+        // 날짜
+        // 날짜 형식 지정
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년-MM월-dd일 HH시mm분");
+        // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환
+        LocalDateTime dateTime = note.getDate();
+        String formattedDateTime = dateTime.format(formatter);
+
+        // 내용
+        String content = receiver.getName()+"님이 "+sender.getName()+"님의 소개팅 신청을 수락하셨습니다.\n"
+                +"D-Day : " + formattedDateTime+"\n 내 스케줄에 일정을 추가합니다.";
+
+        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
+                .receiver(sender.getId())
+                .sender(receiver.getId())
+                .subject(subject)
+                .content(content)
+                .isSogae(false)
+                .date(LocalDateTime.now())
+                .build();
+        //online, offline 여부 나중에 판단
+        send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
+
+        //소개팅 신청 받은 사람한테도 알려줘야 되나??
+
+        noteRepository.save(note);
+    }
+
+    @Override
+    public void refuseSogating(int noteId) throws Exception {
+        Note note = noteRepository.findById(noteId).orElseThrow(()-> new Exception("쪽지가 존재하지 않습니다."));
+        note.updateIsCheck(true);
+        note.updateIsReject(true);  //isReject==true 이면 거절
+
+        //신청자한테 소개팅을 거절하셨습니다 쪽지 전송
+        // 받는이
+        Member receiver = note.getReceiver();
+        // 보내는이
+        Member sender = note.getSender();
+        // 제목
+        String subject = receiver.getName() + "님이 소개팅 신청을 거절하셨습니다.";
+        // 내용
+        String content = receiver.getName() + "님이 소개팅 신청을 거절하셨습니다.";
+
+    }
+
+    //소개팅 수락
+
+
 }
