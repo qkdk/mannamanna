@@ -53,7 +53,8 @@ public interface MemberService {
 
     //마이페이지 정보 조회
     MemberInfoResponse getInfo(Member member);
-    void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest,MultipartFile[] multipartFiles) throws IOException;
+    void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest,MultipartFile[] multipartFiles)
+            throws Exception;
     void findPwd(Member member,MemberFindPwdRequest memberFindPwdRequest);
 
     String storeFile(String memberId, MultipartFile file) throws IOException;
