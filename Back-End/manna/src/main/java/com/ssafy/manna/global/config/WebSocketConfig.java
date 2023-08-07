@@ -32,22 +32,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/api/ws").setAllowedOriginPatterns("*");
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                List<String> usernameHeaders = accessor.getNativeHeader("username");
-                if (usernameHeaders != null && !usernameHeaders.isEmpty()) {
-                    String username = usernameHeaders.get(0);
-                    // 서버에서 해당 헤더 값으로 원하는 동작 수행
-                    log.info("Username received from client: " + username);
-                    accessor.getSessionAttributes().put("username", username);
-                }
-                return message;
-            }
-        });
-
-    }
 }
