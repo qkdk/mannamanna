@@ -114,10 +114,10 @@ public class MemberServiceImpl implements MemberService {
         }
 
         //사진 저장
-        int[] priorities = new int[3];
-        priorities[0] = memberSignUpRequest.getPriority1();
-        priorities[1] = memberSignUpRequest.getPriority2();
-        priorities[2] = memberSignUpRequest.getPriority3();
+//        int[] priorities = new int[3];
+//        priorities[0] = memberSignUpRequest.getPriority1();
+//        priorities[1] = memberSignUpRequest.getPriority2();
+//        priorities[2] = memberSignUpRequest.getPriority3();
 
 
         Address address = new Address(memberSignUpRequest.getSido(), memberSignUpRequest.getGugun(),
@@ -157,15 +157,13 @@ public class MemberServiceImpl implements MemberService {
 
 
         for(int i=0;i<3;i++){
-
             String memberId = memberSignUpRequest.getId();
             String path = storeFile(memberId, multipartFiles[i]);
-
             ProfilePicture profilePicture = ProfilePicture.builder()
                     .member(member)
                     .path(path)
                     .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
-                    .priority(priorities[i])
+                    .priority(i+1)      //1,2,3 저장
                     .build();
             profilePictureRepository.save(profilePicture);
         }
@@ -179,8 +177,6 @@ public class MemberServiceImpl implements MemberService {
         //해당 id를 가진 member를 찾아서 return
         Member member = memberRepository.findById(id).orElseThrow(()->new RuntimeException("Member not found"));
         MemberDetail memberDetail = member.getMemberDetail();
-
-
 
     }
 
@@ -325,7 +321,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest,MultipartFile[] multipartFiles) throws IOException {
+    public void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest,MultipartFile[] multipartFiles)
+            throws Exception {
         MemberDetail memberDetail = member.getMemberDetail();
         Address address = memberDetail.getAddress();
 
@@ -339,22 +336,28 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
 
-        //사진 저장
-        int[] priorities = new int[3];
-        priorities[0] = memberUpdateRequest.getPriority1();
-        priorities[1] = memberUpdateRequest.getPriority2();
-        priorities[2] = memberUpdateRequest.getPriority3();
+        //사진 수정
+//        int[] priorities = new int[3];
+//        priorities[0] = memberUpdateRequest.getPriority1();
+//        priorities[1] = memberUpdateRequest.getPriority2();
+//        priorities[2] = memberUpdateRequest.getPriority3();
 
         for(int i=0;i<3;i++){
             String memberId = member.getId();
-            String path = storeFile(memberId, multipartFiles[i]);
-            ProfilePicture profilePicture = ProfilePicture.builder()
-                    .member(member)
-                    .path(path)
-                    .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
-                    .priority(priorities[i])
-                    .build();
-            profilePictureRepository.save(profilePicture);
+            String path = storeFile(memberId, multipartFiles[i]);   //새로운 사진 저장한 경로
+            //원래 있던 사진 삭제
+            ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
+                    (member,i+1).orElseThrow(()->new Exception("사진 정보가 없습니다."));
+            updatePicture.updatePath(path);
+            updatePicture.updateName(memberId+"_"+multipartFiles[i].getOriginalFilename());
+
+//            ProfilePicture profilePicture = ProfilePicture.builder()
+//                    .member(member)
+//                    .path(path)
+//                    .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
+//                    .priority(priorities[i])
+//                    .build();
+            profilePictureRepository.save(updatePicture);
         }
 
         //주소 update
