@@ -68,11 +68,11 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) throws Exception {
         // 받는이
-        Member receiver = memberRepository.findByName(sogaeNoteSendRequest.getReceiver()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+        Member receiver = memberRepository.findById(sogaeNoteSendRequest.getReceiver()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
         // 보내는이
-        Member sender = memberRepository.findByName(sogaeNoteSendRequest.getSender()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+        Member sender = memberRepository.findById(sogaeNoteSendRequest.getSender()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
         // 제목
-        String subject = sogaeNoteSendRequest.getSender() + "님이 소개팅 신청을 하셨습니다.";
+        String subject = sender.getName() + "님이 소개팅 신청을 하셨습니다.";
         // 날짜
 
         //String으로 들어온 날짜 - 소개팅 날짜
@@ -82,11 +82,8 @@ public class NoteServiceImpl implements NoteService{
         // -> 스케줄에 추가할 때 LocalDateTime 형식으로 저장해야 하므로
 
         // 내용
-        String content = sogaeNoteSendRequest.getSender()+"님이 "+sogaeNoteSendRequest.getReceiver()+"님께 소개팅 신청을 하셨습니다.\n"
+        String content = sender.getName()+"님이 "+receiver.getName()+"님께 소개팅 신청을 하셨습니다.\n"
                 +"D-Day : " + dateString;
-        //String formattedDateTime = date.format(formatter);
-
-
 
         //online, offline 여부 나중에 판단
 
