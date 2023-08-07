@@ -1,6 +1,7 @@
 package com.ssafy.manna.sogaeting.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
+import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,17 @@ public class SogaetingController {
             return ResponseEntity.ok("report success");
         }catch (Exception e){
             return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "like")
+    public ResponseEntity<?> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest){
+        ResponseTemplate<?> body;
+        try{
+            sogaetingService.Like(sogaetingLikeRequest);
+            return ResponseEntity.ok("상대방에게 호감을 보냈습니다.");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
