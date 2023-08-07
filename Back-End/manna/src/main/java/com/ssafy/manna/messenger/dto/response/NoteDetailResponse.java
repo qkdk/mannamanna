@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class NoteDetailResponse {
-    //받는이
+    //받는이2
     private String receiver;
     //보내는이
     private String sender;
