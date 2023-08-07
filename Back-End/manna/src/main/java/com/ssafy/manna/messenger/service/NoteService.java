@@ -3,8 +3,11 @@ package com.ssafy.manna.messenger.service;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
+import com.ssafy.manna.messenger.dto.response.NoteListResponse;
+import com.ssafy.manna.messenger.dto.response.ReceivedNoteResponse;
+import com.ssafy.manna.messenger.dto.response.SentNoteResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
-import org.springframework.http.ResponseEntity;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,5 +27,12 @@ public interface NoteService {
     //2. 소개팅 쪽지 아니면 일반 Response
     NoteDetailResponse readDetailNote(int id) throws Exception;
     SogaeNoteDetailResponse readSogaeDetailNote(int id) throws  Exception;
+
+    //받은 쪽지 List 반환
+    List<NoteListResponse> receivedNoteList(String userId) throws Exception;
+
+    //보낸 쪽지 List 반환
+    List<NoteListResponse> sentNoteList(String userId) throws Exception;
+
 
 }

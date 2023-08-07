@@ -6,8 +6,13 @@ import com.ssafy.manna.messenger.domain.Note;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
+import com.ssafy.manna.messenger.dto.response.NoteListResponse;
+import com.ssafy.manna.messenger.dto.response.ReceivedNoteResponse;
+import com.ssafy.manna.messenger.dto.response.SentNoteResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -151,5 +156,53 @@ public class NoteServiceImpl implements NoteService{
                 .imgPath(SERVER_DOMAIN+"/img/"+sender.getProfilePictures().get(0).getName())
                 .build();
         return sogaeNoteDetailResponse;
+    }
+
+    @Override
+    public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
+        List<Note> receivedNoteList = noteRepository.findAllByReceiverId(userId);
+        List<NoteListResponse> noteListResponses = new ArrayList<>();
+        for(Note receivedNote:receivedNoteList){
+            NoteListResponse noteListResponse = new NoteListResponse().builder()
+                    .id(receivedNote.getId())
+                    .receiverId(receivedNote.getReceiver().getId())
+                    .receiverName(receivedNote.getReceiver().getName())
+                    .senderId(receivedNote.getSender().getId())
+                    .senderName(receivedNote.getSender().getName())
+                    .subject(receivedNote.getSubject())
+                    .content(receivedNote.getContent())
+                    .date(receivedNote.getDate())
+                    .isSogae(receivedNote.getIsSogae())
+                    .isCheck(receivedNote.getIsCheck())
+                    .isReject(receivedNote.getIsReject())
+                   .build();
+
+            noteListResponses.add(noteListResponse);
+        }
+        return noteListResponses;
+    }
+
+    @Override
+    public List<NoteListResponse> sentNoteList(String userId) throws Exception {
+        List<Note> sentNoteList = noteRepository.findAllBySenderId(userId);
+        List<NoteListResponse> noteListResponses = new ArrayList<>();
+        for(Note sentNote:sentNoteList){
+            NoteListResponse noteListResponse = new NoteListResponse().builder()
+                    .id(sentNote.getId())
+                    .receiverId(sentNote.getReceiver().getId())
+                    .receiverName(sentNote.getReceiver().getName())
+                    .senderId(sentNote.getSender().getId())
+                    .senderName(sentNote.getSender().getName())
+                    .subject(sentNote.getSubject())
+                    .content(sentNote.getContent())
+                    .date(sentNote.getDate())
+                    .isSogae(sentNote.getIsSogae())
+                    .isCheck(sentNote.getIsCheck())
+                    .isReject(sentNote.getIsReject())
+                    .build();
+
+            noteListResponses.add(noteListResponse);
+        }
+        return noteListResponses;
     }
 }

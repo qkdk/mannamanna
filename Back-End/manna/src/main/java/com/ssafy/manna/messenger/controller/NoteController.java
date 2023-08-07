@@ -5,13 +5,16 @@ import com.ssafy.manna.messenger.domain.Note;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
+import com.ssafy.manna.messenger.dto.response.NoteListResponse;
+import com.ssafy.manna.messenger.dto.response.ReceivedNoteResponse;
+import com.ssafy.manna.messenger.dto.response.SentNoteResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
 import com.ssafy.manna.messenger.service.NoteService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
-import org.springframework.expression.ExpressionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +76,6 @@ public class NoteController {
 
     }
 
-
     //쪽지 삭제
     @DeleteMapping("/{noteId}")
     public ResponseEntity<?> deleteNote(@PathVariable("noteId") int noteId) throws Exception {
@@ -121,6 +123,31 @@ public class NoteController {
                     .build();
             return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
 
+        }
+    }
+
+    //쪽지 리스트(받은 쪽지함)
+    @GetMapping("/received/{userId}")
+    public ResponseEntity<?> getReceivedNoteList(@PathVariable("userId") String userId)
+    {
+        try{
+            List<NoteListResponse> receivedNoteList = noteService.receivedNoteList(userId);
+            return new ResponseEntity<>(receivedNoteList,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //쪽지 리스트(보낸 쪽지함)
+    @GetMapping("/sent/{userId}")
+    public ResponseEntity<?> getSentNoteList(@PathVariable("userId") String userId)
+    {
+        try{
+            List<NoteListResponse> sentNoteList = noteService.sentNoteList(userId);
+            return new ResponseEntity<>(sentNoteList,HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
