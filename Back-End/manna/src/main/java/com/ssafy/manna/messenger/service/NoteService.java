@@ -4,8 +4,6 @@ import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
 import com.ssafy.manna.messenger.dto.response.NoteListResponse;
-import com.ssafy.manna.messenger.dto.response.ReceivedNoteResponse;
-import com.ssafy.manna.messenger.dto.response.SentNoteResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import java.util.List;
 import org.springframework.stereotype.Service;
