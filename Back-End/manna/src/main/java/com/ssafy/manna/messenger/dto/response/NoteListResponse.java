@@ -24,7 +24,7 @@ public class NoteListResponse {
     //쪽지 제목
     private String subject;
     //쪽지를 보낸시간
-    private LocalDateTime date;
+    private String date;
     //소개팅 쪽지 여부
     private boolean isSogae;
     //소개팅 수락 여부
