@@ -1,6 +1,7 @@
 package com.ssafy.manna.global;
 
 import com.ssafy.manna.global.common.domain.Session;
+import com.ssafy.manna.global.common.enums.SessionEnum;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
 import java.util.List;
 import java.util.Map;
@@ -23,10 +24,14 @@ public class WebSocketEventListener {
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         try {
-            String userName = headerAccessor.getNativeHeader("userName").get(0);
-            String gender = headerAccessor.getNativeHeader("gender").get(0);
-            String userId = headerAccessor.getNativeHeader("userId").get(0);
-            headerAccessor.getSessionAttributes().put("userId", userId);
+            String userName = headerAccessor.getNativeHeader(
+                SessionEnum.SOCKET_HEADER_USER_NAME.getValue()).get(0);
+            String gender = headerAccessor.getNativeHeader(
+                SessionEnum.SOCKET_HEADER_GENDER.getValue()).get(0);
+            String userId = headerAccessor.getNativeHeader(
+                SessionEnum.SOCKET_HEADER_USER_ID.getValue()).get(0);
+            headerAccessor.getSessionAttributes()
+                .put(SessionEnum.SOCKET_HEADER_USER_ID.getValue(), userId);
 
             saveSession(userName, gender, userId);
         } catch (Exception e) {
@@ -38,7 +43,8 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        String userId = (String) headerAccessor.getSessionAttributes().get("userId");
+        String userId = (String) headerAccessor.getSessionAttributes()
+            .get(SessionEnum.SOCKET_HEADER_USER_ID.getValue());
         redisSessionRepository.deleteById(userId);
     }
 
