@@ -74,12 +74,19 @@ public class NoteServiceImpl implements NoteService{
         // 제목
         String subject = sogaeNoteSendRequest.getSender() + "님이 소개팅 신청을 하셨습니다.";
         // 날짜
-        LocalDateTime date = sogaeNoteSendRequest.getDate();
+
+        //String으로 들어온 날짜 - 소개팅 날짜
+        String dateString = sogaeNoteSendRequest.getDate();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
-        String formattedDateTime = date.format(formatter);
+        LocalDateTime localDateTime = LocalDateTime.parse(dateString, formatter);
+        // -> 스케줄에 추가할 때 LocalDateTime 형식으로 저장해야 하므로
+
         // 내용
         String content = sogaeNoteSendRequest.getSender()+"님이 "+sogaeNoteSendRequest.getReceiver()+"님께 소개팅 신청을 하셨습니다.\n"
-                +"D-Day : " + formattedDateTime;
+                +"D-Day : " + dateString;
+        //String formattedDateTime = date.format(formatter);
+
+
 
         //online, offline 여부 나중에 판단
 
@@ -88,16 +95,16 @@ public class NoteServiceImpl implements NoteService{
                 .sender(sender)
                 .subject(subject)
                 .content(content)
-                .date(LocalDateTime.now())
-                .isSogae(true)          //소개팅 쪽지 여부 true
-                .isCheck(false)         //읽음 false 로 설정
-                .isReject(false)       // 거절 여부 false로 설정
+                .date(LocalDateTime.now())      //쪽지 보낸 시간
+                .isSogae(true)                  //소개팅 쪽지 여부 true
+                .isCheck(false)                 //읽음 false 로 설정
+                .isReject(false)                //거절 여부 false로 설정
                 .build();
         noteRepository.save(note);
 
     }
 
-    //소개팅 쪽지 보내기
+
 
 
     @Override
