@@ -55,8 +55,9 @@ public class MemberServiceImpl implements MemberService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-//    @Value("${file.server-domain}")
-//    private String serverDomain;
+
+    @Value("${file.server-domain}")
+    private String serverDomain;
 
 //    @Override
 //    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
@@ -111,13 +112,12 @@ public class MemberServiceImpl implements MemberService {
             log.info("이미 있는 회원입니다.");
             throw new Exception("이미 존재하는 이메일입니다.");
         }
-        System.out.println(memberSignUpRequest);
 
         //사진 저장
-        int[] priorities = new int[3];
-        priorities[0] = memberSignUpRequest.getPriority1();
-        priorities[1] = memberSignUpRequest.getPriority2();
-        priorities[2] = memberSignUpRequest.getPriority3();
+//        int[] priorities = new int[3];
+//        priorities[0] = memberSignUpRequest.getPriority1();
+//        priorities[1] = memberSignUpRequest.getPriority2();
+//        priorities[2] = memberSignUpRequest.getPriority3();
 
 
         Address address = new Address(memberSignUpRequest.getSido(), memberSignUpRequest.getGugun(),
@@ -157,14 +157,13 @@ public class MemberServiceImpl implements MemberService {
 
 
         for(int i=0;i<3;i++){
-            String path = storeFile(multipartFiles[i]);
-
-            System.out.println("path:"+path);
+            String memberId = memberSignUpRequest.getId();
+            String path = storeFile(memberId, multipartFiles[i]);
             ProfilePicture profilePicture = ProfilePicture.builder()
                     .member(member)
                     .path(path)
-                    .name(multipartFiles[i].getOriginalFilename())
-                    .priority(priorities[i])
+                    .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
+                    .priority(i+1)      //1,2,3 저장
                     .build();
             profilePictureRepository.save(profilePicture);
         }
@@ -178,8 +177,6 @@ public class MemberServiceImpl implements MemberService {
         //해당 id를 가진 member를 찾아서 return
         Member member = memberRepository.findById(id).orElseThrow(()->new RuntimeException("Member not found"));
         MemberDetail memberDetail = member.getMemberDetail();
-
-
 
     }
 
@@ -295,25 +292,40 @@ public class MemberServiceImpl implements MemberService {
         List<ProfilePictureDto> profilePictureDtos = new ArrayList<>();
 
         for(ProfilePicture profilePicture : profilePictures){
-//            ProfilePictureDto profilePictureDto = new ProfilePictureDto(profilePicture.getId(),profilePicture.getPath(),profilePicture.getName(),profilePicture.getPriority());
-//            profilePictureDtos.add(profilePictureDto);
+            ProfilePictureDto profilePictureDto = new ProfilePictureDto().builder()
+                    .id(profilePicture.getId())
+                    .path(serverDomain+"/img/"+profilePicture.getName())
+                    .name(profilePicture.getName())
+                    .priority(profilePicture.getPriority())
+                    .build();
+            profilePictureDtos.add(profilePictureDto);
         }
 
-        MemberInfoResponse memberInfoResponse = new MemberInfoResponse(
-                member.getName(),memberDetail.getHeight(),
-                memberDetail.getJob(),memberDetail.isBlockingFriend(),memberDetail.isSmoker(),
-                memberDetail.isDrinker(),memberDetail.getReligion(),memberDetail.getMbti(),
-                profilePictureDtos,memberDetail.getIntroduction(),memberDetail.getMileage()
-                ,memberAddress.getSido(),memberAddress.getGugun(),
-                memberAddress.getDetail()
-        );
+        MemberInfoResponse memberInfoResponse = new MemberInfoResponse().builder()
+                .name(member.getName())
+                .height(memberDetail.getHeight())
+                .job(memberDetail.getJob())
+                .isBlockingFriend(memberDetail.isBlockingFriend())
+                .isSmoker(memberDetail.isSmoker())
+                .isDrinker(memberDetail.isDrinker())
+                .religion(memberDetail.getReligion())
+                .mbti(memberDetail.getMbti())
+                .profilePictures(profilePictureDtos)
+                .introduction(memberDetail.getIntroduction())
+                .mileage(memberDetail.getMileage())
+                .sido(memberAddress.getSido())
+                .gugun(memberAddress.getGugun())
+                .detailAddress(memberAddress.getDetail())
+                .build();
         return memberInfoResponse;
     }
 
     @Override
-    public void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest) {
+    public void updateInfo(Member member,MemberUpdateRequest memberUpdateRequest,MultipartFile[] multipartFiles)
+            throws Exception {
         MemberDetail memberDetail = member.getMemberDetail();
         Address address = memberDetail.getAddress();
+
         memberDetail.updateHeight(memberUpdateRequest.getHeight());
         memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
         memberDetail.updateJob(memberUpdateRequest.getJob());
@@ -324,30 +336,31 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
 
-//        //사진 업데이트
-//        List<ProfilePicture> profilePictures= member.getProfilePictures();
-//        List<ProfilePictureDto> profilePictureDtos = memberUpdateRequest.getProfilePictures();
-//
-//        //dto에서 데이터 꺼내서 profilePictures 를 업데이트
-//        for(ProfilePictureDto profilePicture : profilePictureDtos){
-//            Integer pictureId = profilePicture.getId();
-//            String path = profilePicture.getPath();
-//            String name = profilePicture.getName();
-//            Integer priority = profilePicture.getPriority();
-//
-//            //findById 로 entity 불러오공
-////            Optional<ProfilePicture> findProfilePic = this.findProfilePictureById(pictureId);
-//            if(findProfilePic.isPresent()){
-//                ProfilePicture pic = findProfilePic.get();
-//                pic.updatePath(path);
-//                pic.updateName(name);
-//                pic.updatePriority(priority);
-//            }else {
-//                throw new RuntimeException("Wrong pic id");
-//            }
-//
-//        }
+        //사진 수정
+//        int[] priorities = new int[3];
+//        priorities[0] = memberUpdateRequest.getPriority1();
+//        priorities[1] = memberUpdateRequest.getPriority2();
+//        priorities[2] = memberUpdateRequest.getPriority3();
 
+        for(int i=0;i<3;i++){
+            String memberId = member.getId();
+            String path = storeFile(memberId, multipartFiles[i]);   //새로운 사진 저장한 경로
+            //원래 있던 사진 삭제
+            ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
+                    (member,i+1).orElseThrow(()->new Exception("사진 정보가 없습니다."));
+            updatePicture.updatePath(path);
+            updatePicture.updateName(memberId+"_"+multipartFiles[i].getOriginalFilename());
+
+//            ProfilePicture profilePicture = ProfilePicture.builder()
+//                    .member(member)
+//                    .path(path)
+//                    .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
+//                    .priority(priorities[i])
+//                    .build();
+            profilePictureRepository.save(updatePicture);
+        }
+
+        //주소 update
         String detail = memberUpdateRequest.getDetail();
         String sido = memberUpdateRequest.getSido();
         String gugun = memberUpdateRequest.getGugun();
@@ -373,14 +386,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String storeFile(MultipartFile file) throws IOException {
+    public String storeFile(String memberId, MultipartFile file) throws IOException {
         String uploadDir = "/manna/upload/images/member/";
-        String fileName = file.getOriginalFilename();
+        String originalFileName = file.getOriginalFilename();
+        String fileName = memberId+"_"+ originalFileName;
 
         File directory = new File(uploadDir);
         String filePath = uploadDir + fileName;
         File destFile = new File(filePath);
-        System.out.println(filePath);
 
         if (!directory.exists()) {
             boolean mkdirsResult = directory.mkdirs();
@@ -395,39 +408,6 @@ public class MemberServiceImpl implements MemberService {
         log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
         return filePath;
     }
-
-//    @Override
-//    public String storeFile(MultipartFile file) throws IOException {
-//
-////        String rootDir = "/home/ubuntu";
-//
-//        String fileName = file.getOriginalFilename();
-//
-//        File directory = new File(uploadDir);
-//        String filePath = uploadDir +"/"+ fileName;
-//        File destFile = new File(filePath);
-//        System.out.println(filePath);
-//
-//        if (!directory.exists()) {
-//            boolean mkdirsResult = directory.mkdirs();
-//            if (mkdirsResult) {
-//                System.out.println("디렉토리 생성 성공");
-//            } else {
-//                System.out.println("디렉토리 생성 실패");
-//            }
-//        }
-//
-//        try {
-//            file.transferTo(destFile);
-//            log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
-//            return filePath;
-//        } catch (IOException e) {
-//            log.error("파일 저장 실패:", e);
-//            throw new IOException("파일 저장 실패: " + e.getMessage(), e);
-//        }
-//
-//
-//    }
 
 
 }

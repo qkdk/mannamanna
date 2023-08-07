@@ -45,13 +45,13 @@ public class MemberSignUpRequest {
 
     //회원 프로필 사진 3개
 //    private MultipartFile profilePicture1;
-    private Integer priority1;
+//    private Integer priority1;
 //
 //    private MultipartFile profilePicture2;
-    private Integer priority2;
+//    private Integer priority2;
 //
 //    private MultipartFile profilePicture3;
-    private Integer priority3;
+//    private Integer priority3;
 //
 
 

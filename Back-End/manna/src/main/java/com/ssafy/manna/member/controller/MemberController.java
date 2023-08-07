@@ -28,11 +28,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Optional;
 
 @RestController
@@ -48,9 +43,6 @@ public class MemberController {
 
     @Value("${file.upload-dir}")
     private String uploadDir;
-
-    @Autowired
-    private ServletContext servletContext;
 
     //임시매핑
     @PostMapping("/hello")
@@ -137,12 +129,11 @@ public class MemberController {
 
     //마이페이지 정보 조회
     @GetMapping("/mypage/{id}")
-    public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) {
+    public ResponseEntity<?> myPage(@Validated @PathVariable("id") String id) throws Exception {
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.findOne(id);
-        if(findMember.isPresent()){
-            MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember.get());
-
+        try{
+            Member findMember = memberService.findOne(id).orElseThrow(()->new Exception("회원 정보가 없습니다."));
+            MemberInfoResponse memberInfoResponse = memberService.getInfo(findMember);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 조회 완료")
@@ -150,10 +141,10 @@ public class MemberController {
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
         }
-        else{
+        catch(Exception e){
             body = ResponseTemplate.builder()
                     .result(false)
-                    .msg("Page error")
+                    .msg("회원 조회 실패")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
@@ -161,24 +152,34 @@ public class MemberController {
 
     //마이페이지 정보수정
     @PutMapping("/mypage/{id}")
-    public ResponseEntity<?> myPageEdit(@RequestBody  MemberUpdateRequest memberUpdateRequest, @PathVariable("id") String id){
+    public ResponseEntity<?> myPageEdit(@RequestPart("memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
+                                        @PathVariable("id") String id,
+                                        @RequestPart("profilePicture1") MultipartFile profilePicture1,
+                                        @RequestPart("profilePicture2") MultipartFile profilePicture2,
+                                        @RequestPart("profilePicture3") MultipartFile profilePicture3)
+    {
         ResponseTemplate<?> body;
-        Optional<Member> findMember = memberService.findOne(id);
-        if(findMember.isPresent()){
-            memberService.updateInfo(findMember.get(),memberUpdateRequest);
+        Member findMember = null;
+        try {
+            findMember = memberService.findOne(id).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+            MultipartFile[] multipartFiles = new MultipartFile[3];
+            multipartFiles[0] = profilePicture1;
+            multipartFiles[1] = profilePicture2;
+            multipartFiles[2] = profilePicture3;
+            memberService.updateInfo(findMember,memberUpdateRequest,multipartFiles);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 수정 완료")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
-        }
-        else {
+        } catch (Exception e) {
             body = ResponseTemplate.builder()
                     .result(false)
                     .msg("회원 수정 오류")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
+
     }
 
     //아이디 찾기
@@ -232,8 +233,6 @@ public class MemberController {
         Optional<Member> member = memberService.findOne(memberCheckPwdRequest.getId());
         ResponseTemplate<?> body;
         if(member.isPresent()){
-            System.out.println("받은거:"+memberCheckPwdRequest.getPwd());
-            System.out.println("꺼낸거:"+member.get().getPwd());
             if(passwordEncoder.matches(memberCheckPwdRequest.getPwd(), member.get().getPwd())){
                 body = ResponseTemplate.builder()
                         .result(true)

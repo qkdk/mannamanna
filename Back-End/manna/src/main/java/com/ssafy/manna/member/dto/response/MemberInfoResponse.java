@@ -4,10 +4,14 @@ import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.member.domain.ProfilePicture;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class MemberInfoResponse {
     //마이페이지 - 조회 Response
 

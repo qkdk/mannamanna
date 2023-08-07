@@ -8,11 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class Note {
 
     @Id
@@ -27,7 +30,7 @@ public class Note {
 
     private String subject;
 
-    private String contennt;
+    private String content;
 
     private LocalDateTime date;
 
@@ -37,4 +40,11 @@ public class Note {
 
     private Boolean isReject;
 
+    public void updateIsCheck(boolean isCheck){
+        this.isCheck = isCheck;
+    }
+
+    public void updateIsReject(boolean isReject){
+        this.isReject = isReject;
+    }
 }
