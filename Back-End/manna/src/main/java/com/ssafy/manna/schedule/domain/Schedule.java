@@ -9,14 +9,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@DiscriminatorColumn(name="dtype")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Schedule {
 
     @Id
@@ -31,4 +30,9 @@ public class Schedule {
 
     private LocalDateTime date;
 
+    public Schedule(Member member, Member opponent, LocalDateTime date) {
+        this.member = member;
+        this.opponent = opponent;
+        this.date = date;
+    }
 }

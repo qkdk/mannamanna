@@ -1,6 +1,8 @@
 package com.ssafy.manna.schedule.dto.request;
 
 import java.time.LocalDateTime;
+
+import com.ssafy.manna.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,12 +15,11 @@ import lombok.NoArgsConstructor;
 public class OnlineScheduleRequest {
 
     //내 id
-    String memberId;
+    private Member member;
     //상대방 id
-    String opponentId;
-    //url : 소개팅 방 url
-    String url;
+    private Member opponent;
     //시간
-    LocalDateTime date;
-
+    private LocalDateTime date;
+    //url
+    private String url;
 }

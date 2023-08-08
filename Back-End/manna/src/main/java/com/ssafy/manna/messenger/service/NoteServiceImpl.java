@@ -11,6 +11,10 @@ import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.repository.OnlineScheduleRepository;
+import com.ssafy.manna.schedule.service.OnlineScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +35,7 @@ import java.util.regex.Pattern;
 public class NoteServiceImpl implements NoteService{
     private final MemberRepository memberRepository;
     private final NoteRepository noteRepository;
+    private final OnlineScheduleService onlineScheduleService;
 
     @Value("${file.server-domain}")
     private String SERVER_DOMAIN;
@@ -262,15 +267,34 @@ public class NoteServiceImpl implements NoteService{
         //1. 쪽지 상태 update
         note.updateIsCheck(true);
         note.updateIsReject(false);
-        //2.  스케줄에 추가해주기
-        //2-1. 신청자(sender) 의 스케줄에 추가
-        //2-2. 상대방(receiver) 의 스케줄에 추가.
 
-        //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
-        // 받는이
         Member receiver = note.getReceiver();
         // 보내는이
         Member sender = note.getSender();
+        //2.  스케줄에 추가해주기
+        //2-1. 신청자(sender) 의 스케줄에 추가
+        OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
+                .member(sender)
+                .opponent(receiver)
+                .date(note.getDate())
+                .url("unknown")
+                .build();
+        onlineScheduleService.insertSchedule(senderRequest);
+
+
+        //2-2. 상대방(receiver) 의 스케줄에 추가.
+        OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
+                .member(receiver)
+                .opponent(sender)
+                .date(note.getDate())
+                .url("unknown")
+                .build();
+
+        onlineScheduleService.insertSchedule(receiverRequest);
+
+        //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
+        // 받는이
+
         // 제목
         String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
         // 날짜
