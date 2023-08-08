@@ -1,8 +1,6 @@
 package com.ssafy.manna.sogaeting.dto.response;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.ssafy.manna.sogaeting.dto.SogaetingPictureDto;
-import java.util.List;
 import lombok.Data;
 
 @Data
@@ -18,12 +16,16 @@ public class SogeatingPeopleResponse {
     private Boolean isSmoke;
     private Boolean isDrink;
     private Boolean isOnline;
-    private List<SogaetingPictureDto> pictureURL;
+    private String pictureURL;
+
+    public void updateOnlineState(Boolean isOnline) {
+        this.isOnline = isOnline;
+    }
 
     @QueryProjection
     public SogeatingPeopleResponse(String id, String name, String birth, String sido, String mbti,
         String religion, String introduction, Boolean isSmoke, Boolean isDrink,
-        List<SogaetingPictureDto> pictureURL) {
+        String pictureURL) {
         this.id = id;
         this.name = name;
         this.birth = birth;
