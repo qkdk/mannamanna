@@ -24,17 +24,17 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @RequestMapping("/api/schedule")
 public class ScheduleController {
 
-//    private final OnlineScheduleService onlineScheduleService;
-//
-//    //온라인 스케줄 insert
-//    @PostMapping("/insert")
-//    public ResponseEntity<?> inseretOnlineSchedule(@RequestBody OnlineScheduleRequest scheduleRequest){
-//        try {
-//            onlineScheduleService.insertSchedule(scheduleRequest);
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        }
-//        catch (Exception e){
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    private final OnlineScheduleService onlineScheduleService;
+
+    //온라인 스케줄 insert
+    @PostMapping("/insert")
+    public ResponseEntity<?> inseretOnlineSchedule(@RequestBody OnlineScheduleRequest scheduleRequest){
+        try {
+            onlineScheduleService.insertSchedule(scheduleRequest);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }
