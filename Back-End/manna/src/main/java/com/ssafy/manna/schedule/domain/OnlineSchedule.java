@@ -14,9 +14,8 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@AllArgsConstructor
-@Builder
+//@Getter
+//@AllArgsConstructor
 public class OnlineSchedule extends Schedule {
 
     @Id
@@ -25,11 +24,11 @@ public class OnlineSchedule extends Schedule {
 
     private String url;
 
-    public OnlineSchedule(ScheduleId id, Member member,
-            Member opponent, LocalDateTime date, Integer onlineId,
-            String url) {
-        super(id, member, opponent, date);
-        this.id = onlineId;
-        this.url = url;
-    }
+//    public OnlineSchedule(ScheduleId id, Member member,
+//            Member opponent, LocalDateTime date, Integer onlineId,
+//            String url) {
+//        super(id, member, opponent, date);
+//        this.id = onlineId;
+//        this.url = url;
+//    }
 }

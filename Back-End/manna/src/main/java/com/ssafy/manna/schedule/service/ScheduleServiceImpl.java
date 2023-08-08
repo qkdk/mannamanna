@@ -17,26 +17,26 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class ScheduleServiceImpl implements ScheduleService{
 
-    private final MemberRepository memberRepository;
+//    private final MemberRepository memberRepository;
+//
+//    private  final ScheduleRepository scheduleRepository;
+//    @Override
+//    public void addSchedule(ScheduleRequest scheduleRequest) throws Exception {
+//        Member member = memberRepository.findById(scheduleRequest.getMemberId()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+//        Member opponent = memberRepository.findById(scheduleRequest.getOpponentId()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+//
+//        //스케줄 정보 먼저 저장
+//        Schedule schedule = Schedule.builder()
+//                .member(member)
+//                .opponent(opponent)
+//                .date(scheduleRequest.getDate())
+//                .build();
+//
+//        scheduleRepository.save(schedule);
 
-    private  final ScheduleRepository scheduleRepository;
-    @Override
-    public void addSchedule(ScheduleRequest scheduleRequest) throws Exception {
-        Member member = memberRepository.findById(scheduleRequest.getMemberId()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
-        Member opponent = memberRepository.findById(scheduleRequest.getOpponentId()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+//
+//        OnlineSchedule onlineSchedule = OnlineSchedule.builder()
+//                .build();
 
-        //스케줄 정보 먼저 저장
-        Schedule schedule = Schedule.builder()
-                .member(member)
-                .opponent(opponent)
-                .date(scheduleRequest.getDate())
-                .build();
-
-        scheduleRepository.save(schedule);
-
-
-        OnlineSchedule onlineSchedule = OnlineSchedule.builder()
-                .build();
-
-    }
+//    }
 }
