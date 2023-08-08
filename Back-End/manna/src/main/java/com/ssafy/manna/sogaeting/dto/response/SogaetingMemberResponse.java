@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.Data;
 
 @Data
-public class SogeatingPeopleResponse {
+public class SogaetingMemberResponse {
 
     private String id;
     private String name;
@@ -23,7 +23,7 @@ public class SogeatingPeopleResponse {
     }
 
     @QueryProjection
-    public SogeatingPeopleResponse(String id, String name, String birth, String sido, String mbti,
+    public SogaetingMemberResponse(String id, String name, String birth, String sido, String mbti,
         String religion, String introduction, Boolean isSmoke, Boolean isDrink,
         String pictureURL) {
         this.id = id;

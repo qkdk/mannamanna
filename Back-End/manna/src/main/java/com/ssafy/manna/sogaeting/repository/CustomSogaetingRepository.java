@@ -7,8 +7,8 @@ import static org.springframework.util.StringUtils.hasText;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.manna.sogaeting.dto.response.QSogeatingPeopleResponse;
-import com.ssafy.manna.sogaeting.dto.response.SogeatingPeopleResponse;
+import com.ssafy.manna.sogaeting.dto.response.QSogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,10 +20,10 @@ public class CustomSogaetingRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     // 전부 가져오는 기능 - 성별만 다르게
-    public List<SogeatingPeopleResponse> sample(String gender, Boolean isSmoker, Boolean isDrinker,
+    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker, Boolean isDrinker,
         String mbti) {
         return jpaQueryFactory
-            .select(new QSogeatingPeopleResponse(
+            .select(new QSogaetingMemberResponse(
                 member.id,
                 member.name,
                 memberDetail.birth,
