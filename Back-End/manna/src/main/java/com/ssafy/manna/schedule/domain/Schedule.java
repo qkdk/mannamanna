@@ -1,11 +1,8 @@
 package com.ssafy.manna.schedule.domain;
 
 import com.ssafy.manna.member.domain.Member;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,13 +15,14 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DiscriminatorColumn(name="dtype")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Schedule {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @EmbeddedId
-    private ScheduleId id;
-
-    @MapsId("memberId")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
