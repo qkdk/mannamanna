@@ -169,7 +169,31 @@ public class NoteController {
         }
     }
 
-    //새로운 쪽지 확인 - 내가 로그인하고 나서 생성된 쪽지가 있는지 보면 되는건가?
-
+    //새로운 쪽지 확인 - 안읽은거 있으면 true, 없으면 false
+    @GetMapping("/new/{userId}")
+    public ResponseEntity<?> getNewNoteList(@PathVariable("userId") String userId){
+        ResponseTemplate<?> body;
+        try {
+            List<NoteListResponse> newNoteList = noteService.newNoteList(userId);
+            if(!newNoteList.isEmpty()){
+//                body = ResponseTemplate.builder()
+//                        .result(true)
+//                        .msg("새로운 쪽지 있음")
+//                        .data(newNoteList)
+//                        .build();
+                return ResponseEntity.ok(true);
+            }
+            else{
+//                body = ResponseTemplate.builder()
+//                        .result(false)
+//                        .msg("새로운 쪽지 없음")
+//                        .data(newNoteList)
+//                        .build();
+                return ResponseEntity.ok(false);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

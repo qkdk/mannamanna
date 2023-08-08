@@ -219,6 +219,40 @@ public class NoteServiceImpl implements NoteService{
         return noteListResponses;
     }
 
+    //새로운 쪽지 list
+    @Override
+    public List<NoteListResponse> newNoteList(String userId) throws Exception {
+
+        //내가 받은 사람이고, 아직 안읽은 쪽지 List
+        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheck(userId,false);
+
+        List<NoteListResponse> noteListResponses = new ArrayList<>();
+        for(Note newNote:newNoteList){
+            // 형식 지정
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환
+            LocalDateTime dateTime = newNote.getDate();
+            String formattedDateTime = dateTime.format(formatter);
+
+            NoteListResponse noteListResponse = new NoteListResponse().builder()
+                    .id(newNote.getId())
+                    .receiverId(newNote.getReceiver().getId())
+                    .receiverName(newNote.getReceiver().getName())
+                    .senderId(newNote.getSender().getId())
+                    .senderName(newNote.getSender().getName())
+                    .subject(newNote.getSubject())
+                    .content(newNote.getContent())
+                    .date(formattedDateTime)
+                    .isSogae(newNote.getIsSogae())
+                    .isCheck(newNote.getIsCheck())
+                    .isReject(newNote.getIsReject())
+                    .build();
+
+            noteListResponses.add(noteListResponse);
+        }
+        return noteListResponses;
+    }
+
     @Override
     public void acceptSogating(int noteId) throws Exception {
         Note note = noteRepository.findById(noteId).orElseThrow(()->new Exception("쪽지가 존재하지 않습니다."));

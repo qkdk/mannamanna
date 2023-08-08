@@ -1,5 +1,6 @@
 package com.ssafy.manna.messenger.service;
 
+import com.ssafy.manna.messenger.domain.Note;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
@@ -32,10 +33,13 @@ public interface NoteService {
     //보낸 쪽지 List 반환
     List<NoteListResponse> sentNoteList(String userId) throws Exception;
 
+    //새로운 쪽지 LIST 반환
+    List<NoteListResponse> newNoteList(String userId) throws Exception;
 
     //소개팅 쪽지 수락
     void acceptSogating(int noteId) throws Exception;
 
     //소개팅 쪽지 거절
     void refuseSogating(int noteId) throws Exception;
+
 }

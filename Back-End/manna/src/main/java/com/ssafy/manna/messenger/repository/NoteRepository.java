@@ -15,4 +15,7 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     List<Note> findAllBySenderId(String SenderId);
     //받는 이로 쪽지 조회
     List<Note> findAllByReceiverId(String receiverId);
+
+    // 내가 RECEIVER(받는 사람), isCheck=false인거
+    List<Note> findAllByReceiverIdAndIsCheck(String receiverId,boolean isCheck);
 }
