@@ -13,9 +13,9 @@ class CustomSogaetingRepositoryTest {
     private CustomSogaetingRepository customSogaetingRepository;
 
     @Test
-    public void 테스트(){
-        List<SogaetingMemberResponse> sample = customSogaetingRepository.findMemberByCondition(null, null, null,
-            null);
+    public void 테스트() {
+        List<SogaetingMemberResponse> sample = customSogaetingRepository.findMemberByCondition(null,
+            null, null, null, 0);
 
         for (SogaetingMemberResponse sogaetingMemberResponse : sample) {
             System.out.println(sogaetingMemberResponse);

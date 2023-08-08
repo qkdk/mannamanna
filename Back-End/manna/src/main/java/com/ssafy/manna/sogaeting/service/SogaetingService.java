@@ -13,8 +13,8 @@ public interface SogaetingService {
     void Like(SogaetingLikeRequest sogaetingLikeRequest) throws Exception;
 
     List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti);
+        Boolean isDrinker, String mbti, String userId);
 
     List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
-        Boolean isSmoker, Boolean isDrinker, String mbti);
+        Boolean isSmoker, Boolean isDrinker, String mbti, String userId);
 }

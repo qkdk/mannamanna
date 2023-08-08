@@ -21,7 +21,7 @@ public class CustomSogaetingRepository {
 
     public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
         List<String> onLineMembersId,
-        String gender, Boolean isSmoker, Boolean isDrinker, String mbti) {
+        String gender, Boolean isSmoker, Boolean isDrinker, String mbti, Integer offset) {
         return jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
@@ -46,11 +46,13 @@ public class CustomSogaetingRepository {
                 profilePicture.priority.eq(1),
                 member.id.in(onLineMembersId)
             )
+            .offset(offset * 6)
+            .limit(6)
             .fetch();
     }
 
     public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti) {
+        Boolean isDrinker, String mbti, Integer offset) {
         return jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
@@ -73,6 +75,8 @@ public class CustomSogaetingRepository {
                 drinkerTrue(isDrinker),
                 mbtiEq(mbti),
                 profilePicture.priority.eq(1))
+            .offset(offset * 6)
+            .limit(6)
             .fetch();
     }
 

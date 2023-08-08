@@ -50,9 +50,10 @@ public class SogaetingServiceImpl implements SogaetingService {
 
     @Override
     public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti) {
+        Boolean isDrinker, String mbti, String userId) {
+
         List<SogaetingMemberResponse> findMembers = customSogaetingRepository.findMemberByCondition(
-            gender, isSmoker, isDrinker, mbti);
+            gender, isSmoker, isDrinker, mbti, sessionService.getOffset(userId));
         updateOnlineState(findMembers);
 
         return findMembers;
@@ -60,16 +61,17 @@ public class SogaetingServiceImpl implements SogaetingService {
 
     @Override
     public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
-        Boolean isSmoker, Boolean isDrinker, String mbti) {
+        Boolean isSmoker, Boolean isDrinker, String mbti, String userId) {
 
         // 온라인인 사람부터 찾기
         List<Session> onlineMembers = sessionService.findOnlineMembers();
         List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
         List<SogaetingMemberResponse> memberByConditionAndOnlineState =
             customSogaetingRepository.findMemberByConditionAndOnlineState(
-            onlineMembersId, gender, isSmoker, isDrinker, mbti);
+                onlineMembersId, gender, isSmoker, isDrinker, mbti,
+                sessionService.getOffset(userId));
 
-        memberByConditionAndOnlineState.stream()
+        memberByConditionAndOnlineState
             .forEach(member -> member.updateOnlineState(true));
 
         return memberByConditionAndOnlineState;
