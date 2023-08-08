@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -272,27 +274,31 @@ public class NoteServiceImpl implements NoteService{
         // 제목
         String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
         // 날짜
-        // 날짜 형식 지정
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년-MM월-dd일 HH시mm분");
-        // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환
-        LocalDateTime dateTime = note.getDate();
-        String formattedDateTime = dateTime.format(formatter);
+        String msg = note.getContent();
+        // 정규표현식 패턴
+        String pattern = "\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분";
+        // 패턴 매칭을 위한 Pattern 객체 생성
+        Pattern r = Pattern.compile(pattern);
+        // 매칭되는 부분 추출을 위한 Matcher 객체 생성
+        Matcher m = r.matcher(msg);
+        // 매칭된 부분이 있다면 추출하여 출력
+        if (m.find()) {
+            String dateTime = m.group();
+            // 내용
+            String content = receiver.getName()+"님이 "+sender.getName()+"님의 소개팅 신청을 수락하셨습니다.\n"
+                    +"D-Day : " + dateTime+"\n 내 스케줄에 일정을 추가합니다.";
+            NoteSendRequest noteSendRequest = NoteSendRequest.builder()
+                    .receiver(sender.getId())
+                    .sender(receiver.getId())
+                    .subject(subject)
+                    .content(content)
+                    .isSogae(false)
+                    .date(LocalDateTime.now())
+                    .build();
+            send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
+        }
 
-        // 내용
-        String content = receiver.getName()+"님이 "+sender.getName()+"님의 소개팅 신청을 수락하셨습니다.\n"
-                +"D-Day : " + formattedDateTime+"\n 내 스케줄에 일정을 추가합니다.";
-
-        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
-                .receiver(sender.getId())
-                .sender(receiver.getId())
-                .subject(subject)
-                .content(content)
-                .isSogae(false)
-                .date(LocalDateTime.now())
-                .build();
         //online, offline 여부 나중에 판단
-        send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
-
         //소개팅 신청 받은 사람한테도 알려줘야 되나??
 
         noteRepository.save(note);
@@ -314,9 +320,18 @@ public class NoteServiceImpl implements NoteService{
         // 내용
         String content = receiver.getName() + "님이 소개팅 신청을 거절하셨습니다.";
 
-    }
+        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
+                .receiver(sender.getId())
+                .sender(receiver.getId())
+                .subject(subject)
+                .content(content)
+                .isSogae(false)
+                .date(LocalDateTime.now())
+                .build();
+        send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
 
-    //소개팅 수락
+        noteRepository.save(note);
+    }
 
 
 }

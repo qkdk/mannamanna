@@ -4,6 +4,7 @@ import com.ssafy.manna.member.Enums.BanCode;
 import com.ssafy.manna.member.domain.Ban;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
+import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,14 @@ public class SogaetingServiceImpl implements SogaetingService{
                     .code(BanCode.valueOf(sogaetingReportRequest.getCode()))
                     .build();
 
+
+
+    }
+
+    @Override
+    public void Like(SogaetingLikeRequest sogaetingLikeRequest) throws Exception {
+        Member sendMember = memberRepository.findById(sogaetingLikeRequest.getSenderId()).orElseThrow(() -> new Exception("일치하는 회원이 없습니다."));
+        Member receiverMember = memberRepository.findById(sogaetingLikeRequest.getReceiverId()).orElseThrow(() -> new Exception("일치하는 회원이 없습니다."));
 
 
     }
