@@ -7,6 +7,7 @@ import static org.springframework.util.StringUtils.hasText;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.response.QSogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import java.util.List;
@@ -19,9 +20,9 @@ public class CustomSogaetingRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
-        List<String> onLineMembersId,
-        String gender, Boolean isSmoker, Boolean isDrinker, String mbti) {
+    public List<SogaetingMemberResponse> findMemberByCondition(Integer offset,
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+
         return jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
@@ -39,18 +40,20 @@ public class CustomSogaetingRepository {
             .leftJoin(member.memberDetail, memberDetail)
             .leftJoin(member.profilePictures, profilePicture)
             .where(
-                genderNe(gender),
-                smokerTrue(isSmoker),
-                drinkerTrue(isDrinker),
-                mbtiEq(mbti),
-                profilePicture.priority.eq(1),
-                member.id.in(onLineMembersId)
-            )
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                profilePicture.priority.eq(1))
+            .offset(offset * 6)
+            .limit(6)
             .fetch();
     }
 
-    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti) {
+
+    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+        List<String> onLineMembersId, Integer offset,
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
         return jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
@@ -68,12 +71,86 @@ public class CustomSogaetingRepository {
             .leftJoin(member.memberDetail, memberDetail)
             .leftJoin(member.profilePictures, profilePicture)
             .where(
-                genderNe(gender),
-                smokerTrue(isSmoker),
-                drinkerTrue(isDrinker),
-                mbtiEq(mbti),
-                profilePicture.priority.eq(1))
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                profilePicture.priority.eq(1),
+                member.id.in(onLineMembersId)
+            )
+            .offset(offset * 6)
+            .limit(6)
             .fetch();
+    }
+
+    public List<SogaetingMemberResponse> findMemberByConditionAndLocate(Integer offset,
+        String locate, SogaetingFilteringRequest sogaetingFilteringRequest) {
+
+        return jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                sidoEq(locate),
+                profilePicture.priority.eq(1))
+            .offset(offset * 6)
+            .limit(6)
+            .fetch();
+    }
+
+    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
+        List<String> onLineMembersId, Integer offset, String sido,
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        return jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                sidoEq(sido),
+                profilePicture.priority.eq(1),
+                member.id.in(onLineMembersId)
+            )
+            .offset(offset * 6)
+            .limit(6)
+            .fetch();
+    }
+
+
+
+    private BooleanExpression sidoEq(String sido) {
+        return hasText(sido) ? memberDetail.address.sido.eq(sido) : null;
     }
 
     private BooleanExpression genderNe(String gender) {

@@ -47,7 +47,11 @@ public class WebSocketEventListener {
     }
 
     private void saveSession(String userName, String gender, String userId) {
-        Session socketSession = Session.builder().gender(gender).userId(userId).userName(userName)
+        Session socketSession = Session.builder()
+            .gender(gender)
+            .userId(userId)
+            .userName(userName)
+            .offset((int) (Math.random() * 30) + 1)
             .build();
         redisSessionRepository.save(socketSession);
     }

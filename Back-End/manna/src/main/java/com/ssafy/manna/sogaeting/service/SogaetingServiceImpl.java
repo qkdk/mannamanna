@@ -6,6 +6,7 @@ import com.ssafy.manna.member.Enums.BanCode;
 import com.ssafy.manna.member.domain.Ban;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
+import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
@@ -49,35 +50,104 @@ public class SogaetingServiceImpl implements SogaetingService {
     }
 
     @Override
-    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti) {
-        List<SogaetingMemberResponse> findMembers = customSogaetingRepository.findMemberByCondition(
-            gender, isSmoker, isDrinker, mbti);
-        updateOnlineState(findMembers);
+    public List<SogaetingMemberResponse> findMemberByCondition(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
 
-        return findMembers;
+        List<SogaetingMemberResponse> memberByCondition = customSogaetingRepository.findMemberByCondition(
+            offset, sogaetingFilteringRequest);
+        updateOnlineState(memberByCondition);
+
+        return memberByCondition;
     }
 
     @Override
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
-        Boolean isSmoker, Boolean isDrinker, String mbti) {
+    public List<SogaetingMemberResponse> findMemberByConditionAndLocate(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
+        String sido = getSidoByMemberId(sogaetingFilteringRequest);
 
-        // 온라인인 사람부터 찾기
+        List<SogaetingMemberResponse> memberByConditionAndLocate = customSogaetingRepository.findMemberByConditionAndLocate(
+            offset, sido, sogaetingFilteringRequest);
+
+        updateOnlineState(memberByConditionAndLocate);
+        return memberByConditionAndLocate;
+    }
+
+    @Override
+    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
+
         List<Session> onlineMembers = sessionService.findOnlineMembers();
         List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
-        List<SogaetingMemberResponse> memberByConditionAndOnlineState =
-            customSogaetingRepository.findMemberByConditionAndOnlineState(
-            onlineMembersId, gender, isSmoker, isDrinker, mbti);
+        List<SogaetingMemberResponse> memberByConditionAndOnlineState = customSogaetingRepository.findMemberByConditionAndOnlineState(
+            onlineMembersId, offset, sogaetingFilteringRequest);
 
-        memberByConditionAndOnlineState.stream()
+        memberByConditionAndOnlineState
             .forEach(member -> member.updateOnlineState(true));
 
         return memberByConditionAndOnlineState;
     }
+
+    @Override
+    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
+        String sidoByMemberId = getSidoByMemberId(sogaetingFilteringRequest);
+
+        List<Session> onlineMembers = sessionService.findOnlineMembers();
+        List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
+        List<SogaetingMemberResponse> memberByConditionAndOnlineState = customSogaetingRepository.findMemberByConditionAndOnlineStateAndLocate(
+            onlineMembersId, offset, sidoByMemberId, sogaetingFilteringRequest);
+
+        memberByConditionAndOnlineState
+            .forEach(member -> member.updateOnlineState(true));
+
+        return memberByConditionAndOnlineState;
+    }
+
+//    @Override
+//    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
+//        Boolean isDrinker, String mbti, String sido, String userId) {
+//
+//        List<SogaetingMemberResponse> findMembers = customSogaetingRepository.findMemberByCondition(
+//            gender, isSmoker, isDrinker, mbti, sido, sessionService.getOffset(userId));
+//        updateOnlineState(findMembers);
+//
+//        return findMembers;
+//    }
+//
+//    @Override
+//    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
+//        Boolean isSmoker, Boolean isDrinker, String mbti, String sido, String userId) {
+//
+//        // 온라인인 사람부터 찾기
+//        List<Session> onlineMembers = sessionService.findOnlineMembers();
+//        List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
+//        List<SogaetingMemberResponse> memberByConditionAndOnlineState =
+//            customSogaetingRepository.findMemberByConditionAndOnlineState(
+//                onlineMembersId, gender, isSmoker, isDrinker, mbti, sido,
+//                sessionService.getOffset(userId));
+//
+//        memberByConditionAndOnlineState
+//            .forEach(member -> member.updateOnlineState(true));
+//
+//        return memberByConditionAndOnlineState;
+//    }
 
     private void updateOnlineState(List<SogaetingMemberResponse> findMembers) {
         for (SogaetingMemberResponse findMember : findMembers) {
             findMember.updateOnlineState(sessionService.checkMemberIsOnline(findMember.getId()));
         }
     }
+
+
+    private String getSidoByMemberId(SogaetingFilteringRequest sogaetingFilteringRequest) {
+        Member member = memberRepository.findById(sogaetingFilteringRequest.getMemberId())
+            .orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
+        String sido = member.getMemberDetail().getAddress().getSido();
+        return sido;
+    }
+
 }
