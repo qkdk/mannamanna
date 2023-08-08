@@ -34,7 +34,7 @@ public class SogaetingController {
         }
     }
 
-    @PostMapping(value = "like")
+    @PostMapping(value = "/like")
     public ResponseEntity<?> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest){
         ResponseTemplate<?> body;
         try{
