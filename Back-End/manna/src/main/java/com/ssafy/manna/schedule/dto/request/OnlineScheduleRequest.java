@@ -10,9 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ScheduleRequest {
+public class OnlineScheduleRequest {
 
+    //내 id
     String memberId;
+    //상대방 id
     String opponentId;
+    //url : 소개팅 방 url
+    String url;
+    //시간
     LocalDateTime date;
+
 }
