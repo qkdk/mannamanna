@@ -19,9 +19,38 @@ public class CustomSogaetingRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    // 전부 가져오는 기능 - 성별만 다르게
-    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker, Boolean isDrinker,
-        String mbti) {
+    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+        List<String> onLineMembersId,
+        String gender, Boolean isSmoker, Boolean isDrinker, String mbti) {
+        return jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(gender),
+                smokerTrue(isSmoker),
+                drinkerTrue(isDrinker),
+                mbtiEq(mbti),
+                profilePicture.priority.eq(1),
+                member.id.in(onLineMembersId)
+            )
+            .fetch();
+    }
+
+    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
+        Boolean isDrinker, String mbti) {
         return jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,

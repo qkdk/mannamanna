@@ -14,4 +14,7 @@ public interface SogaetingService {
 
     List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
         Boolean isDrinker, String mbti);
+
+    List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
+        Boolean isSmoker, Boolean isDrinker, String mbti);
 }
