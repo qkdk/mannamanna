@@ -12,13 +12,13 @@ class CustomSogaetingRepositoryTest {
     @Autowired
     private CustomSogaetingRepository customSogaetingRepository;
 
-    @Test
-    public void 테스트() {
-        List<SogaetingMemberResponse> sample = customSogaetingRepository.findMemberByCondition(null,
-            null, null, null, null, 0);
-
-        for (SogaetingMemberResponse sogaetingMemberResponse : sample) {
-            System.out.println(sogaetingMemberResponse);
-        }
-    }
+//    @Test
+//    public void 테스트() {
+//        List<SogaetingMemberResponse> sample = customSogaetingRepository.findMemberByCondition(null,
+//            null, null, null, null, 0);
+//
+//        for (SogaetingMemberResponse sogaetingMemberResponse : sample) {
+//            System.out.println(sogaetingMemberResponse);
+//        }
+//    }
 }

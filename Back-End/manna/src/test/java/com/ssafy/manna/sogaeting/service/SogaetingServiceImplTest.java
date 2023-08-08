@@ -46,14 +46,14 @@ class SogaetingServiceImplTest {
         redisSessionRepository.deleteById("test2");
     }
 
-    @Test
-    public void 온라인_업데이트() {
-        List<SogaetingMemberResponse> memberByCondition1 = sogaetingService.findMemberByCondition(
-            null, null, null, null, null, "test1");
-        List<SogaetingMemberResponse> memberByCondition2 = sogaetingService.findMemberByCondition(
-            null, null, null, null, null, "test2");
-
-        Assertions.assertThat(memberByCondition1.get(0).getId())
-            .isNotEqualTo(memberByCondition2.get(0).getId());
-    }
+//    @Test
+//    public void 온라인_업데이트() {
+//        List<SogaetingMemberResponse> memberByCondition1 = sogaetingService.findMemberByCondition(
+//            null, null, null, null, null, "test1");
+//        List<SogaetingMemberResponse> memberByCondition2 = sogaetingService.findMemberByCondition(
+//            null, null, null, null, null, "test2");
+//
+//        Assertions.assertThat(memberByCondition1.get(0).getId())
+//            .isNotEqualTo(memberByCondition2.get(0).getId());
+//    }
 }

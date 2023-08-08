@@ -1,5 +1,6 @@
 package com.ssafy.manna.sogaeting.service;
 
+import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
@@ -12,9 +13,18 @@ public interface SogaetingService {
 
     void Like(SogaetingLikeRequest sogaetingLikeRequest) throws Exception;
 
-    List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-        Boolean isDrinker, String mbti, String sido, String userId);
+    List<SogaetingMemberResponse> findMemberByCondition(
+        SogaetingFilteringRequest sogaetingFilteringRequest);
 
-    List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
-        Boolean isSmoker, Boolean isDrinker, String mbti, String sido, String userId);
+    List<SogaetingMemberResponse> findMemberByConditionAndLocate(
+        SogaetingFilteringRequest sogaetingFilteringRequest
+    );
+
+    List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+        SogaetingFilteringRequest sogaetingFilteringRequest
+    );
+
+    List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
+        SogaetingFilteringRequest sogaetingFilteringRequest
+    );
 }
