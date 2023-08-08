@@ -25,5 +25,16 @@ public class ReserveAddress extends Address {
     private LocalDateTime advertisementStartDate;
     private LocalDateTime advertisementEndDate;
 
-
+    public ReserveAddress(String sido, String gugun, String detail, Double latitude,
+            Double longitude,
+            Integer id, String name, Boolean isAdvertisement, Integer advertisementCost,
+            LocalDateTime advertisementStartDate, LocalDateTime advertisementEndDate) {
+        super(sido, gugun, detail, latitude, longitude);
+        this.id = id;
+        this.name = name;
+        this.isAdvertisement = isAdvertisement;
+        this.advertisementCost = advertisementCost;
+        this.advertisementStartDate = advertisementStartDate;
+        this.advertisementEndDate = advertisementEndDate;
+    }
 }
