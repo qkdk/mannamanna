@@ -1,5 +1,7 @@
 package com.ssafy.manna.sogaeting.service;
 
+import static com.ssafy.manna.sogaeting.enums.SogaetingEnum.NUM_IMAGE;
+
 import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.service.SessionService;
 import com.ssafy.manna.member.Enums.BanCode;
@@ -9,12 +11,11 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
-import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.ImageMappedSogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.repository.CustomSogaetingRepository;
 import jakarta.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public class SogaetingServiceImpl implements SogaetingService {
     public SogaetingMemberResponsePage findMemberByCondition(
         SogaetingFilteringRequest sogaetingFilteringRequest) {
 
-        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+        PageRequest pageRequest = get2PageRequest(sogaetingFilteringRequest);
         Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByCondition(
             sogaetingFilteringRequest, pageRequest);
 
@@ -77,12 +78,12 @@ public class SogaetingServiceImpl implements SogaetingService {
     public SogaetingMemberResponsePage findMemberByConditionAndLocate(
         SogaetingFilteringRequest sogaetingFilteringRequest) {
         String sido = getSidoByMemberId(sogaetingFilteringRequest);
-        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+        PageRequest pageRequest = get4PageRequest(sogaetingFilteringRequest);
 
         Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndLocate(
             pageRequest, sido, sogaetingFilteringRequest);
-
         int totalPages = pagingDto.getTotalPages();
+
         return new SogaetingMemberResponsePage(sogaetingFilteringRequest.getCurPage(), totalPages,
             mappingImageList(pagingDto.getContent()));
     }
@@ -90,7 +91,7 @@ public class SogaetingServiceImpl implements SogaetingService {
     @Override
     public SogaetingMemberResponsePage findMemberByConditionAndOnlineState(
         SogaetingFilteringRequest sogaetingFilteringRequest) {
-        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+        PageRequest pageRequest = get2PageRequest(sogaetingFilteringRequest);
 
         List<String> onlineMembersId = getOnlineMembersId();
         Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndOnlineState(
@@ -108,7 +109,7 @@ public class SogaetingServiceImpl implements SogaetingService {
         SogaetingFilteringRequest sogaetingFilteringRequest) {
         String sido = getSidoByMemberId(sogaetingFilteringRequest);
 
-        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+        PageRequest pageRequest = get4PageRequest(sogaetingFilteringRequest);
 
         List<String> onlineMembersId = getOnlineMembersId();
         Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndOnlineStateAndLocate(
@@ -119,8 +120,12 @@ public class SogaetingServiceImpl implements SogaetingService {
             mappingImageList(pagingDto.getContent()));
     }
 
-    private PageRequest getPageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {
-        return PageRequest.of(sogaetingFilteringRequest.getCurPage(), 18);
+    private PageRequest get2PageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {
+        return PageRequest.of(sogaetingFilteringRequest.getCurPage(), 2 * NUM_IMAGE.getValue());
+    }
+
+    private PageRequest get4PageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {
+        return PageRequest.of(sogaetingFilteringRequest.getCurPage(), 4 * NUM_IMAGE.getValue());
     }
 
     private List<String> getOnlineMembersId() {
