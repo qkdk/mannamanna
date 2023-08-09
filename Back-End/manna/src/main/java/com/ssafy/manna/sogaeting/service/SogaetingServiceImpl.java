@@ -10,11 +10,19 @@ import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.ImageMappedSogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.repository.CustomSogaetingRepository;
 import jakarta.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +34,7 @@ public class SogaetingServiceImpl implements SogaetingService {
     private final MemberRepository memberRepository;
     private final CustomSogaetingRepository customSogaetingRepository;
     private final SessionService sessionService;
+    private final ModelMapper modelMapper;
 
     @Override
     public void report(SogaetingReportRequest sogaetingReportRequest) throws Exception {
@@ -50,94 +59,77 @@ public class SogaetingServiceImpl implements SogaetingService {
     }
 
     @Override
-    public List<SogaetingMemberResponse> findMemberByCondition(
+    public SogaetingMemberResponsePage findMemberByCondition(
         SogaetingFilteringRequest sogaetingFilteringRequest) {
-        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
 
-        List<SogaetingMemberResponse> memberByCondition = customSogaetingRepository.findMemberByCondition(
-            offset, sogaetingFilteringRequest);
-        updateOnlineState(memberByCondition);
+        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+        Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByCondition(
+            sogaetingFilteringRequest, pageRequest);
 
-        return memberByCondition;
+        List<SogaetingMemberResponse> content = pagingDto.getContent();
+        int totalPages = pagingDto.getTotalPages();
+
+        return new SogaetingMemberResponsePage(sogaetingFilteringRequest.getCurPage(), totalPages,
+            mappingImageList(content));
     }
 
     @Override
-    public List<SogaetingMemberResponse> findMemberByConditionAndLocate(
+    public SogaetingMemberResponsePage findMemberByConditionAndLocate(
         SogaetingFilteringRequest sogaetingFilteringRequest) {
-        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
+        String sido = getSidoByMemberId(sogaetingFilteringRequest);
+        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+
+        Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndLocate(
+            pageRequest, sido, sogaetingFilteringRequest);
+
+        int totalPages = pagingDto.getTotalPages();
+        return new SogaetingMemberResponsePage(sogaetingFilteringRequest.getCurPage(), totalPages,
+            mappingImageList(pagingDto.getContent()));
+    }
+
+    @Override
+    public SogaetingMemberResponsePage findMemberByConditionAndOnlineState(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
+        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
+
+        List<String> onlineMembersId = getOnlineMembersId();
+        Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndOnlineState(
+            onlineMembersId, pageRequest, sogaetingFilteringRequest);
+
+        List<SogaetingMemberResponse> content = pagingDto.getContent();
+        int totalPages = pagingDto.getTotalPages();
+
+        return new SogaetingMemberResponsePage(sogaetingFilteringRequest.getCurPage(), totalPages,
+            mappingImageList(content));
+    }
+
+    @Override
+    public SogaetingMemberResponsePage findMemberByConditionAndOnlineStateAndLocate(
+        SogaetingFilteringRequest sogaetingFilteringRequest) {
         String sido = getSidoByMemberId(sogaetingFilteringRequest);
 
-        List<SogaetingMemberResponse> memberByConditionAndLocate = customSogaetingRepository.findMemberByConditionAndLocate(
-            offset, sido, sogaetingFilteringRequest);
+        PageRequest pageRequest = getPageRequest(sogaetingFilteringRequest);
 
-        updateOnlineState(memberByConditionAndLocate);
-        return memberByConditionAndLocate;
+        List<String> onlineMembersId = getOnlineMembersId();
+        Page<SogaetingMemberResponse> pagingDto = customSogaetingRepository.findMemberByConditionAndOnlineStateAndLocate(
+            onlineMembersId, pageRequest, sido, sogaetingFilteringRequest);
+        int totalPages = pagingDto.getTotalPages();
+
+        return new SogaetingMemberResponsePage(sogaetingFilteringRequest.getCurPage(), totalPages,
+            mappingImageList(pagingDto.getContent()));
     }
 
-    @Override
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
-        SogaetingFilteringRequest sogaetingFilteringRequest) {
-        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
+    private PageRequest getPageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {
+        return PageRequest.of(sogaetingFilteringRequest.getCurPage(), 18);
+    }
 
+    private List<String> getOnlineMembersId() {
         List<Session> onlineMembers = sessionService.findOnlineMembers();
-        List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
-        List<SogaetingMemberResponse> memberByConditionAndOnlineState = customSogaetingRepository.findMemberByConditionAndOnlineState(
-            onlineMembersId, offset, sogaetingFilteringRequest);
-
-        memberByConditionAndOnlineState
-            .forEach(member -> member.updateOnlineState(true));
-
-        return memberByConditionAndOnlineState;
+        return onlineMembers.stream().map(Session::getUserId).toList();
     }
 
-    @Override
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
-        SogaetingFilteringRequest sogaetingFilteringRequest) {
-        Integer offset = sessionService.getOffset(sogaetingFilteringRequest.getMemberId());
-        String sidoByMemberId = getSidoByMemberId(sogaetingFilteringRequest);
-
-        List<Session> onlineMembers = sessionService.findOnlineMembers();
-        List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
-        List<SogaetingMemberResponse> memberByConditionAndOnlineState = customSogaetingRepository.findMemberByConditionAndOnlineStateAndLocate(
-            onlineMembersId, offset, sidoByMemberId, sogaetingFilteringRequest);
-
-        memberByConditionAndOnlineState
-            .forEach(member -> member.updateOnlineState(true));
-
-        return memberByConditionAndOnlineState;
-    }
-
-//    @Override
-//    public List<SogaetingMemberResponse> findMemberByCondition(String gender, Boolean isSmoker,
-//        Boolean isDrinker, String mbti, String sido, String userId) {
-//
-//        List<SogaetingMemberResponse> findMembers = customSogaetingRepository.findMemberByCondition(
-//            gender, isSmoker, isDrinker, mbti, sido, sessionService.getOffset(userId));
-//        updateOnlineState(findMembers);
-//
-//        return findMembers;
-//    }
-//
-//    @Override
-//    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(String gender,
-//        Boolean isSmoker, Boolean isDrinker, String mbti, String sido, String userId) {
-//
-//        // 온라인인 사람부터 찾기
-//        List<Session> onlineMembers = sessionService.findOnlineMembers();
-//        List<String> onlineMembersId = onlineMembers.stream().map(Session::getUserId).toList();
-//        List<SogaetingMemberResponse> memberByConditionAndOnlineState =
-//            customSogaetingRepository.findMemberByConditionAndOnlineState(
-//                onlineMembersId, gender, isSmoker, isDrinker, mbti, sido,
-//                sessionService.getOffset(userId));
-//
-//        memberByConditionAndOnlineState
-//            .forEach(member -> member.updateOnlineState(true));
-//
-//        return memberByConditionAndOnlineState;
-//    }
-
-    private void updateOnlineState(List<SogaetingMemberResponse> findMembers) {
-        for (SogaetingMemberResponse findMember : findMembers) {
+    private void updateOnlineState(List<ImageMappedSogaetingMemberResponse> findMembers) {
+        for (ImageMappedSogaetingMemberResponse findMember : findMembers) {
             findMember.updateOnlineState(sessionService.checkMemberIsOnline(findMember.getId()));
         }
     }
@@ -146,8 +138,37 @@ public class SogaetingServiceImpl implements SogaetingService {
     private String getSidoByMemberId(SogaetingFilteringRequest sogaetingFilteringRequest) {
         Member member = memberRepository.findById(sogaetingFilteringRequest.getMemberId())
             .orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
-        String sido = member.getMemberDetail().getAddress().getSido();
-        return sido;
+        return member.getMemberDetail().getAddress().getSido();
     }
 
+    private List<ImageMappedSogaetingMemberResponse> mappingImageList(
+        List<SogaetingMemberResponse> content) {
+        Map<String, ImageMappedSogaetingMemberResponse> map = new HashMap<>();
+        for (SogaetingMemberResponse sogaetingMemberResponse : content) {
+            mapping(map, sogaetingMemberResponse);
+        }
+
+        List<ImageMappedSogaetingMemberResponse> list = map.values().stream().toList();
+        updateOnlineState(list);
+        return list;
+    }
+
+    private void mapping(Map<String, ImageMappedSogaetingMemberResponse> map,
+        SogaetingMemberResponse sogaetingMemberResponse) {
+        if (!map.containsKey(sogaetingMemberResponse.getId())) {
+            initializeMapping(map, sogaetingMemberResponse);
+        }
+
+        map.get(sogaetingMemberResponse.getId()).getPictureURLs()
+            .add(sogaetingMemberResponse.getPictureURL());
+    }
+
+    private void initializeMapping(Map<String, ImageMappedSogaetingMemberResponse> map,
+        SogaetingMemberResponse sogaetingMemberResponse) {
+        ImageMappedSogaetingMemberResponse imageMappedSogaetingMemberResponse = new ImageMappedSogaetingMemberResponse();
+
+        modelMapper.map(sogaetingMemberResponse, imageMappedSogaetingMemberResponse);
+        map.put(imageMappedSogaetingMemberResponse.getId(),
+            imageMappedSogaetingMemberResponse);
+    }
 }

@@ -15,35 +15,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 class SogaetingServiceImplTest {
 
     @Autowired
-    private SogaetingService sogaetingService;
-    @Autowired
     private RedisSessionRepository redisSessionRepository;
 
-
-    @BeforeEach
-    public void before() {
-        Session test1 = Session.builder()
-            .userName("test1")
-            .userId("test1")
-            .gender("M")
-            .offset(3)
+    @Test
+    public void init(){
+        Session session = Session.builder()
+            .userName("박소현")
+            .userId("sohyun3")
+            .gender("female")
             .build();
-
-        Session test2 = Session.builder()
-            .userName("test2")
-            .userId("test2")
-            .gender("F")
-            .offset(4)
-            .build();
-
-        redisSessionRepository.save(test1);
-        redisSessionRepository.save(test2);
-    }
-
-    @AfterEach
-    public void after() {
-        redisSessionRepository.deleteById("test1");
-        redisSessionRepository.deleteById("test2");
+        redisSessionRepository.save(session);
     }
 
 //    @Test

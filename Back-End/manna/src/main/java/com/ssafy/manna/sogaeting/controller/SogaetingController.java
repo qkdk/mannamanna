@@ -5,6 +5,7 @@ import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +54,12 @@ public class SogaetingController {
     @GetMapping("/recommend")
     public ResponseEntity<?> findMemberByCondition(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
-        List<SogaetingMemberResponse> memberByCondition = sogaetingService.findMemberByCondition(
+        System.out.println(sogaetingFilteringRequest);
+        SogaetingMemberResponsePage memberByCondition = sogaetingService.findMemberByCondition(
             sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<SogaetingMemberResponse>>builder()
+            ResponseTemplate.<SogaetingMemberResponsePage>builder()
                 .msg("조회성공")
                 .data(memberByCondition)
                 .result(true)
@@ -67,12 +69,12 @@ public class SogaetingController {
 
     @GetMapping("/recommend/locate")
     public ResponseEntity<?> findMemberByConditionAndLocate(
-        SogaetingFilteringRequest sogaetingFilteringRequest) {
-        List<SogaetingMemberResponse> memberByConditionAndLocate = sogaetingService.findMemberByConditionAndLocate(
+        @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
+        SogaetingMemberResponsePage memberByConditionAndLocate = sogaetingService.findMemberByConditionAndLocate(
             sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<SogaetingMemberResponse>>builder()
+            ResponseTemplate.<SogaetingMemberResponsePage>builder()
                 .msg("조회성공")
                 .data(memberByConditionAndLocate)
                 .result(true)
@@ -80,14 +82,15 @@ public class SogaetingController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/onlineRecommend/")
+    @GetMapping("/onlineRecommend")
     public ResponseEntity<?> findMemberByConditionAndOnlineState(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
-        List<SogaetingMemberResponse> memberByConditionAndOnlineState =
+
+        SogaetingMemberResponsePage memberByConditionAndOnlineState =
             sogaetingService.findMemberByConditionAndOnlineState(sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<SogaetingMemberResponse>>builder()
+            ResponseTemplate.<SogaetingMemberResponsePage>builder()
                 .msg("조회성공")
                 .data(memberByConditionAndOnlineState)
                 .result(true)
@@ -99,15 +102,16 @@ public class SogaetingController {
     public ResponseEntity<?> findMemberByConditionAndOnlineStateAndLocate(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest
     ) {
-        List<SogaetingMemberResponse> memberByConditionAndOnlineStateAndLocate = sogaetingService.findMemberByConditionAndOnlineStateAndLocate(
+        SogaetingMemberResponsePage memberByConditionAndOnlineStateAndLocate = sogaetingService.findMemberByConditionAndOnlineStateAndLocate(
             sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<SogaetingMemberResponse>>builder()
+            ResponseTemplate.<SogaetingMemberResponsePage>builder()
                 .msg("조회성공")
                 .data(memberByConditionAndOnlineStateAndLocate)
                 .result(true)
                 .build(),
             HttpStatus.OK);
     }
+
 }

@@ -45,7 +45,7 @@ public class SessionService {
     // 사용자의 offset을 가져오는 기능
     public Integer getOffset(String userId){
         Session session = redisSessionRepository.findById(userId).orElseThrow(
-            () -> new RuntimeException("일치하는 사용자가 없습니다.")
+            () -> new RuntimeException("세션에 일치하는 사용자가 없습니다.")
         );
 
         return session.getOffset();

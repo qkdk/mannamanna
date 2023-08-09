@@ -6,12 +6,16 @@ import static com.ssafy.manna.member.domain.QProfilePicture.profilePicture;
 import static org.springframework.util.StringUtils.hasText;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.response.QSogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,10 +24,10 @@ public class CustomSogaetingRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public List<SogaetingMemberResponse> findMemberByCondition(Integer offset,
-        SogaetingFilteringRequest sogaetingFilteringRequest) {
+    public Page<SogaetingMemberResponse> findMemberByCondition(
+        SogaetingFilteringRequest sogaetingFilteringRequest, Pageable pageable) {
 
-        return jpaQueryFactory
+        List<SogaetingMemberResponse> content = jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
                 member.name,
@@ -43,18 +47,43 @@ public class CustomSogaetingRepository {
                 genderNe(sogaetingFilteringRequest.getGender()),
                 smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
                 drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
-                mbtiEq(sogaetingFilteringRequest.getMbti()),
-                profilePicture.priority.eq(1))
-            .offset(offset * 6)
-            .limit(6)
+                mbtiEq(sogaetingFilteringRequest.getMbti()))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
+
+        long total = jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()))
+            .fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
 
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
-        List<String> onLineMembersId, Integer offset,
+    public Page<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+        List<String> onLineMembersId, Pageable pageable,
         SogaetingFilteringRequest sogaetingFilteringRequest) {
-        return jpaQueryFactory
+
+        List<SogaetingMemberResponse> content = jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
                 member.name,
@@ -75,18 +104,13 @@ public class CustomSogaetingRepository {
                 smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
                 drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
                 mbtiEq(sogaetingFilteringRequest.getMbti()),
-                profilePicture.priority.eq(1),
                 member.id.in(onLineMembersId)
             )
-            .offset(offset * 6)
-            .limit(6)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
-    }
 
-    public List<SogaetingMemberResponse> findMemberByConditionAndLocate(Integer offset,
-        String locate, SogaetingFilteringRequest sogaetingFilteringRequest) {
-
-        return jpaQueryFactory
+        long total = jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
                 member.name,
@@ -107,17 +131,73 @@ public class CustomSogaetingRepository {
                 smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
                 drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
                 mbtiEq(sogaetingFilteringRequest.getMbti()),
-                sidoEq(locate),
-                profilePicture.priority.eq(1))
-            .offset(offset * 6)
-            .limit(6)
-            .fetch();
+                member.id.in(onLineMembersId)
+            )
+            .fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
     }
 
-    public List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
-        List<String> onLineMembersId, Integer offset, String sido,
+    public Page<SogaetingMemberResponse> findMemberByConditionAndLocate(Pageable pageable,
+        String locate, SogaetingFilteringRequest sogaetingFilteringRequest) {
+
+        List<SogaetingMemberResponse> content = jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                sidoEq(locate))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        long total = jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                sidoEq(locate))
+            .fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
+    }
+
+    public Page<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
+        List<String> onLineMembersId, Pageable pageable, String sido,
         SogaetingFilteringRequest sogaetingFilteringRequest) {
-        return jpaQueryFactory
+        List<SogaetingMemberResponse> content = jpaQueryFactory
             .select(new QSogaetingMemberResponse(
                 member.id,
                 member.name,
@@ -139,14 +219,40 @@ public class CustomSogaetingRepository {
                 drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
                 mbtiEq(sogaetingFilteringRequest.getMbti()),
                 sidoEq(sido),
-                profilePicture.priority.eq(1),
                 member.id.in(onLineMembersId)
             )
-            .offset(offset * 6)
-            .limit(6)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
             .fetch();
-    }
 
+        long total = jpaQueryFactory
+            .select(new QSogaetingMemberResponse(
+                member.id,
+                member.name,
+                memberDetail.birth,
+                memberDetail.address.sido,
+                memberDetail.mbti,
+                memberDetail.religion,
+                memberDetail.introduction,
+                memberDetail.isSmoker,
+                memberDetail.isDrinker,
+                profilePicture.path
+            ))
+            .from(member)
+            .leftJoin(member.memberDetail, memberDetail)
+            .leftJoin(member.profilePictures, profilePicture)
+            .where(
+                genderNe(sogaetingFilteringRequest.getGender()),
+                smokerTrue(sogaetingFilteringRequest.getIsSmoker()),
+                drinkerTrue(sogaetingFilteringRequest.getIsDrinker()),
+                mbtiEq(sogaetingFilteringRequest.getMbti()),
+                sidoEq(sido),
+                member.id.in(onLineMembersId)
+            )
+            .fetchCount();
+
+        return new PageImpl<>(content, pageable, total);
+    }
 
 
     private BooleanExpression sidoEq(String sido) {
