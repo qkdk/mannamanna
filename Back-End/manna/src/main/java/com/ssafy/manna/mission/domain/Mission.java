@@ -1,5 +1,6 @@
 package com.ssafy.manna.mission.domain;
 
+import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
 import jakarta.persistence.Entity;
@@ -41,4 +42,7 @@ public class Mission extends BaseStartEndEntity {
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
     private List<MissionQuestion> missionQuestions;
 
+    public void updateIsDone(boolean isDone){
+        this.isDone = isDone;
+    }
 }

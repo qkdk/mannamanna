@@ -8,11 +8,13 @@ import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -89,4 +91,15 @@ public class MissionServiceImpl implements MissionService {
         }
         return responseList;
     }
+
+    // 미션 포기하기
+    @Override
+    public void giveUpMission(MissionGiveUpRequest missionGiveUpRequest) {
+        Optional<Mission> findMission = missionRepository.findById(missionGiveUpRequest.getId());
+        Mission mission = findMission.get();
+        mission.updateIsDone(true);
+
+        missionRepository.save(mission);
+    }
 }
+
