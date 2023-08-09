@@ -35,10 +35,6 @@ public class Mission extends BaseStartEndEntity {
 
     private String femaleId;
 
-    private String maleImagePath;
-
-    private String femaleImagePath;
-
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
     private List<MissionQuestion> missionQuestions;
 
