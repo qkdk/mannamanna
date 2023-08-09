@@ -1,6 +1,7 @@
 package com.ssafy.manna.mission.service;
 
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import java.util.List;
 
@@ -10,4 +11,7 @@ public interface MissionService {
     void assignMission(MissionAssignRequest missionAssignRequest) throws Exception;
 
     List<MissionCallResponse> getMissionListByUserId(String userid);
+
+    // 미션 포기하기
+    void giveUpMission(MissionGiveUpRequest missionGiveUpRequest);
 }

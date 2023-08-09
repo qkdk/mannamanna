@@ -2,6 +2,7 @@ package com.ssafy.manna.mission.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,7 +49,7 @@ public class MissionController {
     }
 
     // 해당하는 회원의 미션정보 불러오기
-    @GetMapping("/call/{id}")
+    @GetMapping(value = "/call/{id}")
     public ResponseEntity<List<MissionCallResponse>> getMissionListByUserId(
             @Validated @PathVariable("id") String id) {
         try {
@@ -55,6 +57,27 @@ public class MissionController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // 미션 포기하기
+    @PutMapping(value = "/giveup")
+    public ResponseEntity<?> giveUpMissionByMissionId(
+            @RequestBody MissionGiveUpRequest missionGiveUpRequest) {
+        ResponseTemplate<?> body;
+        try {
+            missionService.giveUpMission(missionGiveUpRequest);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("미션 포기 성공")
+                    .build();
+            return new ResponseEntity<>(body, HttpStatus.OK);
+        } catch (Exception e) {
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("미션 포기 실패")
+                    .build();
+            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
 }
