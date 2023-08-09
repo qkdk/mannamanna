@@ -20,8 +20,8 @@ public class OnlineSchedule extends Schedule {
     @Column(name="url")
     private String url;
     @Builder
-    public OnlineSchedule( Member member, Member opponent, LocalDateTime date, String url) {
-        super(member, opponent, date);
+    public OnlineSchedule( Member female, Member male, LocalDateTime date, String url) {
+        super(female, male, date);
         this.url = url;
     }
 }

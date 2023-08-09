@@ -14,10 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class OnlineScheduleRequest {
 
-    //내 id
-    private Member member;
-    //상대방 id
-    private Member opponent;
+    //여자 id
+    private Member female;
+    //남자 id
+    private Member male;
     //시간
     private LocalDateTime date;
     //url

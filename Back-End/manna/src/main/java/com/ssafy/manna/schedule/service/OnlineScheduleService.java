@@ -20,7 +20,7 @@ public interface OnlineScheduleService {
 
     //read
     // 회원 전체 스케줄 return
-    List<OnlineScheduleResponse> getAllSchedule(String userId);
+    List<OnlineScheduleResponse> getAllSchedule(String userId) throws Exception;
 
     //
 

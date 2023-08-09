@@ -75,6 +75,7 @@ public class NoteServiceImpl implements NoteService{
                 .isSogae(false)         // 소개팅 쪽지 여부 false 설정
                 .isCheck(false)         //읽음 false 로 설정
                 .isReject(false)       // 거절 여부 false로 설정
+                .isDeleted(false)
                 .build();
         noteRepository.save(note);
 
@@ -113,6 +114,7 @@ public class NoteServiceImpl implements NoteService{
                 .isSogae(true)                  //소개팅 쪽지 여부 true
                 .isCheck(false)                 //읽음 false 로 설정
                 .isReject(false)                //거절 여부 false로 설정
+                .isDeleted(false)
                 .build();
         noteRepository.save(note);
 
@@ -181,6 +183,7 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
         List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId,false);
+        System.out.println(receivedNoteList);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note receivedNote:receivedNoteList){
             // 형식 지정
@@ -201,6 +204,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(receivedNote.getIsSogae())
                     .isCheck(receivedNote.getIsCheck())
                     .isReject(receivedNote.getIsReject())
+                    .isDeleted(receivedNote.getIsDeleted())
                     .build();
 
             noteListResponses.add(noteListResponse);
@@ -230,6 +234,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(sentNote.getIsSogae())
                     .isCheck(sentNote.getIsCheck())
                     .isReject(sentNote.getIsReject())
+                    .isDeleted(sentNote.getIsDeleted())
                     .build();
 
             noteListResponses.add(noteListResponse);
@@ -322,25 +327,47 @@ public class NoteServiceImpl implements NoteService{
             ZonedDateTime kstDateTime = time.atZone(kstZone);
             // ZonedDateTime을 LocalDateTime으로 변환
             LocalDateTime dbLocalDateTime = kstDateTime.toLocalDateTime();
-            //2-1. 신청자(sender) 의 스케줄에 추가
-            OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
-                    .member(sender)
-                    .opponent(receiver)
-                    .date(dbLocalDateTime)
-                    .url("unknown")
-                    .build();
-            onlineScheduleService.insertSchedule(senderRequest);
 
+            //schedule 에 하나만 추가
+            //신청자 남자 or 여자
 
-            //2-2. 상대방(receiver) 의 스케줄에 추가.
-            OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
-                    .member(receiver)
-                    .opponent(sender)
-                    .date(dbLocalDateTime)       //
-                    .url("unknown")
-                    .build();
-
-            onlineScheduleService.insertSchedule(receiverRequest);
+            OnlineScheduleRequest onlineScheduleRequest;
+            if(sender.getGender().equals("male")){
+                onlineScheduleRequest = OnlineScheduleRequest.builder()
+                        .female(receiver)
+                        .male(sender)
+                        .date(dbLocalDateTime)
+                        .url("unknown")
+                        .build();
+            }
+            else{
+                onlineScheduleRequest = OnlineScheduleRequest.builder()
+                        .female(sender)
+                        .male(receiver)
+                        .date(dbLocalDateTime)
+                        .url("unknown")
+                        .build();
+            }
+            onlineScheduleService.insertSchedule(onlineScheduleRequest);
+//            //2-1. 신청자(sender) 의 스케줄에 추가
+//            OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
+//                    .member(sender)
+//                    .opponent(receiver)
+//                    .date(dbLocalDateTime)
+//                    .url("unknown")
+//                    .build();
+//            onlineScheduleService.insertSchedule(senderRequest);
+//
+//
+//            //2-2. 상대방(receiver) 의 스케줄에 추가.
+//            OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
+//                    .member(receiver)
+//                    .opponent(sender)
+//                    .date(dbLocalDateTime)       //
+//                    .url("unknown")
+//                    .build();
+//
+//            onlineScheduleService.insertSchedule(receiverRequest);
         }
 
         //online, offline 여부 나중에 판단
