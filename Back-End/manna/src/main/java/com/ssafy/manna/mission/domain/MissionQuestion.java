@@ -10,11 +10,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Builder
+@AllArgsConstructor
 public class MissionQuestion extends BaseStartEndEntity {
 
     @Id
@@ -24,12 +26,13 @@ public class MissionQuestion extends BaseStartEndEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
 
-    private Integer no;
     private Boolean maleIsDone;
     private Boolean femaleIsDone;
 
     @Enumerated(EnumType.STRING)
     private MissionCode code;
+
+    private String content;
 
 
 }
