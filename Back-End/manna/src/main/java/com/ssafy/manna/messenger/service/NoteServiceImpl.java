@@ -9,6 +9,8 @@ import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
 import com.ssafy.manna.messenger.dto.response.NoteListResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +39,17 @@ public class NoteServiceImpl implements NoteService{
     private final NoteRepository noteRepository;
     private final OnlineScheduleService onlineScheduleService;
 
+
+
     @Value("${file.server-domain}")
     private String SERVER_DOMAIN;
+
+
+    //현재시간
+    ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+    ZonedDateTime koreaTime = ZonedDateTime.now(koreaZone);
+    LocalDateTime localDateTime = koreaTime.toLocalDateTime();
+
     // 일반 쪽지 쓰기
     @Override
     public void send(NoteSendRequest noteSendRequest) throws Exception {
@@ -55,14 +66,12 @@ public class NoteServiceImpl implements NoteService{
                 ()->new Exception("보내는 회원 정보가 없습니다.")
         );
 
-        //현재시간
-        LocalDateTime currentDateTime = LocalDateTime.now();
         Note note = Note.builder()
                 .receiver(receiverMember)
                 .sender(senderMember)
                 .subject(noteSendRequest.getSubject())
                 .content(noteSendRequest.getContent())
-                .date(currentDateTime)
+                .date(localDateTime)
                 .isSogae(false)         // 소개팅 쪽지 여부 false 설정
                 .isCheck(false)         //읽음 false 로 설정
                 .isReject(false)       // 거절 여부 false로 설정
@@ -100,7 +109,7 @@ public class NoteServiceImpl implements NoteService{
                 .sender(sender)
                 .subject(subject)
                 .content(content)
-                .date(LocalDateTime.now())      //쪽지 보낸 시간
+                .date(localDateTime)            //쪽지 보낸 시간
                 .isSogae(true)                  //소개팅 쪽지 여부 true
                 .isCheck(false)                 //읽음 false 로 설정
                 .isReject(false)                //거절 여부 false로 설정
@@ -274,26 +283,6 @@ public class NoteServiceImpl implements NoteService{
         Member receiver = note.getReceiver();
         // 보내는이
         Member sender = note.getSender();
-        //2.  스케줄에 추가해주기
-        //2-1. 신청자(sender) 의 스케줄에 추가
-        OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
-                .member(sender)
-                .opponent(receiver)
-                .date(note.getDate())
-                .url("unknown")
-                .build();
-        onlineScheduleService.insertSchedule(senderRequest);
-
-
-        //2-2. 상대방(receiver) 의 스케줄에 추가.
-        OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
-                .member(receiver)
-                .opponent(sender)
-                .date(note.getDate())
-                .url("unknown")
-                .build();
-
-        onlineScheduleService.insertSchedule(receiverRequest);
 
         //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
         // 제목
@@ -312,15 +301,46 @@ public class NoteServiceImpl implements NoteService{
             // 내용
             String content = receiver.getName()+"님이 "+sender.getName()+"님의 소개팅 신청을 수락하셨습니다.\n"
                     +"D-Day : " + dateTime+"\n 내 스케줄에 일정을 추가합니다.";
+            System.out.println("localDateTime:"+localDateTime);
             NoteSendRequest noteSendRequest = NoteSendRequest.builder()
                     .receiver(sender.getId())
                     .sender("admin")
                     .subject(subject)
                     .content(content)
                     .isSogae(false)
-                    .date(LocalDateTime.now())
+                    .date(localDateTime)
                     .build();
             send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
+
+
+            //2.  스케줄에 추가해주기
+            //date : "\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분";을 localDateTime으로 바꿔넣어야 됨
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+            LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
+            // KST 시간대로 변환
+            ZoneId kstZone = ZoneId.of("Asia/Seoul");
+            ZonedDateTime kstDateTime = time.atZone(kstZone);
+            // ZonedDateTime을 LocalDateTime으로 변환
+            LocalDateTime dbLocalDateTime = kstDateTime.toLocalDateTime();
+            //2-1. 신청자(sender) 의 스케줄에 추가
+            OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
+                    .member(sender)
+                    .opponent(receiver)
+                    .date(dbLocalDateTime)
+                    .url("unknown")
+                    .build();
+            onlineScheduleService.insertSchedule(senderRequest);
+
+
+            //2-2. 상대방(receiver) 의 스케줄에 추가.
+            OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
+                    .member(receiver)
+                    .opponent(sender)
+                    .date(dbLocalDateTime)       //
+                    .url("unknown")
+                    .build();
+
+            onlineScheduleService.insertSchedule(receiverRequest);
         }
 
         //online, offline 여부 나중에 판단
@@ -349,7 +369,7 @@ public class NoteServiceImpl implements NoteService{
                 .subject(subject)
                 .content(content)
                 .isSogae(false)
-                .date(LocalDateTime.now())
+                .date(localDateTime)
                 .build();
         send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
 
