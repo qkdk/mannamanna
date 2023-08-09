@@ -15,12 +15,7 @@ public class SogaetingMemberResponse {
     private String introduction;
     private Boolean isSmoke;
     private Boolean isDrink;
-    private Boolean isOnline;
     private String pictureURL;
-
-    public void updateOnlineState(Boolean isOnline) {
-        this.isOnline = isOnline;
-    }
 
     @QueryProjection
     public SogaetingMemberResponse(String id, String name, String birth, String sido, String mbti,

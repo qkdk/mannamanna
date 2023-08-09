@@ -4,6 +4,7 @@ import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import java.util.List;
 
 public interface SogaetingService {
@@ -13,18 +14,18 @@ public interface SogaetingService {
 
     void Like(SogaetingLikeRequest sogaetingLikeRequest) throws Exception;
 
-    List<SogaetingMemberResponse> findMemberByCondition(
+    SogaetingMemberResponsePage findMemberByCondition(
         SogaetingFilteringRequest sogaetingFilteringRequest);
 
-    List<SogaetingMemberResponse> findMemberByConditionAndLocate(
+    SogaetingMemberResponsePage findMemberByConditionAndLocate(
         SogaetingFilteringRequest sogaetingFilteringRequest
     );
 
-    List<SogaetingMemberResponse> findMemberByConditionAndOnlineState(
+    SogaetingMemberResponsePage findMemberByConditionAndOnlineState(
         SogaetingFilteringRequest sogaetingFilteringRequest
     );
 
-    List<SogaetingMemberResponse> findMemberByConditionAndOnlineStateAndLocate(
+    SogaetingMemberResponsePage findMemberByConditionAndOnlineStateAndLocate(
         SogaetingFilteringRequest sogaetingFilteringRequest
     );
 }
