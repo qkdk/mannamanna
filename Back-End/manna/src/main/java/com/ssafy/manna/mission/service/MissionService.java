@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface MissionService {
 
+    // 소개팅이 성공하면 미션 6가지 생성해주기
     void assignMission(MissionAssignRequest missionAssignRequest) throws Exception;
 
 }

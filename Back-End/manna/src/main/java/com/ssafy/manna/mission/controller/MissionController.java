@@ -26,13 +26,13 @@ public class MissionController {
 
 
     // 소개팅이 성공하면 미션 6가지 생성해주기
-    @PostMapping(value = "assign")
-    public ResponseEntity<?> assignMission(@RequestBody MissionAssignRequest missionAssignRequest){
+    @PostMapping(value = "/assign")
+    public ResponseEntity<?> assignMission(@RequestBody MissionAssignRequest missionAssignRequest) {
         ResponseTemplate<?> body;
-        try{
+        try {
             missionService.assignMission(missionAssignRequest);
             return ResponseEntity.ok("mission assign success");
-        } catch (Exception e){
+        } catch (Exception e) {
             body = ResponseTemplate.builder()
                     .result(false)
                     .msg("미션 생성 에러")

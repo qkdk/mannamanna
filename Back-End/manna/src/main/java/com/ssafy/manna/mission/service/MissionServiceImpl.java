@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class MissionServiceImpl implements MissionService{
+public class MissionServiceImpl implements MissionService {
 
     private final CodeDetailRepository codeDetailRepository;
     private final MissionRepository missionRepository;
@@ -27,22 +28,20 @@ public class MissionServiceImpl implements MissionService{
 
     // 소개팅이 성공하면 미션 6가지 생성해주기
     @Override
-    public void assignMission(MissionAssignRequest missionAssignRequest) throws Exception{
-
+    public void assignMission(MissionAssignRequest missionAssignRequest) throws Exception {
+        // 코드가 M인 목록을 랜덤으로 6가지 불러옴
         List<CodeDetail> codeDetails = codeDetailRepository.findRandomTop6ById("M");
-        System.out.println(codeDetails.toString());
-        Mission mission = missionRepository.findById(missionAssignRequest.getMissionId()).orElseThrow(() -> new RuntimeException("mission not found"));
-        System.out.println(mission);
+        Mission mission = missionRepository.findById(missionAssignRequest.getMissionId())
+                .orElseThrow(() -> new RuntimeException("mission not found"));
         codeDetails.stream().forEach(codeDetail -> {
             MissionQuestion missionQuestion = MissionQuestion.builder()
                     .mission(mission)
                     .maleIsDone(false)
                     .femaleIsDone(false)
-                    .code(MissionCode.valueOf("M"))
+                    .code(MissionCode.valueOf("M1"))
                     .content(codeDetail.getName())
                     .build();
             missionQuestionRepository.save(missionQuestion);
-            System.out.println("dd");
         });
     }
 }
