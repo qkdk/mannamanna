@@ -7,7 +7,9 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -35,5 +37,8 @@ public class Mission extends BaseStartEndEntity {
     private String maleImagePath;
 
     private String femaleImagePath;
+
+    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    private List<MissionQuestion> missionQuestions;
 
 }
