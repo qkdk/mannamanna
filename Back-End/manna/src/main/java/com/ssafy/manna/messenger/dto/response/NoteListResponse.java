@@ -31,6 +31,8 @@ public class NoteListResponse {
     private boolean isReject;
     //읽음 여부
     private boolean isCheck;
+    //삭제 여부
+    private boolean isDeleted;
     //내용
     private String content;
 }

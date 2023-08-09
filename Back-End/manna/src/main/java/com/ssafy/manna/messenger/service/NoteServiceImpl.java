@@ -115,7 +115,9 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public void deleteNote(int id) throws Exception {
         Note deleteNote = noteRepository.findById(id).orElseThrow(()->new Exception("쪽지를 찾을 수 없습니다."));
-        noteRepository.delete(deleteNote);
+
+        deleteNote.updateDeleted(true);     //true로 설정
+//        noteRepository.delete(deleteNote);
     }
 
 
@@ -169,7 +171,7 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
-        List<Note> receivedNoteList = noteRepository.findAllByReceiverId(userId);
+        List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId,false);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note receivedNote:receivedNoteList){
             // 형식 지정
@@ -190,7 +192,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(receivedNote.getIsSogae())
                     .isCheck(receivedNote.getIsCheck())
                     .isReject(receivedNote.getIsReject())
-                   .build();
+                    .build();
 
             noteListResponses.add(noteListResponse);
         }
@@ -231,7 +233,7 @@ public class NoteServiceImpl implements NoteService{
     public List<NoteListResponse> newNoteList(String userId) throws Exception {
 
         //내가 받은 사람이고, 아직 안읽은 쪽지 List
-        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheck(userId,false);
+        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheckAndIsDeleted(userId,false,false);
 
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note newNote:newNoteList){
@@ -253,6 +255,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(newNote.getIsSogae())
                     .isCheck(newNote.getIsCheck())
                     .isReject(newNote.getIsReject())
+                    .isDeleted(newNote.getIsDeleted())
                     .build();
 
             noteListResponses.add(noteListResponse);
@@ -293,8 +296,6 @@ public class NoteServiceImpl implements NoteService{
         onlineScheduleService.insertSchedule(receiverRequest);
 
         //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
-        // 받는이
-
         // 제목
         String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
         // 날짜
@@ -313,7 +314,7 @@ public class NoteServiceImpl implements NoteService{
                     +"D-Day : " + dateTime+"\n 내 스케줄에 일정을 추가합니다.";
             NoteSendRequest noteSendRequest = NoteSendRequest.builder()
                     .receiver(sender.getId())
-                    .sender(receiver.getId())
+                    .sender("admin")
                     .subject(subject)
                     .content(content)
                     .isSogae(false)
@@ -323,8 +324,6 @@ public class NoteServiceImpl implements NoteService{
         }
 
         //online, offline 여부 나중에 판단
-        //소개팅 신청 받은 사람한테도 알려줘야 되나??
-
         noteRepository.save(note);
     }
 
@@ -346,7 +345,7 @@ public class NoteServiceImpl implements NoteService{
 
         NoteSendRequest noteSendRequest = NoteSendRequest.builder()
                 .receiver(sender.getId())
-                .sender(receiver.getId())
+                .sender("admin")
                 .subject(subject)
                 .content(content)
                 .isSogae(false)

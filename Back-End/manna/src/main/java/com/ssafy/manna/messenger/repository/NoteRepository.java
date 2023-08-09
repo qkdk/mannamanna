@@ -13,9 +13,9 @@ public interface NoteRepository extends JpaRepository<Note, Integer> {
     Optional<Note> findById(Integer id);
     //보낸이로 쪽지 조회
     List<Note> findAllBySenderId(String SenderId);
-    //받는 이로 쪽지 조회
-    List<Note> findAllByReceiverId(String receiverId);
+    //받는 이로 쪽지 조회 +  isDeleted=false인걸로
+    List<Note> findAllByReceiverIdAndIsDeleted(String receiverId,boolean isDeleted);
 
-    // 내가 RECEIVER(받는 사람), isCheck=false인거
-    List<Note> findAllByReceiverIdAndIsCheck(String receiverId,boolean isCheck);
+    // 내가 RECEIVER(받는 사람), isCheck=false인거 + isDeleted=false
+    List<Note> findAllByReceiverIdAndIsCheckAndIsDeleted(String receiverId,boolean isCheck, boolean isDeleted);
 }
