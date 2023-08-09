@@ -3,7 +3,6 @@ package com.ssafy.manna.schedule.domain;
 import com.ssafy.manna.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +10,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DiscriminatorValue("Offline")
-
 public class OfflineSchedule extends Schedule {
 
     @OneToOne(fetch = FetchType.LAZY)

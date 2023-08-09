@@ -15,11 +15,10 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DiscriminatorValue("Online")
+
 public class OnlineSchedule extends Schedule {
     @Column(name="url")
     private String url;
-
-    // 슈퍼 빌더를 사용하여 부모 클래스의 빌더를 활용합니다.
     @Builder
     public OnlineSchedule( Member member, Member opponent, LocalDateTime date, String url) {
         super(member, opponent, date);

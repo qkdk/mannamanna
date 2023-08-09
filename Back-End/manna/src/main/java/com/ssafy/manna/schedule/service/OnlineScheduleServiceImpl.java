@@ -26,7 +26,6 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
         LocalDateTime date = scheduleRequest.getDate();
         String url = scheduleRequest.getUrl();
 
-        //Online schedule Entity 생성
         OnlineSchedule onlineSchedule = OnlineSchedule.builder()
                 .member(member)
                 .opponent(opponent)
