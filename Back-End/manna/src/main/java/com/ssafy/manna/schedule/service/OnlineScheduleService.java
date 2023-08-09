@@ -15,9 +15,12 @@ public interface OnlineScheduleService {
 
     void deleteSchedule();
 
+    //스케줄 삭제
+    void deleteSchedule(Integer id) throws Exception;
+
     //read
     // 회원 전체 스케줄 return
-    List<OnlineScheduleResponse> getAllSchedule(String userId);
+    List<OnlineScheduleResponse> getAllSchedule(String userId) throws Exception;
 
     //
 

@@ -22,16 +22,18 @@ public class Schedule {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member member;
+    @JoinColumn(name="female")
+    private Member female;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member opponent;
+    @JoinColumn(name="male")
+    private Member male;
 
     private LocalDateTime date;
 
-    public Schedule(Member member, Member opponent, LocalDateTime date) {
-        this.member = member;
-        this.opponent = opponent;
+    public Schedule(Member female, Member male, LocalDateTime date) {
+        this.female = female;
+        this.male = male;
         this.date = date;
     }
 }

@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OnlineScheduleResponse {
 
+    //스케줄 아이디
+    private Integer scheduleId;
     //상대방 아이디
     private String opponentId;
     //날짜 "yyyy년 mm월 dd일"
