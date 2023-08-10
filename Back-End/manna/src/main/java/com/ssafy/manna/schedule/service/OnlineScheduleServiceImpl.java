@@ -51,37 +51,12 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
         onlineScheduleRepository.save(onlineSchedule);
     }
 
-    @Override
-    public void deleteSchedule() {
-
-    }
 
     //스케줄 삭제
     @Override
     public void deleteSchedule(Integer id) throws Exception {
-//        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new Exception("스케줄 정보가 없습니다."));
-        OnlineSchedule schedule = onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception("스케줄 정보가 없습니다."));
-
-//        System.out.println("삭제할 스케줄:"+schedule);
-        //현재시간₩
-//        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
-//        ZonedDateTime koreaTime = ZonedDateTime.now(koreaZone);
-//        LocalDateTime localDateTime = koreaTime.toLocalDateTime();
-
-        scheduleRepository.delete(schedule);
-//        스케줄 삭제 시, 쪽지 보내기( 000님이 스케줄을 취소하셨습니다.) - 걍 둘다한테 보내기
-//        String subject = member.getName()+"님이 스케줄을 취소하셨습니다.";
-//        String content = subject+"\n 스케줄에서 삭제됩니다.";
-//        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
-//                .receiver(opponent.getId())
-//                .subject(subject)
-//                .content(content)
-//                .date(localDateTime)
-//                .isSogae(false)
-//                .sender("admin")
-//                .build();
-//        noteService.send(noteSendRequest);
-
+       OnlineSchedule schedule = (OnlineSchedule) onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception("스케줄 정보가 없습니다."));
+       scheduleRepository.delete(schedule);
     }
 
     @Override
@@ -114,7 +89,6 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
             else{
                 opponent = schedule.getFemale();
         }
-
             OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
