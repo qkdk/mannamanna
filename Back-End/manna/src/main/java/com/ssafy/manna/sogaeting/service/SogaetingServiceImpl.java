@@ -134,9 +134,10 @@ public class SogaetingServiceImpl implements SogaetingService {
         return onlineMembers.stream().map(Session::getUserId).toList();
     }
 
-    private void updateOnlineState(List<ImageMappedSogaetingMemberResponse> findMembers) {
+    private void updateOnlineStateAndBirthUnit(List<ImageMappedSogaetingMemberResponse> findMembers) {
         for (ImageMappedSogaetingMemberResponse findMember : findMembers) {
             findMember.updateOnlineState(sessionService.checkMemberIsOnline(findMember.getId()));
+            findMember.updateBirthUnit();
         }
     }
 
@@ -155,7 +156,7 @@ public class SogaetingServiceImpl implements SogaetingService {
         }
 
         List<ImageMappedSogaetingMemberResponse> list = map.values().stream().toList();
-        updateOnlineState(list);
+        updateOnlineStateAndBirthUnit(list);
         return list;
     }
 

@@ -15,11 +15,13 @@ public class SogaetingMemberResponse {
     private String introduction;
     private Boolean isSmoke;
     private Boolean isDrink;
+    private Integer height;
     private String pictureURL;
 
     @QueryProjection
+
     public SogaetingMemberResponse(String id, String name, String birth, String sido, String mbti,
-        String religion, String introduction, Boolean isSmoke, Boolean isDrink,
+        String religion, String introduction, Boolean isSmoke, Boolean isDrink, Integer height,
         String pictureURL) {
         this.id = id;
         this.name = name;
@@ -30,6 +32,7 @@ public class SogaetingMemberResponse {
         this.introduction = introduction;
         this.isSmoke = isSmoke;
         this.isDrink = isDrink;
+        this.height = height;
         this.pictureURL = pictureURL;
     }
 }
