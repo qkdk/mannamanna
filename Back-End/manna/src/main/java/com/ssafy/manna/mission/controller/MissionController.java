@@ -5,9 +5,9 @@ import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -78,14 +80,40 @@ public class MissionController {
         }
     }
 
+    // 미션 사진 업로드
     @PutMapping(value = "/do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> doMission(@RequestPart("missionDoRequest")MissionDoRequest missionDoRequest, @RequestPart("missionPicture")MultipartFile missionPicture){
-        try{
+    public ResponseEntity<?> doMission(
+            @RequestPart("missionDoRequest") MissionDoRequest missionDoRequest,
+            @RequestPart("missionPicture") MultipartFile missionPicture) {
+        try {
             missionService.doMission(missionDoRequest, missionPicture);
             return ResponseEntity.ok("doMission success");
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 미션 완료 후 인증서 발급
+    @GetMapping(value = "/finish/{id}")
+    public ResponseEntity<?> finishMission(
+            @Validated @PathVariable("id") String id) throws Exception{
+        ResponseTemplate<?> body;
+        try {
+            MissionFinishResponse missionFinishResponse = missionService.finishMission(id);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("미션 완료")
+                    .data(missionFinishResponse)
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        } catch (Exception e) {
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("미션 실패")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 }

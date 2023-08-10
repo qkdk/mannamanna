@@ -11,20 +11,21 @@ import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -120,23 +121,22 @@ public class MissionServiceImpl implements MissionService {
         MissionQuestion missionQuestion = findMissionQuestion.get();
 
         String path = storeFile(missionDoRequest.getMemberId(), missionPicture);
-        if(missionDoRequest.getGender().equals("male")){
+        if (missionDoRequest.getGender().equals("male")) {
             missionQuestion.updateMaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
             missionQuestion.updateMaleIsDone(true);
-        }
-        else if(missionDoRequest.getGender().equals("female")){
+        } else if (missionDoRequest.getGender().equals("female")) {
             missionQuestion.updateFemaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
             missionQuestion.updateFemaleIsDone(true);
         }
 
     }
 
-    // 사진 등록
+    // 미션 사진 등록
     @Override
     public String storeFile(String memberId, MultipartFile file) throws IOException {
         String uploadDir = "/manna/upload/images/member/";
         String originalFileName = file.getOriginalFilename();
-        String fileName = memberId+"_"+ originalFileName;
+        String fileName = memberId + "_" + originalFileName;
 
         File directory = new File(uploadDir);
         String filePath = uploadDir + fileName;
@@ -154,6 +154,53 @@ public class MissionServiceImpl implements MissionService {
         file.transferTo(destFile);
         log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
         return filePath;
+    }
+
+    @Override
+    public MissionFinishResponse finishMission(String id) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        Member member = findMember.get();
+        String gender = member.getGender();
+
+        Optional<Mission> missions;
+        int missionId = 0;
+        if (gender.equals("male")) {
+            missions = missionRepository.findFirstByMaleId(id);
+            missionId = missions.get().getId();
+        } else if (gender.equals("female")) {
+            missions = missionRepository.findFirstByFemaleId(id);
+            missionId = missions.get().getId();
+        }
+
+        Optional<Mission> findMission = missionRepository.findById(missionId);
+        String maleId = findMission.get().getMaleId();
+        String femaleId = findMission.get().getFemaleId();
+
+        List<MissionQuestion> completedQuestions = missionQuestionRepository.findByMissionIdAndMaleIsDoneAndFemaleIsDone(missionId, true, true);
+        int endCnt = 0;
+        for (MissionQuestion completedQuestion : completedQuestions) {
+            if (completedQuestion.getMaleIsDone() == true) {
+                endCnt++;
+            }
+            if (completedQuestion.getFemaleIsDone() == true) {
+                endCnt++;
+            }
+        }
+        if (endCnt == 12) {
+            // 모든 미션을 완료
+            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
+                    .maleId(maleId)
+                    .femaleId(femaleId)
+                    .build();
+            return missionFinishResponse;
+        } else {
+            // 모든 미션을 완료하지 못함
+            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
+                    .maleId("error")
+                    .femaleId("error")
+                    .build();
+            return missionFinishResponse;
+        }
     }
 }
 
