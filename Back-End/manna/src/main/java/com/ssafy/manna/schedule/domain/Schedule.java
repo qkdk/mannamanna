@@ -22,11 +22,11 @@ public class Schedule {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="female")
+    @JoinColumn(name="female_id")
     private Member female;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="male")
+    @JoinColumn(name="male_id")
     private Member male;
 
     private LocalDateTime date;

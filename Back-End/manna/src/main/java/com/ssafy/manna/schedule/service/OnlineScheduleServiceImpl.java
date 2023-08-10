@@ -102,16 +102,15 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
         List<OnlineSchedule> allSchedule;
         if(member.getGender().equals("female")){
             //여자이면
-            allSchedule = onlineScheduleRepository.findByFemale(userId);
-        }
+            allSchedule = onlineScheduleRepository.findByFemaleId(userId);
+          }
         else{
             //남자이면
-            allSchedule = onlineScheduleRepository.findByMale(userId);
+            allSchedule = onlineScheduleRepository.findByMaleId(userId);
         }
 
-
         List<OnlineScheduleResponse> scheduleResponseList = new ArrayList<>();
-        for(Schedule schedule:allSchedule){
+        for(OnlineSchedule schedule:allSchedule){
             //날짜
             LocalDateTime localTime = schedule.getDate();
             int year = localTime.getYear();             // 년도 추출
@@ -119,14 +118,13 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
             int day = localTime.getDayOfMonth();        // 일 추출
             String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
 
-            System.out.println(extractedDate);
             Member opponent;
             if(member.getGender().equals("female")){
                 opponent = schedule.getMale();
             }
             else{
                 opponent = schedule.getFemale();
-            }
+        }
 
             OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
                     .scheduleId(schedule.getId())
