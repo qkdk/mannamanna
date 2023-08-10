@@ -1,5 +1,6 @@
 package com.ssafy.manna.messenger.dto;
 
+import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import java.io.Serializable;
 import java.util.UUID;
 import lombok.Getter;
@@ -14,10 +15,14 @@ public class ChatRoom implements Serializable {
     private String roomId;
     private String name;
 
-    public static ChatRoom create(String name) {
+    public static ChatRoom create(MakeChattingRoomRequest makeChattingRoomRequest) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = name;
+        chatRoom.name = namingChatRoom(makeChattingRoomRequest);
         return chatRoom;
+    }
+
+    private static String namingChatRoom(MakeChattingRoomRequest makeChattingRoomRequest){
+        return makeChattingRoomRequest.getMaleId() + " ❤ " + makeChattingRoomRequest.getFemaleId();
     }
 }
