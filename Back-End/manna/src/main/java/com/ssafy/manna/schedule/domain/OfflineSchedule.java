@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 public class OfflineSchedule extends Schedule {
 
     @OneToOne(fetch = FetchType.LAZY)
-    private ReserveAddress reserve;
+    private ReservePlace reserve;
 
     @Builder
-    public OfflineSchedule(Member member, Member opponent, LocalDateTime date,  ReserveAddress reserve) {
-        super( member, opponent, date);
+    public OfflineSchedule(Member female, Member male, LocalDateTime date,  ReservePlace reserve) {
+        super(female, male, date);
         this.reserve = reserve;
     }
 

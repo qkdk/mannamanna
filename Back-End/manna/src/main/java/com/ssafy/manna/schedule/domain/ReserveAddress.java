@@ -1,16 +1,19 @@
 package com.ssafy.manna.schedule.domain;
 
 import com.ssafy.manna.global.common.domain.Address;
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DiscriminatorValue("Reserve")
 public class ReserveAddress extends Address {
 
     @Id
@@ -25,6 +28,7 @@ public class ReserveAddress extends Address {
     private LocalDateTime advertisementStartDate;
     private LocalDateTime advertisementEndDate;
 
+    @Builder
     public ReserveAddress(String sido, String gugun, String detail, Double latitude,
             Double longitude,
             Integer id, String name, Boolean isAdvertisement, Integer advertisementCost,
