@@ -38,6 +38,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -63,6 +64,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -94,6 +96,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -121,6 +124,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -152,6 +156,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -178,6 +183,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -208,6 +214,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)
@@ -236,6 +243,7 @@ public class CustomSogaetingRepository {
                 memberDetail.introduction,
                 memberDetail.isSmoker,
                 memberDetail.isDrinker,
+                memberDetail.height,
                 profilePicture.path
             ))
             .from(member)

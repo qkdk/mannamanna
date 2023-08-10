@@ -3,6 +3,7 @@ package com.ssafy.manna.sogaeting.service;
 import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
+import java.time.LocalDate;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
@@ -34,6 +35,12 @@ class SogaetingServiceImplTest {
         String s = StringUtils.substringAfterLast(str, "/");
 
         Assertions.assertThat(s).isEqualTo("jaeeitest_hyunjin.jpg");
+    }
+
+    @Test
+    public void 년도_테스트(){
+        int year = LocalDate.now().getYear();
+        System.out.println(year - 1998);
     }
 
 //    @Test
