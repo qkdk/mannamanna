@@ -51,10 +51,10 @@ public class SogaetingController {
         }
     }
 
-    @GetMapping("/recommend")
+    @PostMapping("/recommend")
     public ResponseEntity<?> findMemberByCondition(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
-        System.out.println(sogaetingFilteringRequest);
+
         SogaetingMemberResponsePage memberByCondition = sogaetingService.findMemberByCondition(
             sogaetingFilteringRequest);
 
@@ -67,7 +67,7 @@ public class SogaetingController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/recommend/locate")
+    @PostMapping("/recommend/locate")
     public ResponseEntity<?> findMemberByConditionAndLocate(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
         SogaetingMemberResponsePage memberByConditionAndLocate = sogaetingService.findMemberByConditionAndLocate(
@@ -82,7 +82,7 @@ public class SogaetingController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/onlineRecommend")
+    @PostMapping("/onlineRecommend")
     public ResponseEntity<?> findMemberByConditionAndOnlineState(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
 
@@ -98,7 +98,7 @@ public class SogaetingController {
             HttpStatus.OK);
     }
 
-    @GetMapping("/onlineRecommend/locate")
+    @PostMapping("/onlineRecommend/locate")
     public ResponseEntity<?> findMemberByConditionAndOnlineStateAndLocate(
         @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest
     ) {
