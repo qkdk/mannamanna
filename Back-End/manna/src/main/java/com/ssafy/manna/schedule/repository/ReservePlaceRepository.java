@@ -1,6 +1,5 @@
 package com.ssafy.manna.schedule.repository;
 
-import com.ssafy.manna.schedule.domain.ReserveAddress;
 import com.ssafy.manna.schedule.domain.ReservePlace;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
