@@ -10,6 +10,6 @@ public interface OnlineScheduleRepository extends JpaRepository<OnlineSchedule,I
 
 //    @Override
 //    Optional<OnlineSchedule> findById(Integer integer);
-    List<OnlineSchedule> findByFemale(String femaleId);
-    List<OnlineSchedule> findByMale(String maleId);
+    List<OnlineSchedule> findByFemaleId(String femaleId);
+    List<OnlineSchedule> findByMaleId(String maleId);
 }

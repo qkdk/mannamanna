@@ -15,7 +15,6 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @DiscriminatorValue("Online")
-
 public class OnlineSchedule extends Schedule {
     @Column(name="url")
     private String url;

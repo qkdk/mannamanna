@@ -145,7 +145,7 @@ public class NoteController {
             return new ResponseEntity<>(sentNoteList,HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        }   
     }
 
     //소개팅 쪽지 수락
