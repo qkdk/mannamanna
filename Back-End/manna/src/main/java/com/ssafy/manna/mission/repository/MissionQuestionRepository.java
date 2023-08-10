@@ -2,8 +2,9 @@ package com.ssafy.manna.mission.repository;
 
 import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.domain.MissionQuestion;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 public interface MissionQuestionRepository extends JpaRepository<MissionQuestion, Integer> {
 

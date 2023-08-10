@@ -1,7 +1,5 @@
 package com.ssafy.manna.mission.service;
 
-import com.ssafy.manna.mission.domain.Mission;
-import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;

@@ -1,8 +1,6 @@
 package com.ssafy.manna.mission.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
-import com.ssafy.manna.mission.domain.Mission;
-import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
@@ -10,7 +8,6 @@ import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -97,7 +96,7 @@ public class MissionController {
     // 미션 완료 후 인증서 발급
     @GetMapping(value = "/finish/{id}")
     public ResponseEntity<?> finishMission(
-            @Validated @PathVariable("id") String id) {
+            @Validated @PathVariable("id") String id) throws Exception{
         ResponseTemplate<?> body;
         try {
             MissionFinishResponse missionFinishResponse = missionService.finishMission(id);
