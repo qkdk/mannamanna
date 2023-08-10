@@ -61,7 +61,7 @@ public class ScheduleController {
             offlineScheduleService.insertSchedule(scheduleRequest);
             body = ResponseTemplate.builder()
                     .result(true)
-                    .msg("온라인 스케줄 등록 완료")
+                    .msg("오프라인 스케줄(예약) 등록 완료")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
         } catch (Exception e) {
