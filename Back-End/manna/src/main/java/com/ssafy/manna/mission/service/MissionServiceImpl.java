@@ -120,22 +120,21 @@ public class MissionServiceImpl implements MissionService {
         MissionQuestion missionQuestion = findMissionQuestion.get();
 
         String path = storeFile(missionDoRequest.getMemberId(), missionPicture);
-
         if(missionDoRequest.getGender().equals("male")){
-            missionQuestion.updateMaleImgPath(missionDoRequest.getPath());
+            missionQuestion.updateMaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
+            missionQuestion.updateMaleIsDone(true);
         }
         else if(missionDoRequest.getGender().equals("female")){
-            missionQuestion.updateFemaleImgPath(missionDoRequest.getPath());
+            missionQuestion.updateFemaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
+            missionQuestion.updateFemaleIsDone(true);
         }
 
-
-
     }
-´
+
     // 사진 등록
     @Override
     public String storeFile(String memberId, MultipartFile file) throws IOException {
-        String uploadDir = "/manna/upload/images/mission/";
+        String uploadDir = "/manna/upload/images/member/";
         String originalFileName = file.getOriginalFilename();
         String fileName = memberId+"_"+ originalFileName;
 

@@ -79,7 +79,7 @@ public class MissionController {
     }
 
     @PutMapping(value = "/do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> doMission(@RequestPart("MissionDoRequest")MissionDoRequest missionDoRequest, @RequestPart("missionPicture")MultipartFile missionPicture){
+    public ResponseEntity<?> doMission(@RequestPart("missionDoRequest")MissionDoRequest missionDoRequest, @RequestPart("missionPicture")MultipartFile missionPicture){
         try{
             missionService.doMission(missionDoRequest, missionPicture);
             return ResponseEntity.ok("doMission success");

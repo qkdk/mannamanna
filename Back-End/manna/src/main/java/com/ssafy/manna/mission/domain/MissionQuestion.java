@@ -47,4 +47,13 @@ public class MissionQuestion extends BaseStartEndEntity {
     public void updateFemaleImgPath(String femaleImagePath) {
         this.femaleImagePath = femaleImagePath;
     }
+
+    public void updateMaleIsDone(Boolean maleIsDone){
+        this.maleIsDone = maleIsDone;
+    }
+
+    public void updateFemaleIsDone(Boolean FemaleIsDone){
+        this.femaleIsDone = femaleIsDone;
+    }
+
 }
