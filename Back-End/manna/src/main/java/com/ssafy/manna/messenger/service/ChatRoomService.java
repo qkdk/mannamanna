@@ -1,10 +1,16 @@
 package com.ssafy.manna.messenger.service;
 
+import static com.ssafy.manna.member.Enums.GenderEnum.GENDER_MALE;
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_FEMALE;
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MALE;
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MEMBER;
+
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.messenger.domain.ChatRoom;
 import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
+import com.ssafy.manna.messenger.dto.response.ChatRoomResponse;
 import com.ssafy.manna.messenger.repository.ChatRoomRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
@@ -16,6 +22,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class ChatRoomService {
+
     // Redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private final RedisTemplate<String, Object> redisTemplate;
@@ -48,16 +55,38 @@ public class ChatRoomService {
         return redisChatRoom;
     }
 
+    // 아이디에 해당하는 채팅방 정보 리턴
+    public List<ChatRoomResponse> findChatRoomById(String userId) {
+        Member findMember = memberRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+
+        return getChatRooms(findMember).stream()
+            .map(this::chatRoomDtoMapping).toList();
+    }
+
     private ChatRoom saveChatRoom(MakeChattingRoomRequest makeChattingRoomRequest) {
         Member female = memberRepository.findById(makeChattingRoomRequest.getFemaleId())
-            .orElseThrow(() -> new RuntimeException("일치하는 여자 회원이 없습니다."));
+            .orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_FEMALE.getValue()));
 
         Member male = memberRepository.findById(makeChattingRoomRequest.getMaleId())
-            .orElseThrow(() -> new RuntimeException("일치하는 남자 회원이 없습니다."));
+            .orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MALE.getValue()));
 
-        ChatRoom chatRoom = ChatRoom.of(male, female);
+        return chatRoomRepository.save(ChatRoom.of(male, female));
+    }
 
-        chatRoomRepository.save(chatRoom);
-        return chatRoom;
+    private ChatRoomResponse chatRoomDtoMapping(ChatRoom chatRoom) {
+        return ChatRoomResponse.builder()
+            .maleId(chatRoom.getMale().getId())
+            .femaleId(chatRoom.getFemale().getId())
+            .headMessage(chatRoom.getHeadMessage())
+            .name(chatRoom.getName())
+            .id(chatRoom.getId())
+            .build();
+    }
+
+    private List<ChatRoom> getChatRooms(Member findMember) {
+        return findMember.getGender().equals(GENDER_MALE.getValue()) ?
+            chatRoomRepository.findByMale(findMember)
+            : chatRoomRepository.findByFemale(findMember);
     }
 }
