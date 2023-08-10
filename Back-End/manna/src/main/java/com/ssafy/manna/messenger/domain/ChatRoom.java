@@ -35,4 +35,13 @@ public class ChatRoom extends BaseTimeEntity {
 
     private String name;
     private String headMessage;
+
+    public static ChatRoom of(Member male, Member female) {
+        return ChatRoom.builder()
+            .male(male)
+            .female(female)
+            .name(male.getName() + " 🩷 " + female.getName())
+            .headMessage(male.getName() + " 님과 " + female.getName() + " 님의 채팅방입니다.")
+            .build();
+    }
 }

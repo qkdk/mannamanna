@@ -1,8 +1,6 @@
 package com.ssafy.manna.messenger.domain;
 
-import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import java.io.Serializable;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +13,7 @@ public class RedisChatRoom implements Serializable {
     private String roomId;
     private String name;
 
-    public static RedisChatRoom create(ChatRoom chatRoom) {
+    public static RedisChatRoom of(ChatRoom chatRoom) {
         RedisChatRoom redisChatRoom = new RedisChatRoom();
         redisChatRoom.roomId = chatRoom.getId().toString();
         redisChatRoom.name = chatRoom.getName();

@@ -40,24 +40,24 @@ public class ChatRoomService {
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
     public RedisChatRoom createChatRoom(MakeChattingRoomRequest makeChattingRoomRequest) {
+        ChatRoom chatRoom = saveChatRoom(makeChattingRoomRequest);
+
+        RedisChatRoom redisChatRoom = RedisChatRoom.of(chatRoom);
+
+        opsHashChatRoom.put(CHAT_ROOMS, redisChatRoom.getRoomId(), redisChatRoom);
+        return redisChatRoom;
+    }
+
+    private ChatRoom saveChatRoom(MakeChattingRoomRequest makeChattingRoomRequest) {
         Member female = memberRepository.findById(makeChattingRoomRequest.getFemaleId())
             .orElseThrow(() -> new RuntimeException("일치하는 여자 회원이 없습니다."));
 
         Member male = memberRepository.findById(makeChattingRoomRequest.getMaleId())
             .orElseThrow(() -> new RuntimeException("일치하는 남자 회원이 없습니다."));
 
-        ChatRoom chatRoom = ChatRoom.builder()
-            .male(male)
-            .female(female)
-            .name(male.getName() + " 🩷 " + female.getName())
-            .headMessage(male.getName() + " 님과 " + female.getName() + " 님의 채팅방입니다.")
-            .build();
+        ChatRoom chatRoom = ChatRoom.of(male, female);
 
         chatRoomRepository.save(chatRoom);
-
-        RedisChatRoom redisChatRoom = RedisChatRoom.create(chatRoom);
-
-        opsHashChatRoom.put(CHAT_ROOMS, redisChatRoom.getRoomId(), redisChatRoom);
-        return redisChatRoom;
+        return chatRoom;
     }
 }
