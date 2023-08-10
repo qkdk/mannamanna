@@ -15,11 +15,11 @@ import lombok.NoArgsConstructor;
 public class OnlineScheduleRequest {
 
     //여자 id
-    private Member female;
+    private String femaleId;
     //남자 id
-    private Member male;
+    private String maleId;
     //시간
-    private LocalDateTime date;
+    private String date;
     //url
     private String url;
 }

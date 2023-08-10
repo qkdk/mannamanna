@@ -320,13 +320,7 @@ public class NoteServiceImpl implements NoteService{
 
             //2.  스케줄에 추가해주기
             //date : "\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분";을 localDateTime으로 바꿔넣어야 됨
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
-            LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
-            // KST 시간대로 변환
-            ZoneId kstZone = ZoneId.of("Asia/Seoul");
-            ZonedDateTime kstDateTime = time.atZone(kstZone);
-            // ZonedDateTime을 LocalDateTime으로 변환
-            LocalDateTime dbLocalDateTime = kstDateTime.toLocalDateTime();
+
 
             //schedule 에 하나만 추가
             //신청자 남자 or 여자
@@ -334,17 +328,17 @@ public class NoteServiceImpl implements NoteService{
             OnlineScheduleRequest onlineScheduleRequest;
             if(sender.getGender().equals("male")){
                 onlineScheduleRequest = OnlineScheduleRequest.builder()
-                        .female(receiver)
-                        .male(sender)
-                        .date(dbLocalDateTime)
+                        .femaleId(receiver.getId())
+                        .maleId(sender.getId())
+                        .date(dateTime)
                         .url("unknown")
                         .build();
             }
             else{
                 onlineScheduleRequest = OnlineScheduleRequest.builder()
-                        .female(sender)
-                        .male(receiver)
-                        .date(dbLocalDateTime)
+                        .femaleId(sender.getId())
+                        .maleId(receiver.getId())
+                        .date(dateTime)
                         .url("unknown")
                         .build();
             }

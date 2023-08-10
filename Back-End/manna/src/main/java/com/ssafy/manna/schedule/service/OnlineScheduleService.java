@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface OnlineScheduleService {
 
     //스케줄 등록
-    void insertSchedule(OnlineScheduleRequest scheduleRequest);
+    void insertSchedule(OnlineScheduleRequest scheduleRequest) throws Exception;
 
     //스케줄 삭제
     void deleteSchedule(Integer id) throws Exception;
