@@ -1,5 +1,6 @@
 package com.ssafy.manna.mission.domain;
 
+import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
 import jakarta.persistence.Entity;
@@ -7,12 +8,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.util.List;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
+@Builder
+@AllArgsConstructor
 public class Mission extends BaseStartEndEntity {
 
     @Id
@@ -30,8 +35,10 @@ public class Mission extends BaseStartEndEntity {
 
     private String femaleId;
 
-    private String maleImagePath;
-    private String maleImageMame;
-    private String femaleImagePath;
-    private String femaleImageName;
+    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    private List<MissionQuestion> missionQuestions;
+
+    public void updateIsDone(boolean isDone){
+        this.isDone = isDone;
+    }
 }

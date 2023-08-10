@@ -9,8 +9,14 @@ import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
 import com.ssafy.manna.messenger.dto.response.NoteListResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.repository.OnlineScheduleRepository;
+import com.ssafy.manna.schedule.service.OnlineScheduleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +37,19 @@ import java.util.regex.Pattern;
 public class NoteServiceImpl implements NoteService{
     private final MemberRepository memberRepository;
     private final NoteRepository noteRepository;
+    private final OnlineScheduleService onlineScheduleService;
+
+
 
     @Value("${file.server-domain}")
     private String SERVER_DOMAIN;
+
+
+    //현재시간
+    ZoneId koreaZone = ZoneId.of("Asia/Seoul");
+    ZonedDateTime koreaTime = ZonedDateTime.now(koreaZone);
+    LocalDateTime localDateTime = koreaTime.toLocalDateTime();
+
     // 일반 쪽지 쓰기
     @Override
     public void send(NoteSendRequest noteSendRequest) throws Exception {
@@ -50,17 +66,16 @@ public class NoteServiceImpl implements NoteService{
                 ()->new Exception("보내는 회원 정보가 없습니다.")
         );
 
-        //현재시간
-        LocalDateTime currentDateTime = LocalDateTime.now();
         Note note = Note.builder()
                 .receiver(receiverMember)
                 .sender(senderMember)
                 .subject(noteSendRequest.getSubject())
                 .content(noteSendRequest.getContent())
-                .date(currentDateTime)
+                .date(localDateTime)
                 .isSogae(false)         // 소개팅 쪽지 여부 false 설정
                 .isCheck(false)         //읽음 false 로 설정
                 .isReject(false)       // 거절 여부 false로 설정
+                .isDeleted(false)
                 .build();
         noteRepository.save(note);
 
@@ -95,10 +110,11 @@ public class NoteServiceImpl implements NoteService{
                 .sender(sender)
                 .subject(subject)
                 .content(content)
-                .date(LocalDateTime.now())      //쪽지 보낸 시간
+                .date(localDateTime)            //쪽지 보낸 시간
                 .isSogae(true)                  //소개팅 쪽지 여부 true
                 .isCheck(false)                 //읽음 false 로 설정
                 .isReject(false)                //거절 여부 false로 설정
+                .isDeleted(false)
                 .build();
         noteRepository.save(note);
 
@@ -110,7 +126,9 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public void deleteNote(int id) throws Exception {
         Note deleteNote = noteRepository.findById(id).orElseThrow(()->new Exception("쪽지를 찾을 수 없습니다."));
-        noteRepository.delete(deleteNote);
+
+        deleteNote.updateDeleted(true);     //true로 설정
+//        noteRepository.delete(deleteNote);
     }
 
 
@@ -164,7 +182,8 @@ public class NoteServiceImpl implements NoteService{
 
     @Override
     public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
-        List<Note> receivedNoteList = noteRepository.findAllByReceiverId(userId);
+        List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId,false);
+        System.out.println(receivedNoteList);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note receivedNote:receivedNoteList){
             // 형식 지정
@@ -185,7 +204,8 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(receivedNote.getIsSogae())
                     .isCheck(receivedNote.getIsCheck())
                     .isReject(receivedNote.getIsReject())
-                   .build();
+                    .isDeleted(receivedNote.getIsDeleted())
+                    .build();
 
             noteListResponses.add(noteListResponse);
         }
@@ -214,6 +234,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(sentNote.getIsSogae())
                     .isCheck(sentNote.getIsCheck())
                     .isReject(sentNote.getIsReject())
+                    .isDeleted(sentNote.getIsDeleted())
                     .build();
 
             noteListResponses.add(noteListResponse);
@@ -226,7 +247,7 @@ public class NoteServiceImpl implements NoteService{
     public List<NoteListResponse> newNoteList(String userId) throws Exception {
 
         //내가 받은 사람이고, 아직 안읽은 쪽지 List
-        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheck(userId,false);
+        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheckAndIsDeleted(userId,false,false);
 
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for(Note newNote:newNoteList){
@@ -248,6 +269,7 @@ public class NoteServiceImpl implements NoteService{
                     .isSogae(newNote.getIsSogae())
                     .isCheck(newNote.getIsCheck())
                     .isReject(newNote.getIsReject())
+                    .isDeleted(newNote.getIsDeleted())
                     .build();
 
             noteListResponses.add(noteListResponse);
@@ -262,15 +284,12 @@ public class NoteServiceImpl implements NoteService{
         //1. 쪽지 상태 update
         note.updateIsCheck(true);
         note.updateIsReject(false);
-        //2.  스케줄에 추가해주기
-        //2-1. 신청자(sender) 의 스케줄에 추가
-        //2-2. 상대방(receiver) 의 스케줄에 추가.
 
-        //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
-        // 받는이
         Member receiver = note.getReceiver();
         // 보내는이
         Member sender = note.getSender();
+
+        //3. 신청자(sender)한테 소개팅을 수락하셨습니다 쪽지(or 알림) 전송
         // 제목
         String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
         // 날짜
@@ -287,20 +306,71 @@ public class NoteServiceImpl implements NoteService{
             // 내용
             String content = receiver.getName()+"님이 "+sender.getName()+"님의 소개팅 신청을 수락하셨습니다.\n"
                     +"D-Day : " + dateTime+"\n 내 스케줄에 일정을 추가합니다.";
+            System.out.println("localDateTime:"+localDateTime);
             NoteSendRequest noteSendRequest = NoteSendRequest.builder()
                     .receiver(sender.getId())
-                    .sender(receiver.getId())
+                    .sender("admin")
                     .subject(subject)
                     .content(content)
                     .isSogae(false)
-                    .date(LocalDateTime.now())
+                    .date(localDateTime)
                     .build();
             send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
+
+
+            //2.  스케줄에 추가해주기
+            //date : "\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분";을 localDateTime으로 바꿔넣어야 됨
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+            LocalDateTime time = LocalDateTime.parse(dateTime, formatter);
+            // KST 시간대로 변환
+            ZoneId kstZone = ZoneId.of("Asia/Seoul");
+            ZonedDateTime kstDateTime = time.atZone(kstZone);
+            // ZonedDateTime을 LocalDateTime으로 변환
+            LocalDateTime dbLocalDateTime = kstDateTime.toLocalDateTime();
+
+            //schedule 에 하나만 추가
+            //신청자 남자 or 여자
+
+            OnlineScheduleRequest onlineScheduleRequest;
+            if(sender.getGender().equals("male")){
+                onlineScheduleRequest = OnlineScheduleRequest.builder()
+                        .female(receiver)
+                        .male(sender)
+                        .date(dbLocalDateTime)
+                        .url("unknown")
+                        .build();
+            }
+            else{
+                onlineScheduleRequest = OnlineScheduleRequest.builder()
+                        .female(sender)
+                        .male(receiver)
+                        .date(dbLocalDateTime)
+                        .url("unknown")
+                        .build();
+            }
+            onlineScheduleService.insertSchedule(onlineScheduleRequest);
+//            //2-1. 신청자(sender) 의 스케줄에 추가
+//            OnlineScheduleRequest senderRequest = OnlineScheduleRequest.builder()
+//                    .member(sender)
+//                    .opponent(receiver)
+//                    .date(dbLocalDateTime)
+//                    .url("unknown")
+//                    .build();
+//            onlineScheduleService.insertSchedule(senderRequest);
+//
+//
+//            //2-2. 상대방(receiver) 의 스케줄에 추가.
+//            OnlineScheduleRequest receiverRequest = OnlineScheduleRequest.builder()
+//                    .member(receiver)
+//                    .opponent(sender)
+//                    .date(dbLocalDateTime)       //
+//                    .url("unknown")
+//                    .build();
+//
+//            onlineScheduleService.insertSchedule(receiverRequest);
         }
 
         //online, offline 여부 나중에 판단
-        //소개팅 신청 받은 사람한테도 알려줘야 되나??
-
         noteRepository.save(note);
     }
 
@@ -322,11 +392,11 @@ public class NoteServiceImpl implements NoteService{
 
         NoteSendRequest noteSendRequest = NoteSendRequest.builder()
                 .receiver(sender.getId())
-                .sender(receiver.getId())
+                .sender("admin")
                 .subject(subject)
                 .content(content)
                 .isSogae(false)
-                .date(LocalDateTime.now())
+                .date(localDateTime)
                 .build();
         send(noteSendRequest);      //소개팅 신청자한테 쪽지 보내기.
 

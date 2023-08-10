@@ -45,10 +45,10 @@ public class MemberController {
     private String uploadDir;
 
     //임시매핑
-    @PostMapping("/hello")
-    public ResponseEntity<String> imsi(){
-        return ResponseEntity.ok("success");
-    }
+//    @PostMapping("/hello")
+//    public ResponseEntity<String> imsi(){
+//        return ResponseEntity.ok("success");
+//    }
 
     //회원가입
 //    @PostMapping(value="/regist")

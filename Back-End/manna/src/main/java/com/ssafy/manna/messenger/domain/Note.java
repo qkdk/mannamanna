@@ -40,6 +40,7 @@ public class Note {
 
     private Boolean isReject;
 
+    private Boolean isDeleted;
     public void updateIsCheck(boolean isCheck){
         this.isCheck = isCheck;
     }
@@ -47,4 +48,8 @@ public class Note {
     public void updateIsReject(boolean isReject){
         this.isReject = isReject;
     }
+
+    public void updateDeleted(boolean isDeleted) {this.isDeleted = isDeleted;}
+
+
 }

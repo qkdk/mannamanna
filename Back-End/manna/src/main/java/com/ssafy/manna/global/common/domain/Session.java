@@ -16,4 +16,5 @@ public class Session {
     private String userId;
     private String gender;
     private String userName;
+    private Integer offset;
 }
