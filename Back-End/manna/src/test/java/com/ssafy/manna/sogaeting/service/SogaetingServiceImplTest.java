@@ -23,8 +23,8 @@ class SogaetingServiceImplTest {
     public void init(){
         Session session = Session.builder()
             .userName("박소현")
-            .userId("sohyun3")
-            .gender("female")
+            .userId("gyubo2")
+            .gender("male")
             .build();
         redisSessionRepository.save(session);
     }
