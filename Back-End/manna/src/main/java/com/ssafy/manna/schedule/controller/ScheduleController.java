@@ -5,6 +5,7 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.member.service.MemberService;
 import com.ssafy.manna.schedule.dto.request.OfflineScheduleRequest;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.dto.response.OfflineScheduleResponse;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
 import com.ssafy.manna.schedule.service.OfflineScheduleService;
 import com.ssafy.manna.schedule.service.OfflineScheduleServiceImpl;
@@ -12,6 +13,7 @@ import com.ssafy.manna.schedule.service.OnlineScheduleService;
 import com.ssafy.manna.schedule.service.ScheduleService;
 import com.sun.mail.iap.Response;
 import java.awt.image.RescaleOp;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,9 @@ public class ScheduleController {
 
     private final OnlineScheduleService onlineScheduleService;
     private final OfflineScheduleService offlineScheduleService;
+    private final ScheduleService scheduleService;
 
+    //소개팅 신청 수락 후
     //온라인 스케줄 insert
     @PostMapping("/online/insert")
     public ResponseEntity<?> insertOnlineSchedule(@RequestBody OnlineScheduleRequest scheduleRequest){
@@ -53,6 +57,7 @@ public class ScheduleController {
         }
     }
 
+    //소개팅 후 예약 완료 시
     //오프라인 스케줄 insert
     @PostMapping("/offline/insert")
     public ResponseEntity<?> insertOfflineSchedule(@RequestBody OfflineScheduleRequest scheduleRequest){
@@ -74,10 +79,15 @@ public class ScheduleController {
     public ResponseEntity<?> getAllSchedule(@PathVariable("userId") String userId){
         ResponseTemplate<?> body;
         try{
-            List<OnlineScheduleResponse> scheduleList = onlineScheduleService.getAllSchedule(userId);
+            List<OnlineScheduleResponse> onlineScheduleList = onlineScheduleService.getAllSchedule(userId);
+            List<OfflineScheduleResponse> offLineScheduleList = offlineScheduleService.getAllSchedule(userId);
+            List allScheduleList = new ArrayList<>();
+            allScheduleList.add(onlineScheduleList);
+            allScheduleList.add(offLineScheduleList);
+
             body = ResponseTemplate.builder()
                     .result(true)
-                    .data(scheduleList)
+                    .data(allScheduleList)
                     .msg("스케줄 리스트 조회 완료")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
@@ -93,7 +103,7 @@ public class ScheduleController {
     public ResponseEntity<?> deleteSchedule(@PathVariable("scheduleId") Integer id){
         ResponseTemplate<?> body;
         try{
-            onlineScheduleService.deleteSchedule(id);
+            scheduleService.deleteSchedule(id);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("스케줄이 삭제 되었습니다.")

@@ -20,4 +20,5 @@ public class OnlineScheduleResponse {
     private String date;
     //시간 "hh시 mm분"
 
+    private String url;
 }
