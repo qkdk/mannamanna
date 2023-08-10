@@ -11,6 +11,7 @@ import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
 
@@ -131,7 +132,7 @@ public class MissionServiceImpl implements MissionService {
 
     }
 
-    // 사진 등록
+    // 미션 사진 등록
     @Override
     public String storeFile(String memberId, MultipartFile file) throws IOException {
         String uploadDir = "/manna/upload/images/member/";
@@ -154,6 +155,18 @@ public class MissionServiceImpl implements MissionService {
         file.transferTo(destFile);
         log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
         return filePath;
+    }
+
+    @Override
+    public MissionFinishResponse getMissionListByMissionId(Integer missionId) {
+
+        return null;
+    }
+
+    @Override
+    public MissionFinishResponse finishMission(Integer missionId) {
+
+        return null;
     }
 }
 

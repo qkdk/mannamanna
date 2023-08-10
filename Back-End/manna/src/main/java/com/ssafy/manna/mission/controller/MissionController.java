@@ -1,10 +1,13 @@
 package com.ssafy.manna.mission.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
+import com.ssafy.manna.mission.domain.Mission;
+import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
 import java.util.List;
@@ -78,14 +81,32 @@ public class MissionController {
         }
     }
 
+    // 미션 사진 업로드
     @PutMapping(value = "/do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> doMission(@RequestPart("missionDoRequest")MissionDoRequest missionDoRequest, @RequestPart("missionPicture")MultipartFile missionPicture){
-        try{
+    public ResponseEntity<?> doMission(
+            @RequestPart("missionDoRequest") MissionDoRequest missionDoRequest,
+            @RequestPart("missionPicture") MultipartFile missionPicture) {
+        try {
             missionService.doMission(missionDoRequest, missionPicture);
             return ResponseEntity.ok("doMission success");
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 미션 완료 후 인증서 발급
+    @GetMapping(value = "/finish")
+    public ResponseEntity<?> finishMission(
+            @Validated @PathVariable("missionId") Integer missionId) {
+        ResponseTemplate<?> body;
+
+        try {
+            MissionFinishResponse missionFinishResponse = missionService.finishMission(missionId);
+            return ResponseEntity.ok(missionFinishResponse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 }
