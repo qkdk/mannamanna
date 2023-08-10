@@ -91,11 +91,12 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
             }
             else{
                 opponent = schedule.getFemale();
-        }
+            }
             OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
                     .date(extractedDate)
+                    .url(schedule.getUrl())
                     .build();
             scheduleResponseList.add(onlineSchedule);
         }

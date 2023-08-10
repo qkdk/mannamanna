@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ScheduleRepository extends JpaRepository<Schedule,Integer> {
+    List<Schedule> findByFemaleId(String femaleId);
+    List<Schedule> findByMaleId(String maleId);
 }
