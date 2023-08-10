@@ -29,12 +29,5 @@ public interface MissionService {
     // 사진 등록
     String storeFile(String memberId, MultipartFile file) throws IOException;
 
-
-    MissionFinishResponse getMissionListByMissionId(Integer missionId);
-
-    List<MissionQuestion> findByMissionId(Integer missionId);
-
-    MissionFinishResponse getMaleIdAndFemaleIdAndEndDateByMissionId(Integer missionId);
-
-    MissionFinishResponse finishMission(Integer missionId);
+    MissionFinishResponse finishMission(String id);
 }

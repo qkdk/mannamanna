@@ -3,6 +3,7 @@ package com.ssafy.manna.mission.service;
 import com.ssafy.manna.global.common.domain.CodeDetail;
 import com.ssafy.manna.global.common.repository.CodeDetailRepository;
 import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.mission.domain.Mission;
@@ -158,15 +159,41 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public MissionFinishResponse getMissionListByMissionId(Integer missionId) {
+    public MissionFinishResponse finishMission(String id) {
+        Optional<Member> findMember = memberRepository.findById(id);
+        Member member = findMember.get();
+        String gender = member.getGender();
 
-        return null;
-    }
+        int missionId = 0;
+        if(gender.equals("male")){
+            missionId = missionRepository.findFirstByMaleId(id);
+        }
+        else if(gender.equals("female")){
+            missionId = missionRepository.findFirstByFemaleId(id);
+        }
 
-    @Override
-    public MissionFinishResponse finishMission(Integer missionId) {
+        Optional<Mission> findMission = missionRepository.findById(id);
+        String maleId = findMission.get().getMaleId();
+        String femaleId = findMission.get().getFemaleId();
 
-        return null;
+        List<MissionQuestion> completedQuestions = missionQuestionRepository.findByMissionIdAndMaleIsDoneAndFemaleIsDone(missionId, true, true);
+
+
+        if (!completedQuestions.isEmpty()) {
+            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
+                    .maleId(null)
+                    .femaleId(null)
+                    .build();
+            // 모든 미션을 완료하지 못함
+            return missionFinishResponse;
+        } else {
+            // 모든 미션을 완료
+            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
+                    .maleId(maleId)
+                    .femaleId(femaleId)
+                    .build();
+            return missionFinishResponse;
+        }
     }
 }
 

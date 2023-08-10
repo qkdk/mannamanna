@@ -95,16 +95,24 @@ public class MissionController {
     }
 
     // 미션 완료 후 인증서 발급
-    @GetMapping(value = "/finish")
+    @GetMapping(value = "/finish/{id}")
     public ResponseEntity<?> finishMission(
-            @Validated @PathVariable("missionId") Integer missionId) {
+            @Validated @PathVariable("id") String id) {
         ResponseTemplate<?> body;
-
         try {
-            MissionFinishResponse missionFinishResponse = missionService.finishMission(missionId);
-            return ResponseEntity.ok(missionFinishResponse);
+            MissionFinishResponse missionFinishResponse = missionService.finishMission(id);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("미션 완료")
+                    .data(missionFinishResponse)
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            body = ResponseTemplate.builder()
+                    .result(false)
+                    .msg("미션 실패")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
         }
     }
 

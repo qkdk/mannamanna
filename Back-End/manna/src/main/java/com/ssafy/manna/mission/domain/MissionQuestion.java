@@ -52,7 +52,7 @@ public class MissionQuestion extends BaseStartEndEntity {
         this.maleIsDone = maleIsDone;
     }
 
-    public void updateFemaleIsDone(Boolean FemaleIsDone){
+    public void updateFemaleIsDone(Boolean femaleIsDone){
         this.femaleIsDone = femaleIsDone;
     }
 
