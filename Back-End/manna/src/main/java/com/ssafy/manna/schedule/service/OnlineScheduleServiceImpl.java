@@ -10,6 +10,7 @@ import com.ssafy.manna.schedule.repository.OnlineScheduleRepository;
 import com.ssafy.manna.schedule.repository.ScheduleRepository;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,16 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
     private final MemberRepository memberRepository;
 
     @Override
-    public void insertSchedule(OnlineScheduleRequest scheduleRequest) {
-        Member female = scheduleRequest.getFemale();
-        Member male = scheduleRequest.getMale();
-        LocalDateTime date = scheduleRequest.getDate();
+    public void insertSchedule(OnlineScheduleRequest scheduleRequest) throws Exception {
+        Member female = memberRepository.findById(scheduleRequest.getFemaleId()).orElseThrow(()->new Exception("회원 정보가 없습니다."));
+        Member male = memberRepository.findById(scheduleRequest.getMaleId()).orElseThrow(()->new Exception("회원 정보가 없습니다."));
+        String dateStr = scheduleRequest.getDate();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+        LocalDateTime time = LocalDateTime.parse(dateStr, formatter);
         // KST 시간대로 변환
         ZoneId kstZone = ZoneId.of("Asia/Seoul");
-        ZonedDateTime kstDateTime = date.atZone(kstZone);
-
+        ZonedDateTime kstDateTime = time.atZone(kstZone);
         String url = scheduleRequest.getUrl();
 
         OnlineSchedule onlineSchedule = OnlineSchedule.builder()
