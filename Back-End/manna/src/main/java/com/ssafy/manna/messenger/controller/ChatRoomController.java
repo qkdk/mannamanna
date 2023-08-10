@@ -1,6 +1,6 @@
 package com.ssafy.manna.messenger.controller;
 
-import com.ssafy.manna.messenger.dto.ChatRoom;
+import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import com.ssafy.manna.messenger.service.ChatRoomService;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ChatRoomController {
 
 
     @GetMapping("/rooms")
-    public List<ChatRoom> room() {
+    public List<RedisChatRoom> room() {
         return chatRoomService.findAllRoom();
     }
 
@@ -29,7 +29,7 @@ public class ChatRoomController {
     // 상대방 아이디와 자신의 아이디가 필요하다.
 
     @PostMapping("/room")
-    public ChatRoom createRoom(@RequestBody MakeChattingRoomRequest makeChattingRoomRequest) {
+    public RedisChatRoom createRoom(@RequestBody MakeChattingRoomRequest makeChattingRoomRequest) {
         // 방정보를 리턴한다.
         return chatRoomService.createChatRoom(makeChattingRoomRequest);
     }
@@ -41,7 +41,7 @@ public class ChatRoomController {
 //    }
 
     @GetMapping("/room/{roomId}")
-    public ChatRoom roomInfo(@PathVariable String roomId) {
+    public RedisChatRoom roomInfo(@PathVariable String roomId) {
         return chatRoomService.findRoomById(roomId);
     }
 }

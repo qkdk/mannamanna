@@ -1,6 +1,9 @@
 package com.ssafy.manna.messenger.service;
 
-import com.ssafy.manna.messenger.dto.ChatRoom;
+import com.ssafy.manna.member.domain.Member;
+import com.ssafy.manna.member.repository.MemberRepository;
+import com.ssafy.manna.messenger.domain.ChatRoom;
+import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import com.ssafy.manna.messenger.repository.ChatRoomRepository;
 import jakarta.annotation.PostConstruct;
@@ -17,7 +20,8 @@ public class ChatRoomService {
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChatRoomRepository chatRoomRepository;
-    private HashOperations<String, String, ChatRoom> opsHashChatRoom;
+    private final MemberRepository memberRepository;
+    private HashOperations<String, String, RedisChatRoom> opsHashChatRoom;
 
     @PostConstruct
     private void init() {
@@ -25,22 +29,35 @@ public class ChatRoomService {
     }
 
     // 모든 채팅방 조회
-    public List<ChatRoom> findAllRoom() {
+    public List<RedisChatRoom> findAllRoom() {
         return opsHashChatRoom.values(CHAT_ROOMS);
     }
 
     // 특정 채팅방 조회
-    public ChatRoom findRoomById(String id) {
+    public RedisChatRoom findRoomById(String id) {
         return opsHashChatRoom.get(CHAT_ROOMS, id);
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createChatRoom(MakeChattingRoomRequest makeChattingRoomRequest) {
-        ChatRoom chatRoom = ChatRoom.create(makeChattingRoomRequest);
-        // MySQL에 입력하고 리턴값을 roomId로 하자
+    public RedisChatRoom createChatRoom(MakeChattingRoomRequest makeChattingRoomRequest) {
+        Member female = memberRepository.findById(makeChattingRoomRequest.getFemaleId())
+            .orElseThrow(() -> new RuntimeException("일치하는 여자 회원이 없습니다."));
 
+        Member male = memberRepository.findById(makeChattingRoomRequest.getMaleId())
+            .orElseThrow(() -> new RuntimeException("일치하는 남자 회원이 없습니다."));
 
-        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        return chatRoom;
+        ChatRoom chatRoom = ChatRoom.builder()
+            .male(male)
+            .female(female)
+            .name(male.getName() + " 🩷 " + female.getName())
+            .headMessage(male.getName() + " 님과 " + female.getName() + " 님의 채팅방입니다.")
+            .build();
+
+        chatRoomRepository.save(chatRoom);
+
+        RedisChatRoom redisChatRoom = RedisChatRoom.create(chatRoom);
+
+        opsHashChatRoom.put(CHAT_ROOMS, redisChatRoom.getRoomId(), redisChatRoom);
+        return redisChatRoom;
     }
 }
