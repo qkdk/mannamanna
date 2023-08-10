@@ -8,17 +8,23 @@ import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,9 @@ public class MissionServiceImpl implements MissionService {
     private final MissionRepository missionRepository;
     private final MissionQuestionRepository missionQuestionRepository;
     private final MemberRepository memberRepository;
+
+    @Value("${file.server-domain}")
+    private String serverDomain;
 
     // 소개팅이 성공하면 미션 6가지 생성해주기
     @Override
@@ -45,6 +54,8 @@ public class MissionServiceImpl implements MissionService {
                     .femaleIsDone(false)
                     .code(MissionCode.valueOf("M1"))
                     .content(codeDetail.getName())
+                    .maleImagePath(null)
+                    .femaleImagePath(null)
                     .build();
             missionQuestionRepository.save(missionQuestion);
         });
@@ -100,6 +111,49 @@ public class MissionServiceImpl implements MissionService {
         mission.updateIsDone(true);
 
         missionRepository.save(mission);
+    }
+
+    // 미션 사진 등록하기
+    @Override
+    public void doMission(MissionDoRequest missionDoRequest, MultipartFile missionPicture) throws IOException {
+        Optional<MissionQuestion> findMissionQuestion = missionQuestionRepository.findById(missionDoRequest.getId());
+        MissionQuestion missionQuestion = findMissionQuestion.get();
+
+        String path = storeFile(missionDoRequest.getMemberId(), missionPicture);
+        if(missionDoRequest.getGender().equals("male")){
+            missionQuestion.updateMaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
+            missionQuestion.updateMaleIsDone(true);
+        }
+        else if(missionDoRequest.getGender().equals("female")){
+            missionQuestion.updateFemaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
+            missionQuestion.updateFemaleIsDone(true);
+        }
+
+    }
+
+    // 사진 등록
+    @Override
+    public String storeFile(String memberId, MultipartFile file) throws IOException {
+        String uploadDir = "/manna/upload/images/member/";
+        String originalFileName = file.getOriginalFilename();
+        String fileName = memberId+"_"+ originalFileName;
+
+        File directory = new File(uploadDir);
+        String filePath = uploadDir + fileName;
+        File destFile = new File(filePath);
+
+        if (!directory.exists()) {
+            boolean mkdirsResult = directory.mkdirs();
+            if (mkdirsResult) {
+                System.out.println("디렉토리 생성  String storeFile(String memberId, MultipartFile file) throws IOException;성공");
+            } else {
+                System.out.println("디렉토리 생성 실패");
+            }
+        }
+
+        file.transferTo(destFile);
+        log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+        return filePath;
     }
 }
 

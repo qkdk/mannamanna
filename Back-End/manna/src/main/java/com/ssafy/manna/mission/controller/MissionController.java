@@ -2,6 +2,7 @@ package com.ssafy.manna.mission.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
@@ -10,15 +11,11 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
@@ -80,4 +77,15 @@ public class MissionController {
             return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @PutMapping(value = "/do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> doMission(@RequestPart("missionDoRequest")MissionDoRequest missionDoRequest, @RequestPart("missionPicture")MultipartFile missionPicture){
+        try{
+            missionService.doMission(missionDoRequest, missionPicture);
+            return ResponseEntity.ok("doMission success");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 }

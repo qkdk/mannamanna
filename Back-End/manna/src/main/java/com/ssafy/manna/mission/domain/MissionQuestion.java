@@ -2,6 +2,7 @@ package com.ssafy.manna.mission.domain;
 
 import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
+import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,5 +35,25 @@ public class MissionQuestion extends BaseStartEndEntity {
 
     private String content;
 
+    private String maleImagePath;
+
+    private String femaleImagePath;
+
+
+    public void updateMaleImgPath(String maleImagePath) {
+        this.maleImagePath = maleImagePath;
+    }
+
+    public void updateFemaleImgPath(String femaleImagePath) {
+        this.femaleImagePath = femaleImagePath;
+    }
+
+    public void updateMaleIsDone(Boolean maleIsDone){
+        this.maleIsDone = maleIsDone;
+    }
+
+    public void updateFemaleIsDone(Boolean FemaleIsDone){
+        this.femaleIsDone = femaleIsDone;
+    }
 
 }
