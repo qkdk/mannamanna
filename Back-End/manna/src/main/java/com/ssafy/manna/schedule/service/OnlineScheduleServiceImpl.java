@@ -29,7 +29,6 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
     private final OnlineScheduleRepository onlineScheduleRepository;
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
-//    private final NoteService noteService;
 
     @Override
     public void insertSchedule(OnlineScheduleRequest scheduleRequest) {
@@ -60,27 +59,17 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
     //스케줄 삭제
     @Override
     public void deleteSchedule(Integer id) throws Exception {
-////        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new Exception("스케줄 정보가 없습니다."));
-//        OnlineSchedule schedule = onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception("스케줄 정보가 없습니다."));
-//
-////        System.out.println("삭제할 스케줄:"+schedule);
-//        //현재시간₩
+//        Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new Exception("스케줄 정보가 없습니다."));
+        OnlineSchedule schedule = onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception("스케줄 정보가 없습니다."));
+
+//        System.out.println("삭제할 스케줄:"+schedule);
+        //현재시간₩
 //        ZoneId koreaZone = ZoneId.of("Asia/Seoul");
 //        ZonedDateTime koreaTime = ZonedDateTime.now(koreaZone);
 //        LocalDateTime localDateTime = koreaTime.toLocalDateTime();
-//
-//        //반대 쪽도 삭제
-//        Member member = schedule.getMember();
-//        Member opponent = schedule.getOpponent();
-//        LocalDateTime date = schedule.getDate();
-//
-//        Schedule opponentSchedule = scheduleRepository.findByMemberIdAndOpponentIdAndDate(
-//                opponent.getId(), member.getId(), date);
-//
-//        scheduleRepository.delete(schedule);
-//        scheduleRepository.delete(opponentSchedule);
 
-        //스케줄 삭제 시, 쪽지 보내기( 000님이 스케줄을 취소하셨습니다.)
+        scheduleRepository.delete(schedule);
+//        스케줄 삭제 시, 쪽지 보내기( 000님이 스케줄을 취소하셨습니다.) - 걍 둘다한테 보내기
 //        String subject = member.getName()+"님이 스케줄을 취소하셨습니다.";
 //        String content = subject+"\n 스케줄에서 삭제됩니다.";
 //        NoteSendRequest noteSendRequest = NoteSendRequest.builder()
