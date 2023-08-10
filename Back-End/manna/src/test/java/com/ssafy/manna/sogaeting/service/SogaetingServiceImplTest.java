@@ -4,6 +4,7 @@ import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,6 +26,14 @@ class SogaetingServiceImplTest {
             .gender("female")
             .build();
         redisSessionRepository.save(session);
+    }
+
+    @Test
+    public void Sub_Stirng_last_test(){
+        String str = "/manna/upload/images/member/jaeeitest_hyunjin.jpg";
+        String s = StringUtils.substringAfterLast(str, "/");
+
+        Assertions.assertThat(s).isEqualTo("jaeeitest_hyunjin.jpg");
     }
 
 //    @Test

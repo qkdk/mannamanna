@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -165,7 +166,11 @@ public class SogaetingServiceImpl implements SogaetingService {
         }
 
         map.get(sogaetingMemberResponse.getId()).getPictureURLs()
-            .add(sogaetingMemberResponse.getPictureURL());
+            .add(subStringLast(sogaetingMemberResponse));
+    }
+
+    private static String subStringLast(SogaetingMemberResponse sogaetingMemberResponse) {
+        return StringUtils.substringAfterLast(sogaetingMemberResponse.getPictureURL(), "/");
     }
 
     private void initializeMapping(Map<String, ImageMappedSogaetingMemberResponse> map,
