@@ -9,10 +9,7 @@ import com.ssafy.manna.member.domain.Ban;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingStartRequest;
+import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.ImageMappedSogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
@@ -141,6 +138,16 @@ public class SogaetingServiceImpl implements SogaetingService {
                 .build();
 
         sogaetingRepository.save(sogaeting);
+    }
+
+    // 소개팅 성공 저장
+    @Override
+    public void success(SogaetingSuccessRequest sogaetingSuccessRequest) {
+        Sogaeting sogaeting = sogaetingRepository.findByMaleIdAndFemaleId(sogaetingSuccessRequest.getMaleId(), sogaetingSuccessRequest.getFemaleId());
+
+        sogaeting.updateIsSuccess(true);
+        sogaetingRepository.save(sogaeting);
+
     }
 
     private PageRequest get2PageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {

@@ -1,9 +1,6 @@
 package com.ssafy.manna.sogaeting.service;
 
-import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingStartRequest;
+import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import java.util.List;
@@ -32,4 +29,6 @@ public interface SogaetingService {
 
     // 소개팅 시작하기
     void start(SogaetingStartRequest sogaetingStartRequest);
+
+    void success(SogaetingSuccessRequest sogaetingSuccessRequest);
 }

@@ -1,5 +1,6 @@
 package com.ssafy.manna.sogaeting.repository;
 
+import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,5 +14,8 @@ public interface SogaetingRepository extends JpaRepository<Sogaeting, String> {
 
 
     // 같은 지역 추천하는 기능
+
+    // 남자 여자 아이디를 기준으로 조회
+    Sogaeting findByMaleIdAndFemaleId(String maleId, String femaleId);
 
 }

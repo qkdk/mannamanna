@@ -29,4 +29,7 @@ public class Sogaeting extends BaseStartEndEntity {
 
     private Boolean isSuccess;
 
+    public void updateIsSuccess(boolean isSuccess) {
+        this.isSuccess = isSuccess;
+    }
 }

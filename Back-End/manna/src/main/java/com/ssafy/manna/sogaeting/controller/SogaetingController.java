@@ -1,10 +1,7 @@
 package com.ssafy.manna.sogaeting.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingStartRequest;
+import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
@@ -13,11 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @RestController
@@ -126,5 +119,18 @@ public class SogaetingController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // 소개팅 성공
+    @PutMapping(value = "/success")
+    public ResponseEntity<?> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest){
+        ResponseTemplate<?> body;
+        try {
+            sogaetingService.success(sogaetingSuccessRequest);
+            return ResponseEntity.ok("sogaeting success success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
 
 }
