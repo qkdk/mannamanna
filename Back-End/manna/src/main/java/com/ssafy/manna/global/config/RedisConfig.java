@@ -1,6 +1,6 @@
 package com.ssafy.manna.global.config;
 
-import com.ssafy.manna.messenger.pubsub.RedisSubscriber;
+import com.ssafy.manna.messenger.service.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
