@@ -3,6 +3,7 @@ package com.ssafy.manna.messenger.controller;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
+import com.ssafy.manna.messenger.dto.response.ChatHistoryResponse;
 import com.ssafy.manna.messenger.dto.response.ChatRoomResponse;
 import com.ssafy.manna.messenger.service.ChatRoomService;
 import java.util.List;
@@ -51,6 +52,20 @@ public class ChatRoomController {
                 .result(true)
                 .msg("채팅방 러오기 성공")
                 .data(chatRoomService.findChatRoomById(userId))
+                .build(),
+            HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/{roomId}")
+    public ResponseEntity<ResponseTemplate<List<ChatHistoryResponse>>> getChatHistory(
+        @PathVariable String roomId) {
+
+        return new ResponseEntity<>(
+            ResponseTemplate.<List<ChatHistoryResponse>>builder()
+                .result(true)
+                .msg("채팅기록 불러오기 성공")
+                .data(chatRoomService.findChatHistoryByRoomId(roomId))
                 .build(),
             HttpStatus.OK
         );
