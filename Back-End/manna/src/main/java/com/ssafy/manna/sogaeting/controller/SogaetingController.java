@@ -4,6 +4,7 @@ import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingLikeRequest;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingReportRequest;
+import com.ssafy.manna.sogaeting.dto.request.SogaetingStartRequest;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
@@ -112,6 +113,18 @@ public class SogaetingController {
                 .result(true)
                 .build(),
             HttpStatus.OK);
+    }
+
+    // 소개팅 시작하기
+    @PostMapping(value = "/start")
+    public ResponseEntity<?> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest){
+        ResponseTemplate<?> body;
+        try {
+            sogaetingService.start(sogaetingStartRequest);
+            return ResponseEntity.ok("sogaeting start success");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
