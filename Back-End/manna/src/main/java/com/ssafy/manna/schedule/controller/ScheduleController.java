@@ -14,7 +14,10 @@ import com.ssafy.manna.schedule.service.ScheduleService;
 import com.sun.mail.iap.Response;
 import java.awt.image.RescaleOp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,13 +84,12 @@ public class ScheduleController {
         try{
             List<OnlineScheduleResponse> onlineScheduleList = onlineScheduleService.getAllSchedule(userId);
             List<OfflineScheduleResponse> offLineScheduleList = offlineScheduleService.getAllSchedule(userId);
-            List allScheduleList = new ArrayList<>();
-            allScheduleList.add(onlineScheduleList);
-            allScheduleList.add(offLineScheduleList);
-
+            Map<String, List<?>> scheduleMap = new HashMap<>();
+            scheduleMap.put("onlineSchedule",onlineScheduleList);
+            scheduleMap.put("offlineSchedule",offLineScheduleList);
             body = ResponseTemplate.builder()
                     .result(true)
-                    .data(allScheduleList)
+                    .data(scheduleMap)
                     .msg("스케줄 리스트 조회 완료")
                     .build();
             return new ResponseEntity<>(body,HttpStatus.OK);
