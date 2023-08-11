@@ -1,11 +1,11 @@
 package com.ssafy.manna.messenger.service;
 
-import com.ssafy.manna.messenger.domain.Note;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
 import com.ssafy.manna.messenger.dto.response.NoteDetailResponse;
 import com.ssafy.manna.messenger.dto.response.NoteListResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +41,7 @@ public interface NoteService {
 
     //소개팅 쪽지 거절
     void refuseSogating(int noteId) throws Exception;
+
+    LocalDateTime setNowTime();
 
 }

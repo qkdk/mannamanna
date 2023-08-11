@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,7 +17,7 @@ public class SogaeNoteSendRequest {
     //보내는이 - 아이디
     private String sender;
 
-    //date 날짜
+    //date 소개팅 날짜
     private String date;
 
  }
