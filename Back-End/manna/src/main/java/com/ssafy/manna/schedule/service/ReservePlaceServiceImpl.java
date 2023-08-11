@@ -1,7 +1,10 @@
 package com.ssafy.manna.schedule.service;
 
 import com.ssafy.manna.schedule.domain.ReservePlace;
+import com.ssafy.manna.schedule.dto.request.ReservePlaceRequest;
 import com.ssafy.manna.schedule.repository.ReservePlaceRepository;
+
+import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -23,4 +26,14 @@ public class ReservePlaceServiceImpl implements ReservePlaceService{
         ReservePlace reservePlace = reservePlaceRepository.findById(id).orElseThrow(()->new Exception("예약 장소 정보가 없습니다."));
         return reservePlace;
     }
+
+    @Override
+    public List<ReservePlace> getRecommendList(ReservePlaceRequest reservePlaceRequest) {
+        String sido = reservePlaceRequest.getSido();
+        String gugun = reservePlaceRequest.getGugun();
+        String category = reservePlaceRequest.getCategory();
+        List<ReservePlace> recommendList = reservePlaceRepository.findAllBySidoAndGugunAndCategory(sido,gugun,category);
+        return recommendList;
+    }
+
 }
