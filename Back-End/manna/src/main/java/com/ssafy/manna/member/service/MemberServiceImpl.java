@@ -1,9 +1,7 @@
 package com.ssafy.manna.member.service;
 
-import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.global.common.domain.Address;
-import com.ssafy.manna.global.common.domain.Gugun;
-import com.ssafy.manna.global.common.domain.Sido;
+import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
 import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.member.domain.Member;
@@ -16,14 +14,12 @@ import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.repository.MemberDetailRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
-
+import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,66 +55,12 @@ public class MemberServiceImpl implements MemberService {
     @Value("${file.server-domain}")
     private String serverDomain;
 
-//    @Override
-//    public void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception {
-//
-//        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
-//            log.info("이미 있는 회원입니다.");
-//            throw new Exception("이미 존재하는 이메일입니다.");
-//        }
-//
-//        Sido sido = sidoRepository.findByName(memberSignUpRequest.getSido())
-//                .orElseThrow(() -> new Exception("일치하는 시도가 없습니다."));
-//
-//        Gugun gugun = gugunRepository.findByNameAndSido(memberSignUpRequest.getGugun(), sido)
-//                .orElseThrow(() -> new Exception("일치하는 구군이 없습니다."));
-//
-//        Address address = new Address(sido, gugun, memberSignUpRequest.getDetail(),
-//                memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
-//        Member member = Member.builder()
-//                .id(memberSignUpRequest.getId())
-//                .pwd(memberSignUpRequest.getPwd())
-//                .gender(memberSignUpRequest.getGender())
-//                .name(memberSignUpRequest.getName())
-//                .role(UserRole.USER)
-//                .build();
-//
-//        member.passwordEncode(passwordEncoder);
-//
-//        MemberDetail memberDetail = MemberDetail.builder()
-//                .id(member.getId())
-//                .member(member)
-//                .address(address)
-//                .tel(memberSignUpRequest.getTel())
-//                .birth(memberSignUpRequest.getBirth())
-//                .emailId(memberSignUpRequest.getEmailId())
-//                .emailDomain(memberSignUpRequest.getEmailDomain())
-//                .height(memberSignUpRequest.getHeight())
-//                .job(memberSignUpRequest.getJob())
-//                .isSmoker(memberSignUpRequest.isSmoker())
-//                .isDrinker(memberSignUpRequest.isDrinker())
-//                .mbti(memberSignUpRequest.getMbti())
-//                .religion(memberSignUpRequest.getReligion())
-//                .introduction(memberSignUpRequest.getIntroduction())
-//                .isBlockingFriend(false)            //isBlockingFriend 기본값 false
-//                .mileage(0)
-//                .build();
-//        memberDetailRepository.save(memberDetail);
-//    }
-
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest,MultipartFile[] multipartFiles) throws Exception{
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
             log.info("이미 있는 회원입니다.");
             throw new Exception("이미 존재하는 이메일입니다.");
         }
-
-        //사진 저장
-//        int[] priorities = new int[3];
-//        priorities[0] = memberSignUpRequest.getPriority1();
-//        priorities[1] = memberSignUpRequest.getPriority2();
-//        priorities[2] = memberSignUpRequest.getPriority3();
-
 
         Address address = new Address(memberSignUpRequest.getSido(), memberSignUpRequest.getGugun(),
                 memberSignUpRequest.getDetail(),
@@ -314,6 +256,7 @@ public class MemberServiceImpl implements MemberService {
                 .introduction(memberDetail.getIntroduction())
                 .mileage(memberDetail.getMileage())
                 .sido(memberAddress.getSido())
+                .age(2023-Integer.parseInt(memberDetail.getBirth()))
                 .gugun(memberAddress.getGugun())
                 .detailAddress(memberAddress.getDetail())
                 .build();
@@ -335,13 +278,6 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateReligion(memberUpdateRequest.getReligion());
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
-
-        //사진 수정
-//        int[] priorities = new int[3];
-//        priorities[0] = memberUpdateRequest.getPriority1();
-//        priorities[1] = memberUpdateRequest.getPriority2();
-//        priorities[2] = memberUpdateRequest.getPriority3();
-
         for(int i=0;i<3;i++){
             String memberId = member.getId();
             String path = storeFile(memberId, multipartFiles[i]);   //새로운 사진 저장한 경로
@@ -349,14 +285,6 @@ public class MemberServiceImpl implements MemberService {
             ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
                     (member,i+1).orElseThrow(()->new Exception("사진 정보가 없습니다."));
             updatePicture.updatePath(path);
-            updatePicture.updateName(memberId+"_"+multipartFiles[i].getOriginalFilename());
-
-//            ProfilePicture profilePicture = ProfilePicture.builder()
-//                    .member(member)
-//                    .path(path)
-//                    .name(memberId+"_"+multipartFiles[i].getOriginalFilename())
-//                    .priority(priorities[i])
-//                    .build();
             profilePictureRepository.save(updatePicture);
         }
 
