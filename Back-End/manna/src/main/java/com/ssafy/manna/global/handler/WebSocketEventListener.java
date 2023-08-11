@@ -23,6 +23,7 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectEvent event) {
+        log.info("도커 커넥션 핸들러 작동");
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         try {
             String userName = headerAccessor.getNativeHeader(SOCKET_HEADER_USER_NAME.getValue())
