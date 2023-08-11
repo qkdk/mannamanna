@@ -1,6 +1,5 @@
-package com.ssafy.manna.global.handler;
+package com.ssafy.manna.messenger.domain;
 
-import com.ssafy.manna.messenger.domain.RedisChat;
 import com.ssafy.manna.messenger.dto.ChatMessage;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,14 +12,14 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @ToString
-public class RedisChatElement implements Serializable {
+public class RedisChatHistory implements Serializable {
     private String senderId;
     private String senderName;
     private String message;
     private LocalDateTime time;
 
-    public static RedisChatElement of (ChatMessage roomMessage){
-        return RedisChatElement.builder()
+    public static RedisChatHistory of (ChatMessage roomMessage){
+        return RedisChatHistory.builder()
             .message(roomMessage.getMessage())
             .senderId(roomMessage.getSenderId())
             .senderName(roomMessage.getSenderName())

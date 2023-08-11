@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.manna.global.auth.jwt.JwtService;
 import com.ssafy.manna.messenger.domain.RedisChat;
+import com.ssafy.manna.messenger.domain.RedisChatHistory;
 import com.ssafy.manna.messenger.dto.ChatMessage;
 import com.ssafy.manna.messenger.repository.ChatRepository;
 import java.util.ArrayList;
@@ -12,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.messaging.simp.stomp.StompCommand;
-import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
 
@@ -37,7 +36,7 @@ public class StompHandler implements ChannelInterceptor {
             RedisChat redisChat = chatRepository.findById(chatMessage.getRoomId()).orElse(
                 new RedisChat(chatMessage.getRoomId(), new ArrayList<>()));
 
-            redisChat.getRedisChatElements().add(RedisChatElement.of(chatMessage));
+            redisChat.getRedisChatHistories().add(RedisChatHistory.of(chatMessage));
             chatRepository.save(redisChat);
         } catch (Exception e) {
             log.info("새로운 구독 확인");

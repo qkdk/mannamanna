@@ -1,8 +1,7 @@
 package com.ssafy.manna.global.handler;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.ssafy.manna.messenger.domain.RedisChat;
+import com.ssafy.manna.messenger.domain.RedisChatHistory;
 import com.ssafy.manna.messenger.repository.ChatRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ class StompHandlerTest {
     @Test
     public void AA(){
         RedisChat redisChat = chatRepository.findById("4").get();
-        for (RedisChatElement redisChatElement : redisChat.getRedisChatElements()) {
-            System.out.println(redisChatElement);
+        for (RedisChatHistory redisChatHistory : redisChat.getRedisChatHistories()) {
+            System.out.println(redisChatHistory);
         }
     }
 }
