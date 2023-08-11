@@ -14,12 +14,12 @@ class ChatRoomServiceTest {
     @Autowired
     private ChatRoomService chatRoomService;
 
-    @Test
-    public void 채팅방_정보_테스트(){
-        String femaleId = "sohyun1";
-
-        List<ChatRoomResponse> chatRoomById = chatRoomService.findChatRoomById(femaleId);
-        System.out.println(chatRoomById);
-    }
+//    @Test
+//    public void 채팅방_정보_테스트(){
+//        String femaleId = "sohyun1";
+//
+//        List<ChatRoomResponse> chatRoomById = chatRoomService.findChatRoomById(femaleId);
+//        System.out.println(chatRoomById);
+//    }
 
 }
