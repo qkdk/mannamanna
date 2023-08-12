@@ -83,12 +83,20 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
         List<OnlineSchedule> allSchedule = allSchedule(userId);
         List<OnlineScheduleResponse> scheduleResponseList = new ArrayList<>();
         for(OnlineSchedule schedule:allSchedule){
+
             //날짜
             LocalDateTime localTime = schedule.getDate();
-            int year = localTime.getYear();             // 년도 추출
-            int month = localTime.getMonthValue();      // 월 추출
-            int day = localTime.getDayOfMonth();        // 일 추출
-            String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
+            // DateTimeFormatter를 사용하여 원하는 형식으로 변환
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String formattedDate = localTime.format(dateFormatter);
+
+
+//            LocalDateTime localTime = schedule.getDate();
+//
+//            int year = localTime.getYear();             // 년도 추출
+//            int month = localTime.getMonthValue();      // 월 추출
+//            int day = localTime.getDayOfMonth();        // 일 추출
+//            String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
 
             //시간
             // DateTimeFormatter로 hh:mm 형식으로 변환
@@ -105,7 +113,7 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
             OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
-                    .date(extractedDate)
+                    .date(formattedDate)
                     .time(formattedTime)
                     .url(schedule.getUrl())
                     .build();
