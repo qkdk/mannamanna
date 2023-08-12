@@ -1,35 +1,26 @@
 package com.ssafy.manna.schedule.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
-import com.ssafy.manna.member.repository.MemberRepository;
-import com.ssafy.manna.member.service.MemberService;
+import com.ssafy.manna.schedule.dto.request.DetailScheduleRequest;
 import com.ssafy.manna.schedule.dto.request.OfflineScheduleRequest;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.dto.request.TodayScheduleRequest;
 import com.ssafy.manna.schedule.dto.response.OfflineScheduleResponse;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
+import com.ssafy.manna.schedule.dto.response.ScheduleResponse;
 import com.ssafy.manna.schedule.service.OfflineScheduleService;
-import com.ssafy.manna.schedule.service.OfflineScheduleServiceImpl;
 import com.ssafy.manna.schedule.service.OnlineScheduleService;
 import com.ssafy.manna.schedule.service.ScheduleService;
-import com.sun.mail.iap.Response;
-import java.awt.image.RescaleOp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -77,7 +68,7 @@ public class ScheduleController {
         }
     }
 
-    //온라인 스케줄 list 조회 - userId로 전체 조회
+    //전체 스케줄 list 조회 - userId로 전체 조회
     @GetMapping("/{userId}")
     public ResponseEntity<?> getAllSchedule(@PathVariable("userId") String userId){
         ResponseTemplate<?> body;
@@ -99,6 +90,28 @@ public class ScheduleController {
         }
     }
 
+    //날짜별 스케줄 list 조회 - userId, 날짜로
+    @PostMapping("/list")
+    public ResponseEntity<?> getTodaySchedule(@RequestBody TodayScheduleRequest todayScheduleRequest){
+        ResponseTemplate<?> body;
+        try{
+            List<OnlineScheduleResponse> onlineScheduleList = onlineScheduleService.getTodaySchedule(todayScheduleRequest);
+            List<OfflineScheduleResponse> offLineScheduleList = offlineScheduleService.getTodaySchedule(todayScheduleRequest);
+            Map<String, List<?>> scheduleMap = new HashMap<>();
+            scheduleMap.put("onlineSchedule",onlineScheduleList);
+            scheduleMap.put("offlineSchedule",offLineScheduleList);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .data(scheduleMap)
+                    .msg("날짜별 스케줄 리스트 조회 완료")
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
     //스케줄 삭제
     @DeleteMapping("/{scheduleId}")
@@ -113,6 +126,23 @@ public class ScheduleController {
             return new ResponseEntity<>(body,HttpStatus.OK);
         }
         catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //스케줄 하나 조회(noteId로)
+    @GetMapping("/{scheduleId}/{userId}")
+    public ResponseEntity<?> getDetailSchedule(@PathVariable("scheduleId") Integer scheduleId, @PathVariable("userId") String userId ){
+        ResponseTemplate<?> body;
+        try{
+            ScheduleResponse scheduleResponse = scheduleService.getDetailInfo(scheduleId,userId);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("스케줄 상세 조회 완료")
+                    .data(scheduleResponse)
+                    .build();
+            return new ResponseEntity<>(body,HttpStatus.OK);
+        }catch(Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

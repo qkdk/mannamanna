@@ -1,6 +1,8 @@
 package com.ssafy.manna.schedule.service;
 
+import com.ssafy.manna.schedule.domain.OnlineSchedule;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.dto.request.TodayScheduleRequest;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -16,5 +18,10 @@ public interface OnlineScheduleService {
 
     // 회원 전체 스케줄 return
     List<OnlineScheduleResponse> getAllSchedule(String userId) throws Exception;
+
+    //날짜 스케줄 return
+    List<OnlineScheduleResponse> getTodaySchedule(TodayScheduleRequest todayScheduleRequest) throws Exception;
+
+    List<OnlineSchedule> allSchedule(String userId) throws Exception;
 
 }

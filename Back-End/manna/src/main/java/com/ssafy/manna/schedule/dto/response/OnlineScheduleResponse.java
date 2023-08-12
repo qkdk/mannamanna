@@ -16,9 +16,10 @@ public class OnlineScheduleResponse {
     private Integer scheduleId;
     //상대방 아이디
     private String opponentId;
-    //날짜 "yyyy년 mm월 dd일"
+    //날짜 "yyyy-mm-dd"
     private String date;
     //시간 "hh시 mm분"
+    private String time;
 
     private String url;
 }

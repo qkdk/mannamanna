@@ -6,13 +6,16 @@ import com.ssafy.manna.schedule.domain.OnlineSchedule;
 import com.ssafy.manna.schedule.domain.Schedule;
 import com.ssafy.manna.schedule.dto.request.ScheduleRequest;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
+import com.ssafy.manna.schedule.dto.response.ScheduleResponse;
 import com.ssafy.manna.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,8 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     private  final ScheduleRepository scheduleRepository;
 
+    @Value("${file.server-domain}")
+    private String serverDomain;
     @Override
     public void deleteSchedule(Integer id) throws Exception {
         Schedule schedule = scheduleRepository.findById(id).orElseThrow(()->new Exception("스케줄 정보가 없습니다."));
@@ -45,30 +50,43 @@ public class ScheduleServiceImpl implements ScheduleService{
             //남자이면
             allSchedule = scheduleRepository.findByMaleId(userId);
         }
-
-//        List<OnlineScheduleResponse> scheduleResponseList = new ArrayList<>();
-//        for(OnlineSchedule schedule:allSchedule){
-//            //날짜
-//            LocalDateTime localTime = schedule.getDate();
-//            int year = localTime.getYear();             // 년도 추출
-//            int month = localTime.getMonthValue();      // 월 추출
-//            int day = localTime.getDayOfMonth();        // 일 추출
-//            String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
-//
-//            Member opponent;
-//            if(member.getGender().equals("female")){
-//                opponent = schedule.getMale();
-//            }
-//            else{
-//                opponent = schedule.getFemale();
-//            }
-//            OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
-//                    .scheduleId(schedule.getId())
-//                    .opponentId(opponent.getId())
-//                    .date(extractedDate)
-//                    .build();
-//            scheduleResponseList.add(onlineSchedule);
-//        }
         return allSchedule;
+    }
+
+    @Override
+    public ScheduleResponse getDetailInfo(Integer scheduleId, String userId) throws Exception {
+        //scheduleid
+        Member member = memberRepository.findById(userId).orElseThrow(()->new Exception("회원이 존재하지 않습니다."));
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(()->new Exception("스케줄 정보가 없습니다."));
+        Member opponent;
+        if(member.getGender().equals("female")){
+            //여자이면 반대
+            opponent = schedule.getMale();
+        }
+        else{
+            //남자이면
+            opponent = schedule.getFemale();
+        }
+
+        LocalDateTime localTime = schedule.getDate();
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = localTime.format(dateFormatter);
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm");
+        String formattedTime = localTime.format(timeFormatter);
+
+        ScheduleResponse scheduleResponse = ScheduleResponse.builder()
+                .scheduleId(scheduleId)
+                .opponentId(opponent.getId())
+                .date(formattedDate)
+                .time(formattedTime)
+                .opponentName(opponent.getName())
+                .age(2023-Integer.parseInt(opponent.getMemberDetail().getBirth()))
+                .height(opponent.getMemberDetail().getHeight())
+                .job(opponent.getMemberDetail().getJob())
+                .mbti(opponent.getMemberDetail().getMbti())
+                .imgPath(serverDomain+"/img/"+opponent.getProfilePictures().get(0).getName())
+                .introduction(opponent.getMemberDetail().getIntroduction())
+                .build();
+        return scheduleResponse;
     }
 }

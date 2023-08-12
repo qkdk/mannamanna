@@ -14,9 +14,10 @@ public class OfflineScheduleResponse {
     private Integer scheduleId;
     //상대방 아이디
     private String opponentId;
-    //날짜 "yyyy년 mm월 dd일"
+    //날짜 "yyyy-mm-dd"
     private String date;
-    //시간
+    //시간"hh:mm"
+    private String time;
 
     //sido gugun detail name category
     private String sido;

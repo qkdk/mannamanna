@@ -5,6 +5,7 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.schedule.domain.OnlineSchedule;
 import com.ssafy.manna.schedule.domain.Schedule;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
+import com.ssafy.manna.schedule.dto.request.TodayScheduleRequest;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
 import com.ssafy.manna.schedule.repository.OnlineScheduleRepository;
 import com.ssafy.manna.schedule.repository.ScheduleRepository;
@@ -63,19 +64,23 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
     }
 
     @Override
-    public List<OnlineScheduleResponse> getAllSchedule(String userId) throws Exception {
-        //member 가 female인지 male인지 확인
+    public List<OnlineSchedule> allSchedule(String userId) throws Exception{
         Member member = memberRepository.findById(userId).orElseThrow(()->new Exception("회원이 존재하지 않습니다."));
-        List<OnlineSchedule> allSchedule;
+        List<OnlineSchedule> allSchedule = new ArrayList<>();
         if(member.getGender().equals("female")){
             //여자이면
             allSchedule = onlineScheduleRepository.findByFemaleId(userId);
-          }
+        }
         else{
             //남자이면
             allSchedule = onlineScheduleRepository.findByMaleId(userId);
         }
-
+        return allSchedule;
+    }
+    @Override
+    public List<OnlineScheduleResponse> getAllSchedule(String userId) throws Exception {
+        Member member = memberRepository.findById(userId).orElseThrow(()->new Exception("회원이 존재하지 않습니다."));
+        List<OnlineSchedule> allSchedule = allSchedule(userId);
         List<OnlineScheduleResponse> scheduleResponseList = new ArrayList<>();
         for(OnlineSchedule schedule:allSchedule){
             //날짜
@@ -84,6 +89,11 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
             int month = localTime.getMonthValue();      // 월 추출
             int day = localTime.getDayOfMonth();        // 일 추출
             String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
+
+            //시간
+            // DateTimeFormatter로 hh:mm 형식으로 변환
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+            String formattedTime = localTime.format(formatter);
 
             Member opponent;
             if(member.getGender().equals("female")){
@@ -96,10 +106,54 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService{
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
                     .date(extractedDate)
+                    .time(formattedTime)
                     .url(schedule.getUrl())
                     .build();
             scheduleResponseList.add(onlineSchedule);
         }
         return scheduleResponseList;
     }
+
+    @Override
+    public List<OnlineScheduleResponse> getTodaySchedule(TodayScheduleRequest todayScheduleRequest) throws Exception {
+        String userId = todayScheduleRequest.getUserId();
+        String date = todayScheduleRequest.getDate();
+        Member member = memberRepository.findById(userId).orElseThrow(()->new Exception("회원이 존재하지 않습니다."));
+        List<OnlineSchedule> allSchedule = allSchedule(userId);
+        List<OnlineScheduleResponse> scheduleResponseList = new ArrayList<>();
+        for(OnlineSchedule schedule:allSchedule){
+            //날짜
+            LocalDateTime localTime = schedule.getDate();
+            // DateTimeFormatter를 사용하여 원하는 형식으로 변환
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String formattedDate = localTime.format(dateFormatter);
+            //날짜가 요청 받은 날짜랑 같은지 확인
+            if(date.equals(formattedDate)){
+                //시간
+                // DateTimeFormatter로 hh:mm 형식으로 변환
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+                String formattedTime = localTime.format(formatter);
+
+                Member opponent;
+                if(member.getGender().equals("female")){
+                    opponent = schedule.getMale();
+                }
+                else{
+                    opponent = schedule.getFemale();
+                }
+
+                OnlineScheduleResponse onlineSchedule = OnlineScheduleResponse.builder()
+                        .scheduleId(schedule.getId())
+                        .opponentId(opponent.getId())
+                        .date(formattedDate)
+                        .time(formattedTime)
+                        .url(schedule.getUrl())
+                        .build();
+                scheduleResponseList.add(onlineSchedule);
+            }
+        }
+        return scheduleResponseList;
+    }
+
+
 }

@@ -17,4 +17,6 @@ public interface ScheduleService {
     // 회원 전체 스케줄 return
     List<Schedule> getAllSchedule(String userId) throws Exception;
 
+    ScheduleResponse getDetailInfo(Integer scheduleId,String userId) throws Exception;
+
 }
