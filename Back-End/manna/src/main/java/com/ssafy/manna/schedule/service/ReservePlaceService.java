@@ -14,4 +14,8 @@ public interface ReservePlaceService {
 
     //추천 장소 조회하기 - sido,gugun,category
     List<ReservePlace> getRecommendList(ReservePlaceRequest reservePlaceRequest) throws  Exception;
+
+    //두 사람 위치 가운데 장소 조회하기
+    List<ReservePlace> recommendMiddle(String userId, String opponentId) throws Exception;
+
 }
