@@ -1,6 +1,5 @@
 package com.ssafy.manna.messenger.dto.response;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +14,5 @@ public class ChatHistoryResponse {
     private String senderId;
     private String senderName;
     private String message;
-    private LocalDateTime time;
+    private String time;
 }

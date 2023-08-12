@@ -5,7 +5,7 @@ import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import com.ssafy.manna.messenger.dto.response.ChatHistoryResponse;
 import com.ssafy.manna.messenger.dto.response.ChatRoomResponse;
-import com.ssafy.manna.messenger.service.ChatRoomService;
+import com.ssafy.manna.messenger.service.ChatRoomServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,12 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/chat")
 public class ChatRoomController {
 
-    private final ChatRoomService chatRoomService;
+    private final ChatRoomServiceImpl chatRoomServiceImpl;
 
 
     @GetMapping("/rooms")
     public List<RedisChatRoom> room() {
-        return chatRoomService.findAllRoom();
+        return chatRoomServiceImpl.findAllRoom();
     }
 
     // 상대방 아이디와 자신의 아이디가 필요하다.
@@ -35,7 +35,7 @@ public class ChatRoomController {
     @PostMapping("/room")
     public RedisChatRoom createRoom(@RequestBody MakeChattingRoomRequest makeChattingRoomRequest) {
         // 방정보를 리턴한다.
-        return chatRoomService.createChatRoom(makeChattingRoomRequest);
+        return chatRoomServiceImpl.createChatRoom(makeChattingRoomRequest);
     }
 
 //    @GetMapping("/room/{userId}")
@@ -51,7 +51,7 @@ public class ChatRoomController {
             ResponseTemplate.<List<ChatRoomResponse>>builder()
                 .result(true)
                 .msg("채팅방 러오기 성공")
-                .data(chatRoomService.findChatRoomById(userId))
+                .data(chatRoomServiceImpl.findChatRoomById(userId))
                 .build(),
             HttpStatus.OK
         );
@@ -65,7 +65,7 @@ public class ChatRoomController {
             ResponseTemplate.<List<ChatHistoryResponse>>builder()
                 .result(true)
                 .msg("채팅기록 불러오기 성공")
-                .data(chatRoomService.findChatHistoryByRoomId(roomId))
+                .data(chatRoomServiceImpl.findChatHistoryByRoomId(roomId))
                 .build(),
             HttpStatus.OK
         );
