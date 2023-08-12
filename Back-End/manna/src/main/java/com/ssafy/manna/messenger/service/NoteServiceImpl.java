@@ -247,6 +247,7 @@ public class NoteServiceImpl implements NoteService{
         String subject = receiver.getName() + "님이 소개팅 신청을 수락하셨습니다.";
         // 날짜
         String msg = note.getContent();
+        System.out.println(msg);
         // 정규표현식 패턴
         String pattern = "\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분";
         // 패턴 매칭을 위한 Pattern 객체 생성
@@ -254,7 +255,9 @@ public class NoteServiceImpl implements NoteService{
         // 매칭되는 부분 추출을 위한 Matcher 객체 생성
         Matcher m = r.matcher(msg);
         // 매칭된 부분이 있다면 추출하여 출력
+        System.out.println("수락 완료");
         if (m.find()) {
+            System.out.println("msgssg");
             String dateTime = m.group();
             // 내용
             String content = receiver.getName() + "님이 " + sender.getName() + "님의 소개팅 신청을 수락하셨습니다.\n"
@@ -284,6 +287,7 @@ public class NoteServiceImpl implements NoteService{
                         .url("unknown")
                         .build();
             }
+
             onlineScheduleService.insertSchedule(onlineScheduleRequest);
             noteRepository.save(note);
         }

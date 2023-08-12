@@ -70,11 +70,14 @@ public class OfflineScheduleServiceImpl implements OfflineScheduleService{
         }
         List<OfflineScheduleResponse> scheduleResponses = new ArrayList<>();
         for(OfflineSchedule schedule:allSchedule){
-            LocalDateTime localDateTime = schedule.getDate();
-            int year = localDateTime.getYear();             // 년도 추출
-            int month = localDateTime.getMonthValue();      // 월 추출
-            int day = localDateTime.getDayOfMonth();        // 일 추출
-            String extractedDate = String.format("%04d년 %02d월 %02d일", year, month, day);
+            //날짜
+            LocalDateTime localTime = schedule.getDate();
+            // DateTimeFormatter를 사용하여 원하는 형식으로 변환
+            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String formattedDate = localTime.format(dateFormatter);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+            String formattedTime = localTime.format(formatter);
 
             Member opponent;
             if(member.getGender().equals("female")){
@@ -88,7 +91,8 @@ public class OfflineScheduleServiceImpl implements OfflineScheduleService{
             OfflineScheduleResponse offlineSchedule = OfflineScheduleResponse.builder()
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
-                    .date(extractedDate)
+                    .date(formattedDate)
+                    .time(formattedTime)
                     .category(reservePlace.getCategory())
                     .sido(reservePlace.getSido())
                     .gugun(reservePlace.getGugun())
