@@ -2,12 +2,12 @@ package com.ssafy.manna.schedule.domain;
 
 import com.ssafy.manna.member.domain.Member;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,11 +22,11 @@ public class Schedule {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="female_id")
+    @JoinColumn(name = "female_id")
     private Member female;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="male_id")
+    @JoinColumn(name = "male_id")
     private Member male;
 
     private LocalDateTime date;

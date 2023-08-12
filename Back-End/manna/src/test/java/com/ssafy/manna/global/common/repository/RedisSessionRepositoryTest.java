@@ -1,20 +1,25 @@
 package com.ssafy.manna.global.common.repository;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.ssafy.manna.global.common.domain.Session;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class RedisSessionRepositoryTest {
 
     @Autowired
     private RedisSessionRepository redisSessionRepository;
+
+    private static Session makeEntity() {
+        Session session = Session.builder()
+                .userId("testId")
+                .userName("testName")
+                .gender("testGender")
+                .build();
+        return session;
+    }
 
     @Test
     public void 세션_저장_테스트() {
@@ -35,16 +40,6 @@ class RedisSessionRepositoryTest {
         redisSessionRepository.deleteById("testId");
 
         Assertions.assertThat(redisSessionRepository.findById("testId").isEmpty()).isTrue();
-    }
-
-
-    private static Session makeEntity() {
-        Session session = Session.builder()
-            .userId("testId")
-            .userName("testName")
-            .gender("testGender")
-            .build();
-        return session;
     }
 
 }

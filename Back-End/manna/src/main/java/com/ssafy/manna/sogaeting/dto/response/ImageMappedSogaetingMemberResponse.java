@@ -1,9 +1,10 @@
 package com.ssafy.manna.sogaeting.dto.response;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 
 @Data
 public class ImageMappedSogaetingMemberResponse {
@@ -21,11 +22,11 @@ public class ImageMappedSogaetingMemberResponse {
     private Integer height;
     private List<String> pictureURLs = new ArrayList<>();
 
-    public void updateOnlineState(Boolean onlineState){
+    public void updateOnlineState(Boolean onlineState) {
         this.isOnline = onlineState;
     }
 
-    public void updateBirthUnit(){
+    public void updateBirthUnit() {
         int age = LocalDate.now().getYear() - Integer.parseInt(birth);
         this.birth = Integer.toString(age);
     }

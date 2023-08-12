@@ -1,12 +1,13 @@
 package com.ssafy.manna.messenger.domain;
 
 import com.ssafy.manna.messenger.dto.ChatMessage;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -18,12 +19,12 @@ public class RedisChatHistory implements Serializable {
     private String message;
     private LocalDateTime time;
 
-    public static RedisChatHistory of (ChatMessage roomMessage){
+    public static RedisChatHistory of(ChatMessage roomMessage) {
         return RedisChatHistory.builder()
-            .message(roomMessage.getMessage())
-            .senderId(roomMessage.getSenderId())
-            .senderName(roomMessage.getSenderName())
-            .time(LocalDateTime.now())
-            .build();
+                .message(roomMessage.getMessage())
+                .senderId(roomMessage.getSenderId())
+                .senderName(roomMessage.getSenderName())
+                .time(LocalDateTime.now())
+                .build();
     }
 }

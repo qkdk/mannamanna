@@ -7,7 +7,6 @@ import com.ssafy.manna.messenger.domain.RedisChat;
 import com.ssafy.manna.messenger.domain.RedisChatHistory;
 import com.ssafy.manna.messenger.dto.ChatMessage;
 import com.ssafy.manna.messenger.repository.ChatRepository;
-import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,6 +14,8 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class StompHandler implements ChannelInterceptor {
             ChatMessage chatMessage = encodeChatMessaeg(message);
 
             RedisChat redisChat = chatRepository.findById(chatMessage.getRoomId()).orElse(
-                new RedisChat(chatMessage.getRoomId(), new ArrayList<>()));
+                    new RedisChat(chatMessage.getRoomId(), new ArrayList<>()));
 
             redisChat.getRedisChatHistories().add(RedisChatHistory.of(chatMessage));
             chatRepository.save(redisChat);
@@ -52,7 +53,7 @@ public class StompHandler implements ChannelInterceptor {
 
     private ChatMessage encodeChatMessaeg(Message<?> message) throws JsonProcessingException {
         String publishMessage = (String) redisTemplate.getStringSerializer()
-            .deserialize((byte[]) message.getPayload());
+                .deserialize((byte[]) message.getPayload());
 
         return objectMapper.readValue(publishMessage, ChatMessage.class);
     }

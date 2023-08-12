@@ -34,11 +34,11 @@ public class MeetingController {
 
     // 신고하기
     @PostMapping(value = "/report")
-    public ResponseEntity<?> report(@RequestBody MeetingReportRequest meetingReportRequest){
-        try{
+    public ResponseEntity<?> report(@RequestBody MeetingReportRequest meetingReportRequest) {
+        try {
             meetingService.Report(meetingReportRequest);
             return ResponseEntity.ok("report success");
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

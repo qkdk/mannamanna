@@ -6,7 +6,6 @@ import com.ssafy.manna.schedule.dto.request.ReservePlaceRequest;
 import com.ssafy.manna.schedule.service.ReservePlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,19 +35,19 @@ public class ReservePlaceController {
 
     //예약 - sido,gugun, category 골라서 return
     @PostMapping("/placeList")
-    public ResponseEntity<?> getRecommendList(@RequestBody ReservePlaceRequest reservePlaceRequest){
+    public ResponseEntity<?> getRecommendList(@RequestBody ReservePlaceRequest reservePlaceRequest) {
         ResponseTemplate<?> body;
-        try{
-            List<ReservePlace> recommendList =  reservePlaceService.getRecommendList(reservePlaceRequest);
+        try {
+            List<ReservePlace> recommendList = reservePlaceService.getRecommendList(reservePlaceRequest);
 
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("추천 리스트 조회 완료")
                     .data(recommendList)
                     .build();
-            return new ResponseEntity<>(body,HttpStatus.OK);
+            return new ResponseEntity<>(body, HttpStatus.OK);
 
-        }catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -57,18 +56,17 @@ public class ReservePlaceController {
 
     //두사람 id 받아서 위도 경도 계산해서 가운데 지점들 추천
     @GetMapping("{userId}/{opponentId}")
-    public ResponseEntity<?> recommendMiddle(@PathVariable("userId")String userId, @PathVariable("opponentId")String opponentId){
+    public ResponseEntity<?> recommendMiddle(@PathVariable("userId") String userId, @PathVariable("opponentId") String opponentId) {
         ResponseTemplate<?> body;
-        try{
-            List<ReservePlace> reservePlaces = reservePlaceService.recommendMiddle(userId,opponentId);
+        try {
+            List<ReservePlace> reservePlaces = reservePlaceService.recommendMiddle(userId, opponentId);
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 위치 기반 장소 추천")
                     .data(reservePlaces)
                     .build();
-            return new ResponseEntity<>(body,HttpStatus.OK);
-        }
-        catch (Exception e){
+            return new ResponseEntity<>(body, HttpStatus.OK);
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

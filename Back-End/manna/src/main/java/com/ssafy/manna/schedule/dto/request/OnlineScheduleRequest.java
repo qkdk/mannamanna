@@ -1,8 +1,5 @@
 package com.ssafy.manna.schedule.dto.request;
 
-import java.time.LocalDateTime;
-
-import com.ssafy.manna.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

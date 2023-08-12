@@ -20,4 +20,4 @@ public class SogaeNoteSendRequest {
     //date 소개팅 날짜
     private String date;
 
- }
+}

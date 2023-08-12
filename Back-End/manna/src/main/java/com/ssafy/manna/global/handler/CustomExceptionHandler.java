@@ -15,11 +15,11 @@ public class CustomExceptionHandler {
     public ResponseEntity<ResponseTemplate<String>> handle(RuntimeException e) {
         log.error(e.getMessage());
         return new ResponseEntity<>(
-            ResponseTemplate.<String>builder()
-                .msg(e.getMessage())
-                .result(false)
-                .data(null)
-                .build(),
-            HttpStatus.INTERNAL_SERVER_ERROR);
+                ResponseTemplate.<String>builder()
+                        .msg(e.getMessage())
+                        .result(false)
+                        .data(null)
+                        .build(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,15 +1,10 @@
 package com.ssafy.manna.messenger.domain;
 
 import com.ssafy.manna.member.domain.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
-
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -41,15 +36,18 @@ public class Note {
     private Boolean isReject;
 
     private Boolean isDeleted;
-    public void updateIsCheck(boolean isCheck){
+
+    public void updateIsCheck(boolean isCheck) {
         this.isCheck = isCheck;
     }
 
-    public void updateIsReject(boolean isReject){
+    public void updateIsReject(boolean isReject) {
         this.isReject = isReject;
     }
 
-    public void updateDeleted(boolean isDeleted) {this.isDeleted = isDeleted;}
+    public void updateDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 
 
 }

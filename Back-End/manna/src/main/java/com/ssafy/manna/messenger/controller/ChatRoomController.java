@@ -6,16 +6,12 @@ import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import com.ssafy.manna.messenger.dto.response.ChatHistoryResponse;
 import com.ssafy.manna.messenger.dto.response.ChatRoomResponse;
 import com.ssafy.manna.messenger.service.ChatRoomServiceImpl;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -45,29 +41,29 @@ public class ChatRoomController {
 
     @GetMapping("/room/{userId}")
     public ResponseEntity<ResponseTemplate<List<ChatRoomResponse>>> findRoomsById(
-        @PathVariable String userId) {
+            @PathVariable String userId) {
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<ChatRoomResponse>>builder()
-                .result(true)
-                .msg("채팅방 러오기 성공")
-                .data(chatRoomServiceImpl.findChatRoomById(userId))
-                .build(),
-            HttpStatus.OK
+                ResponseTemplate.<List<ChatRoomResponse>>builder()
+                        .result(true)
+                        .msg("채팅방 러오기 성공")
+                        .data(chatRoomServiceImpl.findChatRoomById(userId))
+                        .build(),
+                HttpStatus.OK
         );
     }
 
     @GetMapping("/{roomId}")
     public ResponseEntity<ResponseTemplate<List<ChatHistoryResponse>>> getChatHistory(
-        @PathVariable String roomId) {
+            @PathVariable String roomId) {
 
         return new ResponseEntity<>(
-            ResponseTemplate.<List<ChatHistoryResponse>>builder()
-                .result(true)
-                .msg("채팅기록 불러오기 성공")
-                .data(chatRoomServiceImpl.findChatHistoryByRoomId(roomId))
-                .build(),
-            HttpStatus.OK
+                ResponseTemplate.<List<ChatHistoryResponse>>builder()
+                        .result(true)
+                        .msg("채팅기록 불러오기 성공")
+                        .data(chatRoomServiceImpl.findChatHistoryByRoomId(roomId))
+                        .build(),
+                HttpStatus.OK
         );
     }
 }

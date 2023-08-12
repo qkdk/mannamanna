@@ -96,7 +96,7 @@ public class MissionController {
     // 미션 완료 후 인증서 발급
     @GetMapping(value = "/finish/{id}")
     public ResponseEntity<?> finishMission(
-            @Validated @PathVariable("id") String id) throws Exception{
+            @Validated @PathVariable("id") String id) throws Exception {
         ResponseTemplate<?> body;
         try {
             MissionFinishResponse missionFinishResponse = missionService.finishMission(id);
@@ -105,13 +105,13 @@ public class MissionController {
                     .msg("미션 완료")
                     .data(missionFinishResponse)
                     .build();
-            return new ResponseEntity<>(body,HttpStatus.OK);
+            return new ResponseEntity<>(body, HttpStatus.OK);
         } catch (Exception e) {
             body = ResponseTemplate.builder()
                     .result(false)
                     .msg("미션 실패")
                     .build();
-            return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
         }
     }
 

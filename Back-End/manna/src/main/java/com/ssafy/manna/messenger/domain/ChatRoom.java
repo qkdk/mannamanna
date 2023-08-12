@@ -2,17 +2,8 @@ package com.ssafy.manna.messenger.domain;
 
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import com.ssafy.manna.member.domain.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Getter
@@ -38,10 +29,10 @@ public class ChatRoom extends BaseTimeEntity {
 
     public static ChatRoom of(Member male, Member female) {
         return ChatRoom.builder()
-            .male(male)
-            .female(female)
-            .name(male.getName() + " 🩷 " + female.getName())
-            .headMessage(male.getName() + " 님과 " + female.getName() + " 님의 채팅방입니다.")
-            .build();
+                .male(male)
+                .female(female)
+                .name(male.getName() + " 🩷 " + female.getName())
+                .headMessage(male.getName() + " 님과 " + female.getName() + " 님의 채팅방입니다.")
+                .build();
     }
 }

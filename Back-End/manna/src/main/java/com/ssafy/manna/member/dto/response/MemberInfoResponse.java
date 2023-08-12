@@ -1,11 +1,12 @@
 package com.ssafy.manna.member.dto.response;
 
 import com.ssafy.manna.global.common.dto.ProfilePictureDto;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor

@@ -1,7 +1,5 @@
 package com.ssafy.manna.member.dto.request;
 
-import com.ssafy.manna.global.common.dto.ProfilePictureDto;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

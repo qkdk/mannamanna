@@ -1,25 +1,23 @@
 package com.ssafy.manna.sogaeting.repository;
 
-import static com.ssafy.manna.member.domain.QMember.member;
-import static com.ssafy.manna.member.domain.QMemberDetail.memberDetail;
-import static com.ssafy.manna.member.domain.QProfilePicture.profilePicture;
-import static org.springframework.util.StringUtils.hasText;
-
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
 import com.ssafy.manna.sogaeting.dto.response.QSogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
-
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+import static com.ssafy.manna.member.domain.QMember.member;
+import static com.ssafy.manna.member.domain.QMemberDetail.memberDetail;
+import static com.ssafy.manna.member.domain.QProfilePicture.profilePicture;
+import static org.springframework.util.StringUtils.hasText;
 
 @Repository
 @RequiredArgsConstructor

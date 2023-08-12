@@ -21,8 +21,8 @@ public class SogaetingMemberResponse {
     @QueryProjection
 
     public SogaetingMemberResponse(String id, String name, String birth, String sido, String mbti,
-        String religion, String introduction, Boolean isSmoke, Boolean isDrink, Integer height,
-        String pictureURL) {
+                                   String religion, String introduction, Boolean isSmoke, Boolean isDrink, Integer height,
+                                   String pictureURL) {
         this.id = id;
         this.name = name;
         this.birth = birth;

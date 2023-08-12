@@ -1,17 +1,11 @@
 package com.ssafy.manna.mission.domain;
 
-import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
-import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import java.util.List;
+import com.ssafy.manna.sogaeting.domain.Sogaeting;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -38,7 +32,7 @@ public class Mission extends BaseStartEndEntity {
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
     private List<MissionQuestion> missionQuestions;
 
-    public void updateIsDone(boolean isDone){
+    public void updateIsDone(boolean isDone) {
         this.isDone = isDone;
     }
 }

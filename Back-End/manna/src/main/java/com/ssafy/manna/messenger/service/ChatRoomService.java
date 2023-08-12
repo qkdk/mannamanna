@@ -4,6 +4,7 @@ import com.ssafy.manna.messenger.domain.RedisChatRoom;
 import com.ssafy.manna.messenger.dto.request.MakeChattingRoomRequest;
 import com.ssafy.manna.messenger.dto.response.ChatHistoryResponse;
 import com.ssafy.manna.messenger.dto.response.ChatRoomResponse;
+
 import java.util.List;
 
 public interface ChatRoomService {

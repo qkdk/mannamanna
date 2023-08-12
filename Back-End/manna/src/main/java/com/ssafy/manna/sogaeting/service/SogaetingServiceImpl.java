@@ -1,7 +1,5 @@
 package com.ssafy.manna.sogaeting.service;
 
-import static com.ssafy.manna.sogaeting.enums.SogaetingEnum.NUM_IMAGE;
-
 import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.service.SessionService;
 import com.ssafy.manna.member.Enums.BanCode;
@@ -16,12 +14,6 @@ import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.repository.CustomSogaetingRepository;
 import com.ssafy.manna.sogaeting.repository.SogaetingRepository;
 import jakarta.transaction.Transactional;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +21,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.ssafy.manna.sogaeting.enums.SogaetingEnum.NUM_IMAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +39,10 @@ public class SogaetingServiceImpl implements SogaetingService {
     private final SessionService sessionService;
     private final ModelMapper modelMapper;
     private final SogaetingRepository sogaetingRepository;
+
+    private static String subStringLast(SogaetingMemberResponse sogaetingMemberResponse) {
+        return StringUtils.substringAfterLast(sogaetingMemberResponse.getPictureURL(), "/");
+    }
 
     @Override
     public void report(SogaetingReportRequest sogaetingReportRequest) throws Exception {
@@ -170,7 +172,6 @@ public class SogaetingServiceImpl implements SogaetingService {
         }
     }
 
-
     private String getSidoByMemberId(SogaetingFilteringRequest sogaetingFilteringRequest) {
         Member member = memberRepository.findById(sogaetingFilteringRequest.getMemberId())
                 .orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
@@ -197,10 +198,6 @@ public class SogaetingServiceImpl implements SogaetingService {
 
         map.get(sogaetingMemberResponse.getId()).getPictureURLs()
                 .add(subStringLast(sogaetingMemberResponse));
-    }
-
-    private static String subStringLast(SogaetingMemberResponse sogaetingMemberResponse) {
-        return StringUtils.substringAfterLast(sogaetingMemberResponse.getPictureURL(), "/");
     }
 
     private void initializeMapping(Map<String, ImageMappedSogaetingMemberResponse> map,

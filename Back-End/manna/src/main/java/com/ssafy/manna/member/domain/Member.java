@@ -3,20 +3,11 @@ package com.ssafy.manna.member.domain;
 import com.ssafy.manna.global.auth.dto.LoginResponse;
 import com.ssafy.manna.global.common.domain.BaseTimeEntity;
 import com.ssafy.manna.member.Enums.UserRole;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -63,11 +54,11 @@ public class Member extends BaseTimeEntity {
 
     public LoginResponse makeLoginResponse(String accessToken, String refreshToken) {
         return LoginResponse.builder()
-            .gender(gender)
-            .userName(name)
-            .id(id)
-            .accessToken(accessToken)
-            .refreshToken(refreshToken)
-            .build();
+                .gender(gender)
+                .userName(name)
+                .id(id)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

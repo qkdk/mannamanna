@@ -1,10 +1,8 @@
 package com.ssafy.manna.messenger.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.manna.messenger.domain.RedisChat;
 import com.ssafy.manna.messenger.dto.ChatMessage;
 import com.ssafy.manna.messenger.repository.ChatRepository;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;

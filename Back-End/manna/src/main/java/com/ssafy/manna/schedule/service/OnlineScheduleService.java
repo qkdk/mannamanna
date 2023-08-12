@@ -4,8 +4,9 @@ import com.ssafy.manna.schedule.domain.OnlineSchedule;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
 import com.ssafy.manna.schedule.dto.request.TodayScheduleRequest;
 import com.ssafy.manna.schedule.dto.response.OnlineScheduleResponse;
-import java.util.List;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface OnlineScheduleService {

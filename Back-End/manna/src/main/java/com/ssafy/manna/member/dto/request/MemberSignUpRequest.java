@@ -1,15 +1,9 @@
 package com.ssafy.manna.member.dto.request;
 
-import com.ssafy.manna.global.common.dto.ProfilePictureDto;
-import jakarta.mail.Multipart;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 
 @Getter

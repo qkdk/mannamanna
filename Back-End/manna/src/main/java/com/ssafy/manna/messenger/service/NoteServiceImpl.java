@@ -11,6 +11,13 @@ import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
 import com.ssafy.manna.schedule.dto.request.OnlineScheduleRequest;
 import com.ssafy.manna.schedule.service.OnlineScheduleService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.expression.ExpressionException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -19,18 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.expression.ExpressionException;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class NoteServiceImpl implements NoteService{
+public class NoteServiceImpl implements NoteService {
     private final MemberRepository memberRepository;
     private final NoteRepository noteRepository;
     private final OnlineScheduleService onlineScheduleService;
@@ -44,13 +45,13 @@ public class NoteServiceImpl implements NoteService{
         //받는이
         String receiverId = noteSendRequest.getReceiver();
         Member receiverMember = memberRepository.findById(receiverId).orElseThrow(
-                ()-> new Exception("받는 회원 정보가 없습니다.")
+                () -> new Exception("받는 회원 정보가 없습니다.")
         );
 
         //보낸이
         String senderId = noteSendRequest.getSender();
         Member senderMember = memberRepository.findById(senderId).orElseThrow(
-                ()->new Exception("보내는 회원 정보가 없습니다.")
+                () -> new Exception("보내는 회원 정보가 없습니다.")
         );
         Note note = Note.builder()
                 .receiver(receiverMember)
@@ -71,17 +72,17 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) throws Exception {
         // 받는이
-        Member receiver = memberRepository.findById(sogaeNoteSendRequest.getReceiver()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+        Member receiver = memberRepository.findById(sogaeNoteSendRequest.getReceiver()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
         // 보내는이
-        Member sender = memberRepository.findById(sogaeNoteSendRequest.getSender()).orElseThrow(()-> new Exception("회원 정보가 없습니다."));
+        Member sender = memberRepository.findById(sogaeNoteSendRequest.getSender()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
         // 제목
         String subject = sender.getName() + "님이 소개팅 신청을 하셨습니다.";
         // 날짜
         //String으로 들어온 날짜 - 소개팅 날짜
         String dateString = sogaeNoteSendRequest.getDate();
         // 내용
-        String content = sender.getName()+"님이 "+receiver.getName()+"님께 소개팅 신청을 하셨습니다.\n"
-                +"D-Day : " + dateString;
+        String content = sender.getName() + "님이 " + receiver.getName() + "님께 소개팅 신청을 하셨습니다.\n"
+                + "D-Day : " + dateString;
 
         Note note = Note.builder()
                 .receiver(receiver)
@@ -101,7 +102,7 @@ public class NoteServiceImpl implements NoteService{
     //쪽지 삭제
     @Override
     public void deleteNote(int noteId) throws Exception {
-        Note deleteNote = noteRepository.findById(noteId).orElseThrow(()->new Exception("쪽지를 찾을 수 없습니다."));
+        Note deleteNote = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지를 찾을 수 없습니다."));
         deleteNote.updateDeleted(true);     //true로 설정
         noteRepository.save(deleteNote);
     }
@@ -110,7 +111,7 @@ public class NoteServiceImpl implements NoteService{
     @Override
     public NoteDetailResponse readDetailNote(int noteId) throws Exception {
         //읽음 처리
-        Note note = noteRepository.findById(noteId).orElseThrow(()-> new Exception("쪽지를 찾을 수 없습니다."));
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지를 찾을 수 없습니다."));
         note.updateIsCheck(true);
         noteRepository.save(note);
         //NoteDetailResponse 로 보내기
@@ -132,7 +133,7 @@ public class NoteServiceImpl implements NoteService{
     //소개팅 쪽지 상세 보기 - 상대방 프로필 표출
     @Override
     public SogaeNoteDetailResponse readSogaeDetailNote(int noteId) throws Exception {
-        Note note = noteRepository.findById(noteId).orElseThrow(()->new ExpressionException("쪽지를 찾을 수 없습니다."));
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new ExpressionException("쪽지를 찾을 수 없습니다."));
         //보낸이
         Member sender = note.getSender();
         //읽음 처리
@@ -146,7 +147,7 @@ public class NoteServiceImpl implements NoteService{
                 .job(sender.getMemberDetail().getJob())
                 .mbti(sender.getMemberDetail().getMbti())
                 .introduction(sender.getMemberDetail().getIntroduction())
-                .imgPath(SERVER_DOMAIN+"/img/"+sender.getProfilePictures().get(0).getName())
+                .imgPath(SERVER_DOMAIN + "/img/" + sender.getProfilePictures().get(0).getName())
                 .build();
         return sogaeNoteDetailResponse;
     }
@@ -154,9 +155,9 @@ public class NoteServiceImpl implements NoteService{
     //받은 쪽지 리스트
     @Override
     public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
-        List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId,false);
+        List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId, false);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
-        for(Note receivedNote:receivedNoteList){
+        for (Note receivedNote : receivedNoteList) {
 
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(receivedNote.getId())
@@ -183,7 +184,7 @@ public class NoteServiceImpl implements NoteService{
     public List<NoteListResponse> sentNoteList(String userId) throws Exception {
         List<Note> sentNoteList = noteRepository.findAllBySenderId(userId);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
-        for(Note sentNote:sentNoteList){
+        for (Note sentNote : sentNoteList) {
 
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(sentNote.getId())
@@ -207,9 +208,9 @@ public class NoteServiceImpl implements NoteService{
     //새로운 쪽지 list
     @Override
     public List<NoteListResponse> newNoteList(String userId) throws Exception {
-        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheckAndIsDeleted(userId,false,false);
+        List<Note> newNoteList = noteRepository.findAllByReceiverIdAndIsCheckAndIsDeleted(userId, false, false);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
-        for(Note newNote:newNoteList){
+        for (Note newNote : newNoteList) {
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(newNote.getId())
                     .receiverId(newNote.getReceiver().getId())
@@ -296,7 +297,7 @@ public class NoteServiceImpl implements NoteService{
     //소개팅 쪽지 거절
     @Override
     public void refuseSogating(int noteId) throws Exception {
-        Note note = noteRepository.findById(noteId).orElseThrow(()-> new Exception("쪽지가 존재하지 않습니다."));
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지가 존재하지 않습니다."));
         note.updateIsCheck(true);
         note.updateIsReject(true);  //isReject==true 이면 거절
 
@@ -323,7 +324,7 @@ public class NoteServiceImpl implements NoteService{
 
     //현재시간 return
     @Override
-    public LocalDateTime setNowTime(){
+    public LocalDateTime setNowTime() {
         //현재시간
         ZoneId koreaZone = ZoneId.of("Asia/Seoul");
         ZonedDateTime koreaTime = ZonedDateTime.now(koreaZone);
@@ -332,7 +333,7 @@ public class NoteServiceImpl implements NoteService{
     }
 
     //LocalDateTime->String
-    public String localDateTimeToString(LocalDateTime localDateTime){
+    public String localDateTimeToString(LocalDateTime localDateTime) {
         // 형식 지정
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // LocalDateTime 객체를 "2023-08-07 05:44:20" 형식으로 변환

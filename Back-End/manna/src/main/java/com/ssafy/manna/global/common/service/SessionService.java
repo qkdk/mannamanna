@@ -1,14 +1,14 @@
 package com.ssafy.manna.global.common.service;
 
-import static com.ssafy.manna.global.common.enums.SessionEnum.*;
-
 import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
-import com.ssafy.manna.global.common.enums.SessionEnum;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static com.ssafy.manna.global.common.enums.SessionEnum.GENDER_FEMALE;
+import static com.ssafy.manna.global.common.enums.SessionEnum.GENDER_MALE;
 
 @RequiredArgsConstructor
 @Service
@@ -30,22 +30,22 @@ public class SessionService {
     public List<Session> findOnlineMaleMember() {
         List<Session> allSession = redisSessionRepository.findAll();
         return allSession.stream()
-            .filter(session -> session.getGender().equals(GENDER_MALE.getValue()))
-            .toList();
+                .filter(session -> session.getGender().equals(GENDER_MALE.getValue()))
+                .toList();
     }
 
     // 여자만 가져오는 기능
     public List<Session> findOnlineFemaleMember() {
         List<Session> allSession = redisSessionRepository.findAll();
         return allSession.stream()
-            .filter(session -> session.getGender().equals(GENDER_FEMALE.getValue()))
-            .toList();
+                .filter(session -> session.getGender().equals(GENDER_FEMALE.getValue()))
+                .toList();
     }
 
     // 사용자의 offset을 가져오는 기능
-    public Integer getOffset(String userId){
+    public Integer getOffset(String userId) {
         Session session = redisSessionRepository.findById(userId).orElseThrow(
-            () -> new RuntimeException("세션에 일치하는 사용자가 없습니다.")
+                () -> new RuntimeException("세션에 일치하는 사용자가 없습니다.")
         );
 
         return session.getOffset();

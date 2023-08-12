@@ -1,12 +1,7 @@
 package com.ssafy.manna.sogaeting.repository;
 
-import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
 import com.ssafy.manna.global.common.service.SessionService;
-import com.ssafy.manna.sogaeting.dto.request.SogaetingFilteringRequest;
-import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 

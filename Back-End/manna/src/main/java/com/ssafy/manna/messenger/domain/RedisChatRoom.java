@@ -1,8 +1,9 @@
 package com.ssafy.manna.messenger.domain;
 
-import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Getter
 @Setter

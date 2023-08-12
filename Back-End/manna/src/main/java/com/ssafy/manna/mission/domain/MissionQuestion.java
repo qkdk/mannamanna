@@ -1,16 +1,8 @@
 package com.ssafy.manna.mission.domain;
 
-import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
-import com.ssafy.manna.mission.dto.request.MissionDoRequest;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.ssafy.manna.mission.Enums.MissionCode;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -48,11 +40,11 @@ public class MissionQuestion extends BaseStartEndEntity {
         this.femaleImagePath = femaleImagePath;
     }
 
-    public void updateMaleIsDone(Boolean maleIsDone){
+    public void updateMaleIsDone(Boolean maleIsDone) {
         this.maleIsDone = maleIsDone;
     }
 
-    public void updateFemaleIsDone(Boolean femaleIsDone){
+    public void updateFemaleIsDone(Boolean femaleIsDone) {
         this.femaleIsDone = femaleIsDone;
     }
 

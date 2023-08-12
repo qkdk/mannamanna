@@ -2,16 +2,13 @@ package com.ssafy.manna.sogaeting.service;
 
 import com.ssafy.manna.global.common.domain.Session;
 import com.ssafy.manna.global.common.repository.RedisSessionRepository;
-import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
-import java.time.LocalDate;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
 
 @SpringBootTest
 class SogaetingServiceImplTest {
@@ -20,17 +17,17 @@ class SogaetingServiceImplTest {
     private RedisSessionRepository redisSessionRepository;
 
     @Test
-    public void init(){
+    public void init() {
         Session session = Session.builder()
-            .userName("박소현")
-            .userId("gyubo2")
-            .gender("male")
-            .build();
+                .userName("박소현")
+                .userId("gyubo2")
+                .gender("male")
+                .build();
         redisSessionRepository.save(session);
     }
 
     @Test
-    public void Sub_Stirng_last_test(){
+    public void Sub_Stirng_last_test() {
         String str = "/manna/upload/images/member/jaeeitest_hyunjin.jpg";
         String s = StringUtils.substringAfterLast(str, "/");
 
@@ -38,7 +35,7 @@ class SogaetingServiceImplTest {
     }
 
     @Test
-    public void 년도_테스트(){
+    public void 년도_테스트() {
         int year = LocalDate.now().getYear();
         System.out.println(year - 1998);
     }

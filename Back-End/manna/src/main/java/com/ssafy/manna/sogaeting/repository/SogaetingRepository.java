@@ -1,6 +1,5 @@
 package com.ssafy.manna.sogaeting.repository;
 
-import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 

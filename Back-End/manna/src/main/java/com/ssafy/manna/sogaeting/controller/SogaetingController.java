@@ -2,10 +2,8 @@ package com.ssafy.manna.sogaeting.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.sogaeting.dto.request.*;
-import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -47,70 +45,70 @@ public class SogaetingController {
 
     @PostMapping("/recommend")
     public ResponseEntity<?> findMemberByCondition(
-        @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
+            @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
 
         SogaetingMemberResponsePage memberByCondition = sogaetingService.findMemberByCondition(
-            sogaetingFilteringRequest);
+                sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                .msg("조회성공")
-                .data(memberByCondition)
-                .result(true)
-                .build(),
-            HttpStatus.OK);
+                ResponseTemplate.<SogaetingMemberResponsePage>builder()
+                        .msg("조회성공")
+                        .data(memberByCondition)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
     }
 
     @PostMapping("/recommend/locate")
     public ResponseEntity<?> findMemberByConditionAndLocate(
-        @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
+            @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
         SogaetingMemberResponsePage memberByConditionAndLocate = sogaetingService.findMemberByConditionAndLocate(
-            sogaetingFilteringRequest);
+                sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                .msg("조회성공")
-                .data(memberByConditionAndLocate)
-                .result(true)
-                .build(),
-            HttpStatus.OK);
+                ResponseTemplate.<SogaetingMemberResponsePage>builder()
+                        .msg("조회성공")
+                        .data(memberByConditionAndLocate)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
     }
 
     @PostMapping("/onlineRecommend")
     public ResponseEntity<?> findMemberByConditionAndOnlineState(
-        @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
+            @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
 
         SogaetingMemberResponsePage memberByConditionAndOnlineState =
-            sogaetingService.findMemberByConditionAndOnlineState(sogaetingFilteringRequest);
+                sogaetingService.findMemberByConditionAndOnlineState(sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                .msg("조회성공")
-                .data(memberByConditionAndOnlineState)
-                .result(true)
-                .build(),
-            HttpStatus.OK);
+                ResponseTemplate.<SogaetingMemberResponsePage>builder()
+                        .msg("조회성공")
+                        .data(memberByConditionAndOnlineState)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
     }
 
     @PostMapping("/onlineRecommend/locate")
     public ResponseEntity<?> findMemberByConditionAndOnlineStateAndLocate(
-        @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest
+            @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest
     ) {
         SogaetingMemberResponsePage memberByConditionAndOnlineStateAndLocate = sogaetingService.findMemberByConditionAndOnlineStateAndLocate(
-            sogaetingFilteringRequest);
+                sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
-            ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                .msg("조회성공")
-                .data(memberByConditionAndOnlineStateAndLocate)
-                .result(true)
-                .build(),
-            HttpStatus.OK);
+                ResponseTemplate.<SogaetingMemberResponsePage>builder()
+                        .msg("조회성공")
+                        .data(memberByConditionAndOnlineStateAndLocate)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
     }
 
     // 소개팅 시작하기
     @PostMapping(value = "/start")
-    public ResponseEntity<?> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest){
+    public ResponseEntity<?> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest) {
         ResponseTemplate<?> body;
         try {
             sogaetingService.start(sogaetingStartRequest);
@@ -122,7 +120,7 @@ public class SogaetingController {
 
     // 소개팅 성공
     @PutMapping(value = "/success")
-    public ResponseEntity<?> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest){
+    public ResponseEntity<?> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest) {
         ResponseTemplate<?> body;
         try {
             sogaetingService.success(sogaetingSuccessRequest);

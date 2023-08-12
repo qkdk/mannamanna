@@ -1,11 +1,9 @@
 package com.ssafy.manna.messenger.controller;
 
-import com.ssafy.manna.global.auth.jwt.JwtService;
 import com.ssafy.manna.messenger.dto.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
@@ -30,7 +28,6 @@ public class ChatController {
 //        // Websocket에 발행된 메시지를 redis로 발행(publish)
 //        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
 //    }
-
     @MessageMapping("/chat/message")
     public void message(ChatMessage message) {
         // 채팅방 입장시에는 대화명과 메시지를 자동으로 세팅한다.
