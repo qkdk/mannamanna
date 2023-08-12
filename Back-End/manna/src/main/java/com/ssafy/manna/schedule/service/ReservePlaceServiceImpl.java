@@ -69,7 +69,7 @@ public class ReservePlaceServiceImpl implements ReservePlaceService{
         double metersPerDegreeLongitude = metersPerDegreeLatitude * Math.cos(Math.toRadians(latitudeMiddle));
 
 // 현재 위치 기준 검색 거리 좌표
-        double radius = 1000.0; // 반경 5 km
+        double radius = 1000.0; // 반경 1 km
         double maxY = latitudeMiddle + (radius / metersPerDegreeLatitude);
         double minY = latitudeMiddle - (radius / metersPerDegreeLatitude);
         double maxX = longitudeMiddle + (radius / metersPerDegreeLongitude);
