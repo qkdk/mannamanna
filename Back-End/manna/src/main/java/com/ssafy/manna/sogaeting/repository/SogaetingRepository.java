@@ -17,4 +17,5 @@ public interface SogaetingRepository extends JpaRepository<Sogaeting, String> {
     // 남자 여자 아이디를 기준으로 조회
     Sogaeting findByMaleIdAndFemaleId(String maleId, String femaleId);
 
+
 }

@@ -1,6 +1,8 @@
 package com.ssafy.manna.sogaeting.service;
 
+import com.ssafy.manna.global.common.domain.CodeDetail;
 import com.ssafy.manna.global.common.domain.Session;
+import com.ssafy.manna.global.common.repository.CodeDetailRepository;
 import com.ssafy.manna.global.common.service.SessionService;
 import com.ssafy.manna.member.Enums.BanCode;
 import com.ssafy.manna.member.domain.Ban;
@@ -9,6 +11,7 @@ import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.ImageMappedSogaetingMemberResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingChatRecommendResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.repository.CustomSogaetingRepository;
@@ -39,6 +42,7 @@ public class SogaetingServiceImpl implements SogaetingService {
     private final SessionService sessionService;
     private final ModelMapper modelMapper;
     private final SogaetingRepository sogaetingRepository;
+    private final CodeDetailRepository codeDetailRepository;
 
     private static String subStringLast(SogaetingMemberResponse sogaetingMemberResponse) {
         return StringUtils.substringAfterLast(sogaetingMemberResponse.getPictureURL(), "/");
@@ -56,6 +60,7 @@ public class SogaetingServiceImpl implements SogaetingService {
                 .context(sogaetingReportRequest.getContext())
                 .code(BanCode.valueOf(sogaetingReportRequest.getCode()))
                 .build();
+
     }
 
     @Override
@@ -150,6 +155,14 @@ public class SogaetingServiceImpl implements SogaetingService {
         sogaeting.updateIsSuccess(true);
         sogaetingRepository.save(sogaeting);
 
+    }
+
+    @Override
+    public SogaetingChatRecommendResponse getRandomTCodeDetailName() {
+        CodeDetail codeDetail = codeDetailRepository.findRandomById("T");
+        String name = codeDetail.getName();
+        SogaetingChatRecommendResponse sogaetingChatRecommendResponse = new SogaetingChatRecommendResponse(name);
+        return sogaetingChatRecommendResponse;
     }
 
     private PageRequest get2PageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {

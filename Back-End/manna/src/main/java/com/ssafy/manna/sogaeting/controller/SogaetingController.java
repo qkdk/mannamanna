@@ -2,6 +2,7 @@ package com.ssafy.manna.sogaeting.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.sogaeting.dto.request.*;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingChatRecommendResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
 import lombok.RequiredArgsConstructor;
@@ -91,7 +92,7 @@ public class SogaetingController {
     }
 
     @PostMapping("/onlineRecommend/locate")
-    public ResponseEntity<?> findMemberByConditionAndOnlineStateAndLocate(
+    public ResponseEntity<ResponseTemplate<SogaetingMemberResponsePage>> findMemberByConditionAndOnlineStateAndLocate(
             @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest
     ) {
         SogaetingMemberResponsePage memberByConditionAndOnlineStateAndLocate = sogaetingService.findMemberByConditionAndOnlineStateAndLocate(
@@ -130,5 +131,19 @@ public class SogaetingController {
         }
     }
 
+    // 대화 주제 추천
+    @GetMapping(value = "/chatRecommend")
+    public ResponseEntity<ResponseTemplate<SogaetingChatRecommendResponse>> getRandomTCodeDetailName(){
+
+        SogaetingChatRecommendResponse sogaetingChatRecommendResponse =  sogaetingService.getRandomTCodeDetailName();
+
+        return new ResponseEntity<>(
+                ResponseTemplate.<SogaetingChatRecommendResponse>builder()
+                        .msg("대화주제 추천 성공")
+                        .data(sogaetingChatRecommendResponse)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
+    }
 
 }
