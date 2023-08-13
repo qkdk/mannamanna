@@ -35,27 +35,7 @@ public class MemberController {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-    //임시매핑
-//    @PostMapping("/hello")
-//    public ResponseEntity<String> imsi(){
-//        return ResponseEntity.ok("success");
-//    }
-
-    //회원가입
-//    @PostMapping(value="/regist")
-//    public ResponseEntity<?> join(@RequestBody MemberSignUpRequest memberSignUpRequest) {
-//        try {
-//            // 회원가입 시 카카오 인증
-//            memberService.signUp(memberSignUpRequest);
-//            return ResponseEntity.ok("join success");
-//        } catch (Exception e) {
-//            return ResponseEntity.badRequest().body(e.getMessage());
-//        }
-//    }
-
-    //회원가입(이미지 포함)
-
-
+    //회원 가입
     @PostMapping(value = "/regist", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> join(
             @RequestPart("memberSignUpRequest") MemberSignUpRequest memberSignUpRequest,
@@ -75,26 +55,6 @@ public class MemberController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-//    @GetMapping("{imgname}")
-//    public ResponseEntity<String> getProfileImg(@PathVariable("imgname") String imgname){
-//        String img = "https://i9b205.p.ssafy.io/"+
-//    }
-
-
-//    @PostMapping("/upload")
-//    public ResponseEntity<?> handleFileUpload(@RequestParam("file") MultipartFile file) {
-//
-//        try {
-//            String fileName = file.getOriginalFilename();
-//            String filePath = uploadDir + File.separator + fileName;
-//            File destFile = new File(filePath);
-//            file.transferTo(destFile);
-//            return ResponseEntity.ok("File uploaded successfully.");
-//        } catch (IOException e) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file: " + e.getMessage());
-//        }
-//    }
 
     //회원탈퇴
     @DeleteMapping("/delete")

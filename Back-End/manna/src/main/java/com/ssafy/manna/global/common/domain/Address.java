@@ -1,15 +1,15 @@
 package com.ssafy.manna.global.common.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @Getter
+@Builder
+@AllArgsConstructor
 public class Address extends BaseTimeEntity {
 
     @Id

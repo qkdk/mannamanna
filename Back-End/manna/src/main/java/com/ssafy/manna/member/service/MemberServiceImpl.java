@@ -18,6 +18,7 @@ import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -29,8 +30,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,9 +47,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberDetailRepository memberDetailRepository;
     private final ProfilePictureRepository profilePictureRepository;
     private final PasswordEncoder passwordEncoder;
-
     private final JavaMailSender javaMailSender;
-    private final ResourceLoader resourceLoader;
 
     @Value("${spring.mail.username}")
     private String sender;
@@ -52,20 +55,23 @@ public class MemberServiceImpl implements MemberService {
     @Value("${file.upload-dir}")
     private String uploadDir;
 
-
     @Value("${file.server-domain}")
     private String serverDomain;
 
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest, MultipartFile[] multipartFiles) throws Exception {
         if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
-            log.info("이미 있는 회원입니다.");
-            throw new Exception("이미 존재하는 이메일입니다.");
+            log.info(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
+            throw new Exception(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
         }
 
-        Address address = new Address(memberSignUpRequest.getSido(), memberSignUpRequest.getGugun(),
-                memberSignUpRequest.getDetail(),
-                memberSignUpRequest.getLatitude(), memberSignUpRequest.getLongitude());
+        Address address = Address.builder()
+                .sido(memberSignUpRequest.getSido())
+                .gugun(memberSignUpRequest.getGugun())
+                .detail(memberSignUpRequest.getDetail())
+                .latitude(memberSignUpRequest.getLatitude())
+                .longitude(memberSignUpRequest.getLongitude())
+                .build();
 
         Member member = Member.builder()
                 .id(memberSignUpRequest.getId())
@@ -92,40 +98,45 @@ public class MemberServiceImpl implements MemberService {
                 .mbti(memberSignUpRequest.getMbti())
                 .religion(memberSignUpRequest.getReligion())
                 .introduction(memberSignUpRequest.getIntroduction())
-//            .isBlockingFriend(memberSignUpRequest.isBlockingFriend())
                 .isBlockingFriend(false)
                 .mileage(1000)
                 .build();
         memberDetailRepository.save(memberDetail);
 
+        List<ProfilePicture> profilePictures = Arrays.stream(multipartFiles)
+                .limit(3)
+                .map(file->{
+                    String memberId = memberSignUpRequest.getId();
+                    try {
+                        String path = storeFile(memberId,file);
+                        int priority = Arrays.asList(multipartFiles).indexOf(file)+1;
+                        return ProfilePicture.builder()
+                                .member(member)
+                                .path(path)
+                                .name(memberId+"_"+file.getOriginalFilename())
+                                .priority(priority)
+                                .build();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
-        for (int i = 0; i < 3; i++) {
-            String memberId = memberSignUpRequest.getId();
-            String path = storeFile(memberId, multipartFiles[i]);
-            ProfilePicture profilePicture = ProfilePicture.builder()
-                    .member(member)
-                    .path(path)
-                    .name(memberId + "_" + multipartFiles[i].getOriginalFilename())
-                    .priority(i + 1)      //1,2,3 저장
-                    .build();
-            profilePictureRepository.save(profilePicture);
-        }
+                })
+                .collect(Collectors.toList());
+        profilePictureRepository.saveAll(profilePictures);
+
+
+//        for (int i = 0; i < 3; i++) {
+//            String memberId = memberSignUpRequest.getId();
+//            String path = storeFile(memberId, multipartFiles[i]);
+//            ProfilePicture profilePicture = ProfilePicture.builder()
+//                    .member(member)
+//                    .path(path)
+//                    .name(memberId + "_" + multipartFiles[i].getOriginalFilename())
+//                    .priority(i + 1)      //1,2,3 저장
+//                    .build();
+//            profilePictureRepository.save(profilePicture);
+//        }
     }
-
-
-    @Override
-    public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
-
-        //해당 id를 가진 member를 찾아서 return
-        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found"));
-        MemberDetail memberDetail = member.getMemberDetail();
-
-    }
-
-//    @Override
-//    public void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception {
-//
-//    }
 
     @Override
     public void delete(String pwd, String id) {
@@ -313,7 +324,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String storeFile(String memberId, MultipartFile file) throws IOException {
-        String uploadDir = "/manna/upload/images/member/";
         String originalFileName = file.getOriginalFilename();
         String fileName = memberId + "_" + originalFileName;
 
@@ -324,9 +334,9 @@ public class MemberServiceImpl implements MemberService {
         if (!directory.exists()) {
             boolean mkdirsResult = directory.mkdirs();
             if (mkdirsResult) {
-                System.out.println("디렉토리 생성 성공");
+                log.info("디렉토리 생성 성공");
             } else {
-                System.out.println("디렉토리 생성 실패");
+                log.info("디렉토리 생성 실패");
             }
         }
 

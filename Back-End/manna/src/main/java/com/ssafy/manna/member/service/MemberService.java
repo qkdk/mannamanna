@@ -14,23 +14,13 @@ import java.util.Optional;
 
 
 public interface MemberService {
-    //회원가입
-//    void signUp(MemberSignUpRequest memberSignUpRequest) throws Exception;
 
     void signUp(MemberSignUpRequest memberSignUpRequest, MultipartFile[] multipartFiles) throws Exception;
-
-    //정보 수정
-    void update(MemberUpdateRequest memberUpdateRequest, String id) throws Exception;
 
     //회원탈퇴
     void delete(String pwd, String id);
 
-    //정보조회
-//    Optional<Member> getInfo(String id);
-
     Optional<Member> findOne(String insertedUserId);
-
-//    void signUp(String id, String pwd);
 
     //이름이랑 mail로 member 찾기
     Optional<Member> findMemberByNameAndEmail(MemberFindIdRequest memberFindIdRequest);
@@ -45,8 +35,6 @@ public interface MemberService {
     public MailDto createMail(String memberEmail, String memberEmailDomain, String tempPwd);
 
     void sendMail(MailDto mailDto);
-
-//    Optional<ProfilePicture> findProfilePictureById(Integer id);
 
     //마이페이지 정보 조회
     MemberInfoResponse getInfo(Member member);
