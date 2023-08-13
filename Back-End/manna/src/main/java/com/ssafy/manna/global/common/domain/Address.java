@@ -20,7 +20,6 @@ public class Address extends BaseTimeEntity {
     private String detail;
     private Double latitude;
     private Double longitude;
-//    private String dtype;
 
     public Address(String sido, String gugun, String detail, Double latitude, Double longitude) {
         this.sido = sido;
