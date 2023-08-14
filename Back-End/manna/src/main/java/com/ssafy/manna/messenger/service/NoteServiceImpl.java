@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.ssafy.manna.messenger.Enums.NoteExceptionsEnum.*;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -41,17 +43,17 @@ public class NoteServiceImpl implements NoteService {
 
     // 일반 쪽지 쓰기
     @Override
-    public void send(NoteSendRequest noteSendRequest) throws Exception {
+    public void send(NoteSendRequest noteSendRequest) {
         //받는이
         String receiverId = noteSendRequest.getReceiver();
         Member receiverMember = memberRepository.findById(receiverId).orElseThrow(
-                () -> new Exception("받는 회원 정보가 없습니다.")
+                () -> new RuntimeException(NOTE_RECEIVER_ERROR.getValue())
         );
 
         //보낸이
         String senderId = noteSendRequest.getSender();
         Member senderMember = memberRepository.findById(senderId).orElseThrow(
-                () -> new Exception("보내는 회원 정보가 없습니다.")
+                () -> new RuntimeException(NOTE_SENDER_ERROR.getValue())
         );
         Note note = Note.builder()
                 .receiver(receiverMember)
@@ -70,20 +72,19 @@ public class NoteServiceImpl implements NoteService {
 
     //소개팅 쪽지 전송
     @Override
-    public void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) throws Exception {
+    public void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) {
         // 받는이
-        Member receiver = memberRepository.findById(sogaeNoteSendRequest.getReceiver()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
+        Member receiver = memberRepository.findById(sogaeNoteSendRequest.getReceiver()).orElseThrow(() -> new RuntimeException(NOTE_RECEIVER_ERROR.getValue()));
         // 보내는이
-        Member sender = memberRepository.findById(sogaeNoteSendRequest.getSender()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
+        Member sender = memberRepository.findById(sogaeNoteSendRequest.getSender()).orElseThrow(() -> new RuntimeException(NOTE_SENDER_ERROR.getValue()));
         // 제목
-        String subject = sender.getName() + "님이 소개팅 신청을 하셨습니다.";
+        String subject = sender.getName() + SOGAE_NOTE_FROM_MSG.getValue();
         // 날짜
         //String으로 들어온 날짜 - 소개팅 날짜
         String dateString = sogaeNoteSendRequest.getDate();
         // 내용
-        String content = sender.getName() + "님이 " + receiver.getName() + "님께 소개팅 신청을 하셨습니다.\n"
-                + "D-Day : " + dateString;
 
+        String content = String.format(SOGAE_NOTE_REQUEST.getValue(),sender.getName(),receiver.getName(),dateString);
         Note note = Note.builder()
                 .receiver(receiver)
                 .sender(sender)
@@ -101,17 +102,17 @@ public class NoteServiceImpl implements NoteService {
 
     //쪽지 삭제
     @Override
-    public void deleteNote(int noteId) throws Exception {
-        Note deleteNote = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지를 찾을 수 없습니다."));
+    public void deleteNote(int noteId){
+        Note deleteNote = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException(NOTE_EXIST_ERROR.getValue()));
         deleteNote.updateDeleted(true);     //true로 설정
         noteRepository.save(deleteNote);
     }
 
     //일반 쪽지 상세보기
     @Override
-    public NoteDetailResponse readDetailNote(int noteId) throws Exception {
+    public NoteDetailResponse readDetailNote(int noteId){
         //읽음 처리
-        Note note = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지를 찾을 수 없습니다."));
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException(NOTE_EXIST_ERROR.getValue()));
         note.updateIsCheck(true);
         noteRepository.save(note);
         //NoteDetailResponse 로 보내기
@@ -132,8 +133,8 @@ public class NoteServiceImpl implements NoteService {
 
     //소개팅 쪽지 상세 보기 - 상대방 프로필 표출
     @Override
-    public SogaeNoteDetailResponse readSogaeDetailNote(int noteId) throws Exception {
-        Note note = noteRepository.findById(noteId).orElseThrow(() -> new ExpressionException("쪽지를 찾을 수 없습니다."));
+    public SogaeNoteDetailResponse readSogaeDetailNote(int noteId) {
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException(NOTE_EXIST_ERROR.getValue()));
         //보낸이
         Member sender = note.getSender();
         //읽음 처리
