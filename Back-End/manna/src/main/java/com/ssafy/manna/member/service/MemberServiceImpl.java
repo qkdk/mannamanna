@@ -7,10 +7,8 @@ import com.ssafy.manna.member.Enums.UserRole;
 import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.domain.MemberDetail;
 import com.ssafy.manna.member.domain.ProfilePicture;
-import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
-import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
-import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
-import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.request.*;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import com.ssafy.manna.member.repository.MemberDetailRepository;
 import com.ssafy.manna.member.repository.MemberRepository;
@@ -18,8 +16,6 @@ import com.ssafy.manna.member.repository.ProfilePictureRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -36,7 +32,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.*;
-
+import static com.ssafy.manna.member.Enums.MemberInfoEnum.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -58,13 +54,19 @@ public class MemberServiceImpl implements MemberService {
     @Value("${file.server-domain}")
     private String serverDomain;
 
+    @Value("${file.url-path}")
+    private String urlPath;
+
     @Override
     public void signUp(MemberSignUpRequest memberSignUpRequest, MultipartFile[] multipartFiles) throws Exception {
-        if (memberRepository.findById(memberSignUpRequest.getId()).isPresent()) {
-            log.info(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
-            throw new Exception(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
+        Optional<Member> checkMember = memberRepository.findById(memberSignUpRequest.getId());
+        if (checkMember.isPresent()) {
+            //id가 존재하고, 탈퇴한 회원이 아닌 경우 회원가입 불가.
+            if(checkMember.get().getRole().equals("USER")) {
+                log.info(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
+                throw new Exception(MEMBER_EXCEPTIONS_EXIST_MEMBER.getValue());
+            }
         }
-
         Address address = Address.builder()
                 .sido(memberSignUpRequest.getSido())
                 .gugun(memberSignUpRequest.getGugun())
@@ -116,38 +118,25 @@ public class MemberServiceImpl implements MemberService {
                                 .name(memberId+"_"+file.getOriginalFilename())
                                 .priority(priority)
                                 .build();
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
 
                 })
                 .collect(Collectors.toList());
         profilePictureRepository.saveAll(profilePictures);
-
-
-//        for (int i = 0; i < 3; i++) {
-//            String memberId = memberSignUpRequest.getId();
-//            String path = storeFile(memberId, multipartFiles[i]);
-//            ProfilePicture profilePicture = ProfilePicture.builder()
-//                    .member(member)
-//                    .path(path)
-//                    .name(memberId + "_" + multipartFiles[i].getOriginalFilename())
-//                    .priority(i + 1)      //1,2,3 저장
-//                    .build();
-//            profilePictureRepository.save(profilePicture);
-//        }
     }
 
     @Override
     public void delete(String pwd, String id) {
-        Member delMember = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("Member not found"));
+        Member delMember = memberRepository.findById(id).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         if (passwordEncoder.matches(pwd, delMember.getPwd())) {
             //입력한 비밀번호가 같으면 삭제 진행 - User role 을 Deleted로 변경
-            delMember.updateRole("DELETED");
+            delMember.updateRole(String.valueOf(UserRole.DELETED));
 
         } else {
             //입력한 비밀번호가 틀리면 throw Error
-            throw new RuntimeException("Password Incorrect");
+            throw new RuntimeException(MEMBER_EXCEPTIONS_WRONG_PASSWORD.getValue());
         }
     }
 
@@ -185,7 +174,7 @@ public class MemberServiceImpl implements MemberService {
 
             return encodedPassword;
         } else {
-            throw new RuntimeException("Member not found");
+            throw new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue());
         }
     }
 
@@ -212,9 +201,8 @@ public class MemberServiceImpl implements MemberService {
         MailDto dto = new MailDto();
         String email = memberEmail.concat("@" + memberEmailDomain);
         dto.setAddress(email);
-        dto.setTitle("맞나만나 임시비밀번호 안내 이메일 입니다.");
-        dto.setMessage("안녕하세요. 맞나만나 임시비밀번호 안내 관련 이메일입니다." + " 회원님의 임시 비밀번호는 " + tempPwd + "입니다."
-                + "로그인 후에 비밀번호를 변경해주세요.");
+        dto.setTitle(MEMBER_INFO_ENUM_PASSWORD_TITLE.getValue());
+        dto.setMessage(MEMBER_INFO_ENUM_PASSWORD_MESSAGE_ONE.getValue()+ tempPwd +MEMBER_INFO_ENUM_PASSWORD_MESSAGE_TWO.getValue());
         return dto;
     }
 
@@ -230,13 +218,9 @@ public class MemberServiceImpl implements MemberService {
         javaMailSender.send(message);
     }
 
-//    @Override
-//    public Optional<ProfilePicture> findProfilePictureById(Integer id) {
-//        return profilePictureRepository.findById(id);
-//    }
-
     @Override
-    public MemberInfoResponse getInfo(Member member) {
+    public MemberInfoResponse getInfo(String id) {
+        Member member = memberRepository.findById(id).orElseThrow(()-> new RuntimeException(MEMBER_SEARCH_FAIL.getValue()));
         MemberDetail memberDetail = member.getMemberDetail();
         Address memberAddress = memberDetail.getAddress();
         List<ProfilePicture> profilePictures = member.getProfilePictures();
@@ -245,7 +229,7 @@ public class MemberServiceImpl implements MemberService {
         for (ProfilePicture profilePicture : profilePictures) {
             ProfilePictureDto profilePictureDto = new ProfilePictureDto().builder()
                     .id(profilePicture.getId())
-                    .path(serverDomain + "/img/" + profilePicture.getName())
+                    .path(serverDomain + urlPath + profilePicture.getName())
                     .name(profilePicture.getName())
                     .priority(profilePicture.getPriority())
                     .build();
@@ -273,11 +257,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updateInfo(Member member, MemberUpdateRequest memberUpdateRequest, MultipartFile[] multipartFiles)
-            throws Exception {
+    public void updateInfo(String id, MemberUpdateRequest memberUpdateRequest, MultipartFile[] multipartFiles)
+    {
+        Member member = memberRepository.findById(id).orElseThrow(()-> new RuntimeException(MEMBER_MODIFY_FAIL.getValue()));
         MemberDetail memberDetail = member.getMemberDetail();
         Address address = memberDetail.getAddress();
-
         memberDetail.updateHeight(memberUpdateRequest.getHeight());
         memberDetail.updateIntroduction(memberUpdateRequest.getIntroduction());
         memberDetail.updateJob(memberUpdateRequest.getJob());
@@ -288,11 +272,10 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
         for (int i = 0; i < 3; i++) {
-            String memberId = member.getId();
-            String path = storeFile(memberId, multipartFiles[i]);   //새로운 사진 저장한 경로
+            String path = storeFile(id, multipartFiles[i]);   //새로운 사진 저장한 경로
             //원래 있던 사진 삭제
             ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
-                    (member, i + 1).orElseThrow(() -> new Exception("사진 정보가 없습니다."));
+                    (member, i + 1).orElseThrow(() -> new RuntimeException(PROFILE_PICTURE_NOT_EXIST.getValue()));
             updatePicture.updatePath(path);
             profilePictureRepository.save(updatePicture);
         }
@@ -310,7 +293,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void findPwd(Member member, MemberFindPwdRequest memberFindPwdRequest) {
+    public void findPwd(MemberFindPwdRequest memberFindPwdRequest) {
+        //비밀번호 찾기
+        Member member = memberRepository.findById(memberFindPwdRequest.getId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_WRONG_INFO.getValue()));
         String findId = member.getId();
         String emailId = memberFindPwdRequest.getEmailId();
         String emailDomain = memberFindPwdRequest.getEmailDomain();
@@ -323,7 +308,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String storeFile(String memberId, MultipartFile file) throws IOException {
+    public String storeFile(String memberId, MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
         String fileName = memberId + "_" + originalFileName;
 
@@ -334,15 +319,46 @@ public class MemberServiceImpl implements MemberService {
         if (!directory.exists()) {
             boolean mkdirsResult = directory.mkdirs();
             if (mkdirsResult) {
-                log.info("디렉토리 생성 성공");
+                log.info(DIRECTORY_SUCCESS_MESSAGE.getValue());
             } else {
-                log.info("디렉토리 생성 실패");
+                log.info(DIRECTORY_FAIL_MESSAGE.getValue());
             }
         }
-
-        file.transferTo(destFile);
-        log.info("서비스 >>> 파일 저장 성공! filePath : " + filePath);
+        try {
+            file.transferTo(destFile);
+        } catch (IOException e) {
+            throw new RuntimeException(PROFILE_PICTURE_SAVE_FAIL.getValue());
+        }
+        log.info(PROFILE_PICTURE_SAVE_SUCCESS+ filePath);
         return filePath;
+    }
+
+    @Override
+    public void checkPassword(MemberCheckPwdRequest memberCheckPwdRequest) {
+        Member member = memberRepository.findById(memberCheckPwdRequest.getId()).orElseThrow(()-> new RuntimeException(MEMBER_EXCEPTIONS_WRONG_INFO.getValue()));
+        if (!passwordEncoder.matches(memberCheckPwdRequest.getPwd(), member.getPwd())) {
+            throw new RuntimeException(MEMBER_EXCEPTIONS_WRONG_PASSWORD.getValue());
+        }
+    }
+
+    @Override
+    public void changePassword(MemberCheckPwdRequest memberChangePwdRequest) {
+        Member member = memberRepository.findById(memberChangePwdRequest.getId()).orElseThrow(()->new RuntimeException(MEMBER_PASSWORD_MODIFY_FAIL.getValue()));
+        member.updatePassword(passwordEncoder, memberChangePwdRequest.getPwd());
+        memberRepository.save(member);
+
+    }
+
+    @Override
+    public MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest) {
+        Member member = memberRepository.findByNameAndMemberDetailEmailIdAndMemberDetailEmailDomain(
+          memberFindIdRequest.getName(), memberFindIdRequest.getEmailId(), memberFindIdRequest.getEmailDomain()
+        ).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+
+        MemberFindIdResponse memberFindIdResponse = MemberFindIdResponse.builder()
+                .id(member.getId())
+                .build();
+        return memberFindIdResponse;
     }
 
 
