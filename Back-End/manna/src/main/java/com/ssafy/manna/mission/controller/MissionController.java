@@ -5,6 +5,7 @@ import com.ssafy.manna.mission.Enums.MissionResponseMessage;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
+import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
@@ -115,5 +116,17 @@ public class MissionController {
                 HttpStatus.OK);
     }
 
+    // 소개팅 성공 시 미션 시작
+    @PostMapping(value = "/start")
+    public ResponseEntity<ResponseTemplate<MissionResponseMessage>> startMission(@RequestBody MissionStartRequest missionStartRequest){
+        missionService.startMission(missionStartRequest);
+
+        return ResponseEntity.ok(
+                ResponseTemplate.<MissionResponseMessage>builder()
+                        .result(true)
+                        .msg(MissionResponseMessage.MISSION_START_SUCCESS.getMessage())
+                        .build()
+        );
+    }
 
 }

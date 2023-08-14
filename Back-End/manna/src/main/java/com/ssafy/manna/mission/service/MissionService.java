@@ -3,6 +3,7 @@ package com.ssafy.manna.mission.service;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
+import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,4 +29,6 @@ public interface MissionService {
     String storeFile(String memberId, MultipartFile file) throws IOException;
 
     MissionFinishResponse finishMission(String id);
+
+    void startMission(MissionStartRequest missionStartRequest);
 }

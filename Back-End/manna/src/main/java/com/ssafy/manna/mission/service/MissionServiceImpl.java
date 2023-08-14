@@ -10,10 +10,13 @@ import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
+import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
+import com.ssafy.manna.sogaeting.domain.Sogaeting;
+import com.ssafy.manna.sogaeting.repository.SogaetingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +40,7 @@ public class MissionServiceImpl implements MissionService {
     private final MissionRepository missionRepository;
     private final MissionQuestionRepository missionQuestionRepository;
     private final MemberRepository memberRepository;
+    private final SogaetingRepository sogaetingRepository;
 
     @Value("${file.server-domain}")
     private String serverDomain;
@@ -201,6 +205,26 @@ public class MissionServiceImpl implements MissionService {
                     .build();
             return missionFinishResponse;
         }
+    }
+
+    @Override
+    public void startMission(MissionStartRequest missionStartRequest) {
+        int sogaetingId = missionStartRequest.getSogaetingId();
+        Sogaeting sogaeting = Sogaeting.builder()
+                .id(missionStartRequest.getSogaetingId())
+                .build();
+
+       // sogaetingRepository.save(sogaeting);
+
+        Mission mission = Mission.builder()
+                .sogaeting(sogaeting)
+                .isSuccess(false)
+                .isDone(false)
+                .maleId(missionStartRequest.getMaleId())
+                .femaleId(missionStartRequest.getFemaleId())
+                .build();
+
+        missionRepository.save(mission);
     }
 }
 
