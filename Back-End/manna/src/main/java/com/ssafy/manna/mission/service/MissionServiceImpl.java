@@ -54,7 +54,7 @@ public class MissionServiceImpl implements MissionService {
                     .maleIsDone(false)
                     .femaleIsDone(false)
                     .code(MissionCode.valueOf("M1"))
-                    .content(codeDetail.getName())
+                    .content(codeDetail.getName()) 
                     .maleImagePath(null)
                     .femaleImagePath(null)
                     .build();

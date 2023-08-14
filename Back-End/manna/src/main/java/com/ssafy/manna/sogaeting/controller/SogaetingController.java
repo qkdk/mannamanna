@@ -4,6 +4,7 @@ import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingChatRecommendResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
+import com.ssafy.manna.sogaeting.enums.SogaetingResponseMessage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,43 +22,46 @@ public class SogaetingController {
 
     private final SogaetingService sogaetingService;
 
-    // 신고하기
     @PostMapping(value = "/report")
-    public ResponseEntity<?> report(@RequestBody SogaetingReportRequest sogaetingReportRequest) {
-        ResponseTemplate<?> body;
-        try {
-            sogaetingService.report(sogaetingReportRequest);
-            return ResponseEntity.ok("report success");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> report(@RequestBody SogaetingReportRequest sogaetingReportRequest) throws Exception {
+        sogaetingService.report(sogaetingReportRequest);
+
+        return new ResponseEntity<>(
+                ResponseTemplate.<SogaetingResponseMessage>builder()
+                        .msg(SogaetingResponseMessage.SOGAETING_REPORT_SUCCESS.getMessage())
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
+
     }
 
     @PostMapping(value = "/like")
-    public ResponseEntity<?> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest) {
-        ResponseTemplate<?> body;
-        try {
-            sogaetingService.Like(sogaetingLikeRequest);
-            return ResponseEntity.ok("상대방에게 호감을 보냈습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest) throws Exception {
+        sogaetingService.Like(sogaetingLikeRequest);
+
+        return new ResponseEntity<>(
+                ResponseTemplate.<SogaetingResponseMessage>builder()
+                        .msg(SogaetingResponseMessage.SOGAETING_LIKE_SUCCESS.getMessage())
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
+
     }
 
+
     @PostMapping("/recommend")
-    public ResponseEntity<?> findMemberByCondition(
+    public ResponseEntity<ResponseTemplate<SogaetingMemberResponsePage>> findMemberByCondition(
             @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
 
         SogaetingMemberResponsePage memberByCondition = sogaetingService.findMemberByCondition(
                 sogaetingFilteringRequest);
 
-        return new ResponseEntity<>(
+        return ResponseEntity.ok(
                 ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                        .msg("조회성공")
+                        .msg(SogaetingResponseMessage.SOGAETING_RECOMMEND_SUCCESS.getMessage())
                         .data(memberByCondition)
                         .result(true)
-                        .build(),
-                HttpStatus.OK);
+                        .build());
     }
 
     @PostMapping("/recommend/locate")
@@ -108,38 +112,40 @@ public class SogaetingController {
     }
 
     // 소개팅 시작하기
-    @PostMapping(value = "/start")
-    public ResponseEntity<?> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest) {
-        ResponseTemplate<?> body;
-        try {
-            sogaetingService.start(sogaetingStartRequest);
-            return ResponseEntity.ok("sogaeting start success");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/start")
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest) {
+        sogaetingService.start(sogaetingStartRequest);
+
+        return ResponseEntity.ok(
+                ResponseTemplate.<SogaetingResponseMessage>builder()
+                        .msg(SogaetingResponseMessage.SOGAETING_START_SUCCESS.getMessage())
+                        .result(true)
+                        .build());
+
     }
 
     // 소개팅 성공
-    @PutMapping(value = "/success")
-    public ResponseEntity<?> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest) {
-        ResponseTemplate<?> body;
-        try {
-            sogaetingService.success(sogaetingSuccessRequest);
-            return ResponseEntity.ok("sogaeting success success");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping("/success")
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest) {
+        sogaetingService.success(sogaetingSuccessRequest);
+
+        return ResponseEntity.ok(
+                ResponseTemplate.<SogaetingResponseMessage>builder()
+                        .msg(SogaetingResponseMessage.SOGAETING_SUCCESS_SUCCESS.getMessage())
+                        .result(true)
+                        .build());
+
     }
 
     // 대화 주제 추천
     @GetMapping(value = "/chatRecommend")
-    public ResponseEntity<ResponseTemplate<SogaetingChatRecommendResponse>> getRandomTCodeDetailName(){
+    public ResponseEntity<ResponseTemplate<SogaetingChatRecommendResponse>> getRandomTCodeDetailName() {
 
-        SogaetingChatRecommendResponse sogaetingChatRecommendResponse =  sogaetingService.getRandomTCodeDetailName();
+        SogaetingChatRecommendResponse sogaetingChatRecommendResponse = sogaetingService.getRandomTCodeDetailName();
 
         return new ResponseEntity<>(
                 ResponseTemplate.<SogaetingChatRecommendResponse>builder()
-                        .msg("대화주제 추천 성공")
+                        .msg(SogaetingResponseMessage.SOGAETING_CHATRECOMMEND_SUCCESS.getMessage())
                         .data(sogaetingChatRecommendResponse)
                         .result(true)
                         .build(),
