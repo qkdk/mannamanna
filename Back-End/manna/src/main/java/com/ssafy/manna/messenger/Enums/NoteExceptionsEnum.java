@@ -18,11 +18,15 @@ public enum NoteExceptionsEnum {
     SOGAE_NOTE_TO_MSG("님께 소개팅 신청을 하셨습니다.\n"),
     DATE_FORMAT("D-Day: %s"),
     SOGAE_NOTE_REQUEST("%s님이 %s님께 소개팅 신청을 하셨습니다.\n D-Day : %s"),
+    SOGAE_NOTE_ACCEPT("%s님이 소개팅 신청을 수락하셨습니다."),
+    SOGAE_NOTE_REFUSE("%s님이 소개팅 신청을 거절하셨습니다."),
+    NEW_NOTE_NOT_EXIST("새로운 쪽지가 없습니다."),
+
+    NEW_NOTE_SUCCESS("새로운 쪽지 조회에 성공했습니다."),
+    SOGAE_NOTE_ACCEPT_CONTENT("%s님이 %s님의 소개팅 신청을 수락하셨습니다.\n D-Day : %s \n 내 스케줄에 일정을 추가합니다."),
     RECEIVED_NOTE_SUCCESS("받은 쪽지함 조회에 성공했습니다."),
-
-    SENT_NOTE_SUCCESS("보낸 쪽지함 조회에 성공했습니다.");
-
-
+    SENT_NOTE_SUCCESS("보낸 쪽지함 조회에 성공했습니다."),
+    SOGAE_DATE_PATTERN("\\d{4}년 \\d{2}월 \\d{2}일 \\d{2}시 \\d{2}분");
     private final String value;
 
 
