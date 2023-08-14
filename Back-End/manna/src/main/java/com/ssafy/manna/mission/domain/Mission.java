@@ -1,5 +1,6 @@
 package com.ssafy.manna.mission.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.manna.global.common.domain.BaseStartEndEntity;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import jakarta.persistence.*;
@@ -21,8 +22,10 @@ public class Mission extends BaseStartEndEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Sogaeting sogaeting;
 
+    @JsonProperty("isSucess")
     private Boolean isSuccess;
 
+    @JsonProperty("isDone")
     private Boolean isDone;
 
     private String maleId;

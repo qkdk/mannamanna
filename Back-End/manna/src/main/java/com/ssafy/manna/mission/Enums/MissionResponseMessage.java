@@ -9,8 +9,8 @@ public enum MissionResponseMessage {
     MISSION_GIVEUP_ERROR("mission giveup error"),
     MISSION_DO_SUCCESS("mission do success"),
     MISSION_DO_ERROR("mission do error"),
-    MISSION_FINISH_SUCCESS("mission finish success")
-    ;
+    MISSION_FINISH_SUCCESS("mission finish success"),
+    MISSION_START_SUCCESS("mission start success");
 
     private final String message;
 
