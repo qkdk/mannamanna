@@ -2,10 +2,8 @@ package com.ssafy.manna.member.service;
 
 import com.ssafy.manna.global.common.dto.MailDto;
 import com.ssafy.manna.member.domain.Member;
-import com.ssafy.manna.member.dto.request.MemberFindIdRequest;
-import com.ssafy.manna.member.dto.request.MemberFindPwdRequest;
-import com.ssafy.manna.member.dto.request.MemberSignUpRequest;
-import com.ssafy.manna.member.dto.request.MemberUpdateRequest;
+import com.ssafy.manna.member.dto.request.*;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.member.dto.response.MemberInfoResponse;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,12 +35,18 @@ public interface MemberService {
     void sendMail(MailDto mailDto);
 
     //마이페이지 정보 조회
-    MemberInfoResponse getInfo(Member member);
+    MemberInfoResponse getInfo(String id);
 
-    void updateInfo(Member member, MemberUpdateRequest memberUpdateRequest, MultipartFile[] multipartFiles)
-            throws Exception;
+    void updateInfo(String id, MemberUpdateRequest memberUpdateRequest, MultipartFile[] multipartFiles);
 
-    void findPwd(Member member, MemberFindPwdRequest memberFindPwdRequest);
+    void findPwd(MemberFindPwdRequest memberFindPwdRequest);
 
     String storeFile(String memberId, MultipartFile file) throws IOException;
+
+    void checkPassword(MemberCheckPwdRequest memberCheckPwdRequest);
+
+    void changePassword(MemberCheckPwdRequest memberChangePwdRequest);
+
+    MemberFindIdResponse findId(MemberFindIdRequest memberFindIdRequest);
+
 }
