@@ -1,6 +1,7 @@
 package com.ssafy.manna.messenger.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
+import com.ssafy.manna.member.dto.response.MemberFindIdResponse;
 import com.ssafy.manna.messenger.domain.Note;
 import com.ssafy.manna.messenger.dto.request.NoteSendRequest;
 import com.ssafy.manna.messenger.dto.request.SogaeNoteSendRequest;
@@ -9,14 +10,20 @@ import com.ssafy.manna.messenger.dto.response.NoteListResponse;
 import com.ssafy.manna.messenger.dto.response.SogaeNoteDetailResponse;
 import com.ssafy.manna.messenger.repository.NoteRepository;
 import com.ssafy.manna.messenger.service.NoteService;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
+
+import static com.ssafy.manna.member.Enums.MemberInfoEnum.MEMBER_SEARCH_SUCCESS;
 import static com.ssafy.manna.messenger.Enums.NoteExceptionsEnum.*;
 @RestController
 @RequiredArgsConstructor
@@ -44,70 +51,60 @@ public class NoteController {
 
     //소개팅 쪽지 쓰기
     @PostMapping("/sogae/send")
-    public ResponseEntity<?> sendSogaeNote(@RequestBody SogaeNoteSendRequest sogaeNoteSendRequest) {
-        ResponseTemplate<?> body;
-        try {
-            noteService.sendSogaeNote(sogaeNoteSendRequest);
-            body = ResponseTemplate.builder()
-                    .result(true)
-                    .msg("소개팅 쪽지 전송 완료")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.OK);
-        } catch (Exception e) {
-            body = ResponseTemplate.builder()
-                    .result(false)
-                    .msg("소개팅 쪽지 전송 실패")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ResponseTemplate> sendSogaeNote(@RequestBody SogaeNoteSendRequest sogaeNoteSendRequest) {
 
-
+        noteService.sendSogaeNote(sogaeNoteSendRequest);
+        return new ResponseEntity<>(
+                ResponseTemplate.builder()
+                        .result(true)
+                        .msg(NOTE_SOGAE_SEND_SUCCESS.getValue())
+                        .build(),
+                HttpStatus.OK
+        );
     }
 
     //쪽지 삭제
     @DeleteMapping("/{noteId}")
-    public ResponseEntity<?> deleteNote(@PathVariable("noteId") int noteId) throws Exception {
-        ResponseTemplate<?> body;
-        try {
-            noteService.deleteNote(noteId);
-            body = ResponseTemplate.builder()
-                    .result(true)
-                    .msg("쪽지 삭제 완료")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.OK);
-        } catch (Exception e) {
-            body = ResponseTemplate.builder()
-                    .result(false)
-                    .msg("쪽지 삭제 error")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ResponseTemplate> deleteNote(@PathVariable("noteId") int noteId) throws Exception {
 
-        }
+        noteService.deleteNote(noteId);
+        return new ResponseEntity<>(
+                ResponseTemplate.builder()
+                        .result(true)
+                        .msg(NOTE_DELETE_SUCCESS.getValue())
+                        .build(),HttpStatus.OK
+        );
 
     }
 
     //쪽지 상세보기
+    @ApiResponse(responseCode = "200", description = "성공", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = NoteDetailResponse.class)),
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SogaeNoteDetailResponse.class))
+    })
     @GetMapping("/{noteId}")
     public ResponseEntity<?> readNote(@PathVariable("noteId") int noteId) {
-        ResponseTemplate<?> body;
-        try {
-            Note note = noteRepository.findById(noteId).orElseThrow(() -> new Exception("쪽지를 찾을 수 없습니다."));
-            if (!note.getIsSogae()) {
+        Note note = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException(NOTE_EXIST_ERROR.getValue()));
+        if (!note.getIsSogae()) {
                 //일반 쪽지 인 경우
                 NoteDetailResponse noteDetailResponse = noteService.readDetailNote(noteId);
-                return ResponseEntity.ok(noteDetailResponse);
-            } else {
+                return new ResponseEntity<>(
+                    ResponseTemplate.<NoteDetailResponse>builder()
+                            .msg(MEMBER_SEARCH_SUCCESS.getValue())
+                            .data(noteDetailResponse)
+                            .result(true)
+                            .build(),
+                    HttpStatus.OK);
+        } else {
                 //소개팅 쪽지인 경우
                 SogaeNoteDetailResponse sogaeNoteDetailResponse = noteService.readSogaeDetailNote(noteId);
-                return ResponseEntity.ok(sogaeNoteDetailResponse);
-            }
-        } catch (Exception e) {
-            body = ResponseTemplate.builder()
-                    .result(false)
-                    .msg("쪽지 삭제 error")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-
+                return new ResponseEntity<>(
+                    ResponseTemplate.<SogaeNoteDetailResponse>builder()
+                            .msg(MEMBER_SEARCH_SUCCESS.getValue())
+                            .data(sogaeNoteDetailResponse)
+                            .result(true)
+                            .build(),
+                    HttpStatus.OK);
         }
     }
 

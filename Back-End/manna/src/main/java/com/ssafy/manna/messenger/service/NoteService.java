@@ -17,17 +17,17 @@ public interface NoteService {
     void send(NoteSendRequest noteSendRequest);
 
     //소개팅 쪽지 전송하기
-    void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) throws Exception;
+    void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest);
 
     //쪽지 삭제하기
-    void deleteNote(int id) throws Exception;
+    void deleteNote(int id);
 
     //쪽지 내용 보기 (읽기처리)
     //1. 소개팅 쪽지면 소개팅 Response
     //2. 소개팅 쪽지 아니면 일반 Response
-    NoteDetailResponse readDetailNote(int id) throws Exception;
+    NoteDetailResponse readDetailNote(int id);
 
-    SogaeNoteDetailResponse readSogaeDetailNote(int id) throws Exception;
+    SogaeNoteDetailResponse readSogaeDetailNote(int id);
 
     //받은 쪽지 List 반환
     List<NoteListResponse> receivedNoteList(String userId) throws Exception;
