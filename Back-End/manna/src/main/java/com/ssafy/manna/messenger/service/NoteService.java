@@ -30,10 +30,10 @@ public interface NoteService {
     SogaeNoteDetailResponse readSogaeDetailNote(int id);
 
     //받은 쪽지 List 반환
-    List<NoteListResponse> receivedNoteList(String userId) throws Exception;
+    List<NoteListResponse> receivedNoteList(String userId);
 
     //보낸 쪽지 List 반환
-    List<NoteListResponse> sentNoteList(String userId) throws Exception;
+    List<NoteListResponse> sentNoteList(String userId);
 
     //새로운 쪽지 LIST 반환
     List<NoteListResponse> newNoteList(String userId) throws Exception;
