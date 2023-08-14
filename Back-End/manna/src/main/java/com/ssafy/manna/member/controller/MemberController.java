@@ -23,7 +23,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import java.util.Optional;
 
 import static com.ssafy.manna.member.Enums.MemberInfoEnum.*;
-import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.*;
 
 @RestController
 @RequiredArgsConstructor

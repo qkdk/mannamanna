@@ -14,7 +14,7 @@ import java.util.List;
 public interface NoteService {
 
     //쪽지 전송하기(일반 쪽지)
-    void send(NoteSendRequest noteSendRequest) throws Exception;
+    void send(NoteSendRequest noteSendRequest);
 
     //소개팅 쪽지 전송하기
     void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest) throws Exception;

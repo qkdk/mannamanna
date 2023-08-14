@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.util.List;
-
+import static com.ssafy.manna.messenger.Enums.NoteExceptionsEnum.*;
 @RestController
 @RequiredArgsConstructor
 @EnableWebMvc
@@ -31,23 +31,15 @@ public class NoteController {
 
     //일반 쪽지 쓰기
     @PostMapping("/send")
-    public ResponseEntity<?> sendNote(@RequestBody NoteSendRequest noteSendRequest) {
-        ResponseTemplate<?> body;
-        try {
-            noteService.send(noteSendRequest);
-            body = ResponseTemplate.builder()
-                    .result(true)
-                    .msg("쪽지 전송 완료")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.OK);
-        } catch (Exception e) {
-            body = ResponseTemplate.builder()
-                    .result(false)
-                    .msg("send error")
-                    .build();
-            return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
-        }
-
+    public ResponseEntity<ResponseTemplate> sendNote(@RequestBody NoteSendRequest noteSendRequest) {
+         noteService.send(noteSendRequest);
+         return new ResponseEntity<>(
+           ResponseTemplate.builder()
+                   .result(true)
+                   .msg(NOTE_SEND_SUCCESS.getValue())
+                   .build(),
+                 HttpStatus.OK
+         );
     }
 
     //소개팅 쪽지 쓰기

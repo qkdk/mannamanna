@@ -41,17 +41,17 @@ public class NoteServiceImpl implements NoteService {
 
     // 일반 쪽지 쓰기
     @Override
-    public void send(NoteSendRequest noteSendRequest) throws Exception {
+    public void send(NoteSendRequest noteSendRequest) {
         //받는이
         String receiverId = noteSendRequest.getReceiver();
         Member receiverMember = memberRepository.findById(receiverId).orElseThrow(
-                () -> new Exception("받는 회원 정보가 없습니다.")
+                () -> new RuntimeException("받는 회원 정보가 없습니다.")
         );
 
         //보낸이
         String senderId = noteSendRequest.getSender();
         Member senderMember = memberRepository.findById(senderId).orElseThrow(
-                () -> new Exception("보내는 회원 정보가 없습니다.")
+                () -> new RuntimeException("보내는 회원 정보가 없습니다.")
         );
         Note note = Note.builder()
                 .receiver(receiverMember)
