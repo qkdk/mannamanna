@@ -14,7 +14,10 @@ public enum SogaetingResponseMessage {
     SOGAETING_START_ERROR("start error"),
     SOGAETING_SUCCESS_SUCCESS("sogaeting success success"),
     SOGAETING_SUCCESS_ERROR("sogaeting success error"),
-    SOGAETING_CHATRECOMMEND_SUCCESS("chat recommend success");
+    SOGAETING_CHATRECOMMEND_SUCCESS("chat recommend success"),
+    SOGAETING_RECOMMENDLOCATE_SUCCESS("recommend locate success"),
+    SOGAETING_ONLINERECOMMEND_SUCCESS("online recommend success"),
+    SOGAETING_ONLINERECOMMENDLOCATE_SUCCESS("online recommend locate success");
 
 
     private final String message;
