@@ -32,7 +32,8 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         try {
-            ChatMessage chatMessage = encodeChatMessaeg(message);
+            ChatMessage chatMessage = encodeChatMessaege(message);
+            log.info("TALK메시지 수신 " + chatMessage.getSenderId() + " : " + chatMessage.getRoomId());
 
             RedisChat redisChat = chatRepository.findById(chatMessage.getRoomId()).orElse(
                     new RedisChat(chatMessage.getRoomId(), new ArrayList<>()));
@@ -40,7 +41,7 @@ public class StompHandler implements ChannelInterceptor {
             redisChat.getRedisChatHistories().add(RedisChatHistory.of(chatMessage));
             chatRepository.save(redisChat);
         } catch (Exception e) {
-            log.info("새로운 구독 확인");
+            log.info("새로운 Socket 커넥션 확인");
         }
 
 //        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
@@ -51,7 +52,7 @@ public class StompHandler implements ChannelInterceptor {
         return message;
     }
 
-    private ChatMessage encodeChatMessaeg(Message<?> message) throws JsonProcessingException {
+    private ChatMessage encodeChatMessaege(Message<?> message) throws JsonProcessingException {
         String publishMessage = (String) redisTemplate.getStringSerializer()
                 .deserialize((byte[]) message.getPayload());
 
