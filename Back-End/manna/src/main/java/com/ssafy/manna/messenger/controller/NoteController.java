@@ -110,24 +110,30 @@ public class NoteController {
 
     //쪽지 리스트(받은 쪽지함)
     @GetMapping("/received/{userId}")
-    public ResponseEntity<?> getReceivedNoteList(@PathVariable("userId") String userId) {
-        try {
-            List<NoteListResponse> receivedNoteList = noteService.receivedNoteList(userId);
-            return new ResponseEntity<>(receivedNoteList, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ResponseTemplate<List<NoteListResponse>>> getReceivedNoteList(@PathVariable("userId") String userId) {
+        List<NoteListResponse> receivedNoteList = noteService.receivedNoteList(userId);
+        return new ResponseEntity<>(
+                ResponseTemplate.<List<NoteListResponse>>builder()
+                        .result(true)
+                        .msg(RECEIVED_NOTE_SUCCESS.getValue())
+                        .data(receivedNoteList)
+                        .build(),HttpStatus.OK
+        );
+
     }
 
     //쪽지 리스트(보낸 쪽지함)
     @GetMapping("/sent/{userId}")
-    public ResponseEntity<?> getSentNoteList(@PathVariable("userId") String userId) {
-        try {
-            List<NoteListResponse> sentNoteList = noteService.sentNoteList(userId);
-            return new ResponseEntity<>(sentNoteList, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<ResponseTemplate<List<NoteListResponse>>> getSentNoteList(@PathVariable("userId") String userId) {
+        List<NoteListResponse> sentNoteList = noteService.sentNoteList(userId);
+        return new ResponseEntity<>(
+                ResponseTemplate.<List<NoteListResponse>>builder()
+                        .result(true)
+                        .msg(SENT_NOTE_SUCCESS.getValue())
+                        .data(sentNoteList)
+                        .build(),HttpStatus.OK
+        );
+
     }
 
     //소개팅 쪽지 수락

@@ -155,11 +155,10 @@ public class NoteServiceImpl implements NoteService {
 
     //받은 쪽지 리스트
     @Override
-    public List<NoteListResponse> receivedNoteList(String userId) throws Exception {
+    public List<NoteListResponse> receivedNoteList(String userId) {
         List<Note> receivedNoteList = noteRepository.findAllByReceiverIdAndIsDeleted(userId, false);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for (Note receivedNote : receivedNoteList) {
-
             NoteListResponse noteListResponse = new NoteListResponse().builder()
                     .id(receivedNote.getId())
                     .receiverId(receivedNote.getReceiver().getId())
@@ -182,7 +181,7 @@ public class NoteServiceImpl implements NoteService {
 
     //보낸 쪽지 리스트
     @Override
-    public List<NoteListResponse> sentNoteList(String userId) throws Exception {
+    public List<NoteListResponse> sentNoteList(String userId){
         List<Note> sentNoteList = noteRepository.findAllBySenderId(userId);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for (Note sentNote : sentNoteList) {

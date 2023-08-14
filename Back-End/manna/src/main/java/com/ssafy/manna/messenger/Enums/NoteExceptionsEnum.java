@@ -17,7 +17,10 @@ public enum NoteExceptionsEnum {
     SOGAE_NOTE_FROM_MSG("님이 소개팅 신청을 하셨습니다."),
     SOGAE_NOTE_TO_MSG("님께 소개팅 신청을 하셨습니다.\n"),
     DATE_FORMAT("D-Day: %s"),
-    SOGAE_NOTE_REQUEST("%s님이 %s님께 소개팅 신청을 하셨습니다.\n D-Day : %s");
+    SOGAE_NOTE_REQUEST("%s님이 %s님께 소개팅 신청을 하셨습니다.\n D-Day : %s"),
+    RECEIVED_NOTE_SUCCESS("받은 쪽지함 조회에 성공했습니다."),
+
+    SENT_NOTE_SUCCESS("보낸 쪽지함 조회에 성공했습니다.");
 
 
     private final String value;
