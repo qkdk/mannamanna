@@ -138,50 +138,42 @@ public class NoteController {
 
     //소개팅 쪽지 수락
     @GetMapping("/sogae/accept/{noteId}")
-    public ResponseEntity<?> acceptSogaeting(@PathVariable("noteId") int noteId) {
-        try {
-            noteService.acceptSogating(noteId);
-            return ResponseEntity.ok("소개팅을 수락하셨습니다.");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<ResponseTemplate> acceptSogaeting(@PathVariable("noteId") int noteId) {
+        noteService.acceptSogating(noteId);
+        return new ResponseEntity<>(
+                ResponseTemplate.builder()
+                        .result(true)
+                        .msg(SOGAE_ACCEPT_MESSAGE.getValue())
+                        .build(),HttpStatus.OK
+        );
     }
 
     //소개팅 쪽지 거절
     @GetMapping("/sogae/refuse/{noteId}")
     public ResponseEntity<?> refuseSogaeting(@PathVariable("noteId") int noteId) {
-        try {
-            noteService.refuseSogating(noteId);
-            return ResponseEntity.ok("소개팅을 거절하셨습니다.");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
+        noteService.refuseSogating(noteId);
+        return new ResponseEntity<>(
+                ResponseTemplate.builder()
+                        .result(true)
+                        .msg(SOGAE_DECLINE_MESSAGE.getValue())
+                        .build(),HttpStatus.OK
+        );
     }
 
     //새로운 쪽지 확인 - 안읽은거 있으면 true, 없으면 false
     @GetMapping("/new/{userId}")
-    public ResponseEntity<?> getNewNoteList(@PathVariable("userId") String userId) {
-        ResponseTemplate<?> body;
-        try {
-            List<NoteListResponse> newNoteList = noteService.newNoteList(userId);
-            if (!newNoteList.isEmpty()) {
-//                body = ResponseTemplate.builder()
-//                        .result(true)
-//                        .msg("새로운 쪽지 있음")
-//                        .data(newNoteList)
-//                        .build();
-                return ResponseEntity.ok(true);
-            } else {
-//                body = ResponseTemplate.builder()
-//                        .result(false)
-//                        .msg("새로운 쪽지 없음")
-//                        .data(newNoteList)
-//                        .build();
-                return ResponseEntity.ok(false);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public ResponseEntity<ResponseTemplate<List<NoteListResponse>>> getNewNoteList(@PathVariable("userId") String userId) {
+        List<NoteListResponse> newNoteList = noteService.newNoteList(userId);
+        return new ResponseEntity<>(
+                ResponseTemplate.<List<NoteListResponse>>builder()
+                        .result(true)
+                        .msg(NEW_NOTE_SUCCESS.getValue())
+                        .data(newNoteList)
+                        .build(),
+                HttpStatus.OK
+        );
+
     }
 
 }

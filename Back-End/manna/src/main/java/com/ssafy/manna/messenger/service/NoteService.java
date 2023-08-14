@@ -36,13 +36,13 @@ public interface NoteService {
     List<NoteListResponse> sentNoteList(String userId);
 
     //새로운 쪽지 LIST 반환
-    List<NoteListResponse> newNoteList(String userId) throws Exception;
+    List<NoteListResponse> newNoteList(String userId);
 
     //소개팅 쪽지 수락
-    void acceptSogating(int noteId) throws Exception;
+    void acceptSogating(int noteId);
 
     //소개팅 쪽지 거절
-    void refuseSogating(int noteId) throws Exception;
+    void refuseSogating(int noteId);
 
     LocalDateTime setNowTime();
 

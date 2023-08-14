@@ -20,6 +20,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.*;
+import static com.ssafy.manna.schedule.Enums.DateTimeFormat.*;
+import static com.ssafy.manna.schedule.Enums.Timezone.*;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -31,15 +35,15 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void insertSchedule(OnlineScheduleRequest scheduleRequest) throws Exception {
-        Member female = memberRepository.findById(scheduleRequest.getFemaleId()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
-        Member male = memberRepository.findById(scheduleRequest.getMaleId()).orElseThrow(() -> new Exception("회원 정보가 없습니다."));
+    public void insertSchedule(OnlineScheduleRequest scheduleRequest) {
+        Member female = memberRepository.findById(scheduleRequest.getFemaleId()).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+        Member male = memberRepository.findById(scheduleRequest.getMaleId()).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         String dateStr = scheduleRequest.getDate();
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(KST.getValue());
         LocalDateTime time = LocalDateTime.parse(dateStr, formatter);
         // KST 시간대로 변환
-        ZoneId kstZone = ZoneId.of("Asia/Seoul");
+        ZoneId kstZone = ZoneId.of(SEOUL.getZoneId());
         ZonedDateTime kstDateTime = time.atZone(kstZone);
         String url = scheduleRequest.getUrl();
 
@@ -57,7 +61,7 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService {
     //스케줄 삭제
     @Override
     public void deleteSchedule(Integer id) throws Exception {
-        OnlineSchedule schedule = (OnlineSchedule) onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception("스케줄 정보가 없습니다."));
+        OnlineSchedule schedule = (OnlineSchedule) onlineScheduleRepository.findById(id).orElseThrow(() -> new Exception());
         scheduleRepository.delete(schedule);
     }
 
