@@ -277,6 +277,7 @@ public class MemberServiceImpl implements MemberService {
             ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
                     (member, i + 1).orElseThrow(() -> new RuntimeException(PROFILE_PICTURE_NOT_EXIST.getValue()));
             updatePicture.updatePath(path);
+            updatePicture.updateName(multipartFiles[i].getOriginalFilename());
             profilePictureRepository.save(updatePicture);
         }
 
