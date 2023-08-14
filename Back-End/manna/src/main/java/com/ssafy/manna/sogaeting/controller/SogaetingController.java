@@ -23,11 +23,11 @@ public class SogaetingController {
     private final SogaetingService sogaetingService;
 
     @PostMapping(value = "/report")
-    public ResponseEntity<ResponseTemplate<String>> report(@RequestBody SogaetingReportRequest sogaetingReportRequest) throws Exception {
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> report(@RequestBody SogaetingReportRequest sogaetingReportRequest) throws Exception {
         sogaetingService.report(sogaetingReportRequest);
 
         return new ResponseEntity<>(
-                ResponseTemplate.<String>builder()
+                ResponseTemplate.<SogaetingResponseMessage>builder()
                         .msg(SogaetingResponseMessage.SOGAETING_REPORT_SUCCESS.getMessage())
                         .result(true)
                         .build(),
@@ -36,11 +36,11 @@ public class SogaetingController {
     }
 
     @PostMapping(value = "/like")
-    public ResponseEntity<ResponseTemplate<String>> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest) throws Exception {
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> like(@RequestBody SogaetingLikeRequest sogaetingLikeRequest) throws Exception {
         sogaetingService.Like(sogaetingLikeRequest);
 
         return new ResponseEntity<>(
-                ResponseTemplate.<String>builder()
+                ResponseTemplate.<SogaetingResponseMessage>builder()
                         .msg(SogaetingResponseMessage.SOGAETING_LIKE_SUCCESS.getMessage())
                         .result(true)
                         .build(),
@@ -113,11 +113,11 @@ public class SogaetingController {
 
     // 소개팅 시작하기
     @PostMapping("/start")
-    public ResponseEntity<ResponseTemplate<String>> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest) {
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> startSogaeting(@RequestBody SogaetingStartRequest sogaetingStartRequest) {
         sogaetingService.start(sogaetingStartRequest);
 
         return ResponseEntity.ok(
-                ResponseTemplate.<String>builder()
+                ResponseTemplate.<SogaetingResponseMessage>builder()
                         .msg(SogaetingResponseMessage.SOGAETING_START_SUCCESS.getMessage())
                         .result(true)
                         .build());
@@ -126,11 +126,11 @@ public class SogaetingController {
 
     // 소개팅 성공
     @PutMapping("/success")
-    public ResponseEntity<ResponseTemplate<String>> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest) {
+    public ResponseEntity<ResponseTemplate<SogaetingResponseMessage>> successSogaeting(@RequestBody SogaetingSuccessRequest sogaetingSuccessRequest) {
         sogaetingService.success(sogaetingSuccessRequest);
 
         return ResponseEntity.ok(
-                ResponseTemplate.<String>builder()
+                ResponseTemplate.<SogaetingResponseMessage>builder()
                         .msg(SogaetingResponseMessage.SOGAETING_SUCCESS_SUCCESS.getMessage())
                         .result(true)
                         .build());

@@ -35,12 +35,12 @@ public class MissionController {
 
     // 소개팅이 성공하면 미션 6가지 생성해주기
     @PostMapping(value = "/assign")
-    public ResponseEntity<ResponseTemplate<?>> assignMission(@RequestBody MissionAssignRequest missionAssignRequest) throws Exception {
+    public ResponseEntity<ResponseTemplate<MissionResponseMessage>> assignMission(@RequestBody MissionAssignRequest missionAssignRequest) throws Exception {
 
         missionService.assignMission(missionAssignRequest);
 
         return ResponseEntity.ok(
-                ResponseTemplate.builder()
+                ResponseTemplate.<MissionResponseMessage>builder()
                         .result(true)
                         .msg(MissionResponseMessage.MISSION_ASSIGN_SUCCESS.getMessage())
                         .build()
@@ -83,14 +83,14 @@ public class MissionController {
 
     // 미션 사진 업로드
     @PutMapping(value = "/do", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ResponseTemplate<?>> doMission(
+    public ResponseEntity<ResponseTemplate<MissionResponseMessage>> doMission(
             @RequestPart("missionDoRequest") MissionDoRequest missionDoRequest,
             @RequestPart("missionPicture") MultipartFile missionPicture) throws IOException {
 
         missionService.doMission(missionDoRequest, missionPicture);
 
         return ResponseEntity.ok(
-                ResponseTemplate.builder()
+                ResponseTemplate.<MissionResponseMessage>builder()
                         .result(true)
                         .msg(MissionResponseMessage.MISSION_DO_SUCCESS.getMessage())
                         .build()
