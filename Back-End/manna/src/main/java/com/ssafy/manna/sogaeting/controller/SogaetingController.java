@@ -65,14 +65,14 @@ public class SogaetingController {
     }
 
     @PostMapping("/recommend/locate")
-    public ResponseEntity<?> findMemberByConditionAndLocate(
+    public ResponseEntity<ResponseTemplate<SogaetingMemberResponsePage>> findMemberByConditionAndLocate(
             @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
         SogaetingMemberResponsePage memberByConditionAndLocate = sogaetingService.findMemberByConditionAndLocate(
                 sogaetingFilteringRequest);
 
         return new ResponseEntity<>(
                 ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                        .msg("조회성공")
+                        .msg(SogaetingResponseMessage.SOGAETING_RECOMMENDLOCATE_SUCCESS.getMessage())
                         .data(memberByConditionAndLocate)
                         .result(true)
                         .build(),
@@ -80,7 +80,7 @@ public class SogaetingController {
     }
 
     @PostMapping("/onlineRecommend")
-    public ResponseEntity<?> findMemberByConditionAndOnlineState(
+    public ResponseEntity<ResponseTemplate<SogaetingMemberResponsePage>> findMemberByConditionAndOnlineState(
             @RequestBody SogaetingFilteringRequest sogaetingFilteringRequest) {
 
         SogaetingMemberResponsePage memberByConditionAndOnlineState =
@@ -88,7 +88,7 @@ public class SogaetingController {
 
         return new ResponseEntity<>(
                 ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                        .msg("조회성공")
+                        .msg(SogaetingResponseMessage.SOGAETING_ONLINERECOMMEND_SUCCESS.getMessage())
                         .data(memberByConditionAndOnlineState)
                         .result(true)
                         .build(),
@@ -104,7 +104,7 @@ public class SogaetingController {
 
         return new ResponseEntity<>(
                 ResponseTemplate.<SogaetingMemberResponsePage>builder()
-                        .msg("조회성공")
+                        .msg(SogaetingResponseMessage.SOGAETING_ONLINERECOMMENDLOCATE_SUCCESS.getMessage())
                         .data(memberByConditionAndOnlineStateAndLocate)
                         .result(true)
                         .build(),
