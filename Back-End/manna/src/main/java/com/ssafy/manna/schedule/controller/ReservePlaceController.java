@@ -3,6 +3,7 @@ package com.ssafy.manna.schedule.controller;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.schedule.domain.ReservePlace;
 import com.ssafy.manna.schedule.dto.request.ReservePlaceRequest;
+import com.ssafy.manna.schedule.dto.request.ReservePlaceSidoGugunRequest;
 import com.ssafy.manna.schedule.service.ReservePlaceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,26 @@ public class ReservePlaceController {
 //            throw new RuntimeException(e);
 //        }
 //    }
+
+
+    // 예약 - sido , gugun 두가지 골라서 return
+    @PostMapping("/placeListBySidoGugun")
+    public ResponseEntity<?> getRecommendListSidoGugun(@RequestBody ReservePlaceSidoGugunRequest reservePlaceSidoGugunRequest) {
+        ResponseTemplate<?> body;
+        try {
+            List<ReservePlace> recommendListBySidoGugun = reservePlaceService.getRecommendListBySidoGugun(reservePlaceSidoGugunRequest);
+            body = ResponseTemplate.builder()
+                    .result(true)
+                    .msg("추천 리스트 조회 완료")
+                    .data(recommendListBySidoGugun)
+                    .build();
+            return new ResponseEntity<>(body, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 
 
     //예약 - sido,gugun, category 골라서 return
