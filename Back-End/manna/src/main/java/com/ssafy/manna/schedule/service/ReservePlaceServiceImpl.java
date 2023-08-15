@@ -5,6 +5,7 @@ import com.ssafy.manna.member.domain.Member;
 import com.ssafy.manna.member.repository.MemberRepository;
 import com.ssafy.manna.schedule.domain.ReservePlace;
 import com.ssafy.manna.schedule.dto.request.ReservePlaceRequest;
+import com.ssafy.manna.schedule.dto.request.ReservePlaceSidoGugunRequest;
 import com.ssafy.manna.schedule.repository.ReservePlaceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -90,6 +91,14 @@ public class ReservePlaceServiceImpl implements ReservePlaceService {
         System.out.println(nearByPlaces.size());
 
         return nearByPlaces;
+    }
+
+    @Override
+    public List<ReservePlace> getRecommendListBySidoGugun(ReservePlaceSidoGugunRequest reservePlaceSidoGugunRequest) {
+        String sido = reservePlaceSidoGugunRequest.getSido();
+        String gugun = reservePlaceSidoGugunRequest.getGugun();
+        List<ReservePlace> recommendList = reservePlaceRepository.findAllBySidoAndGugun(sido, gugun);
+        return recommendList;
     }
 
 }
