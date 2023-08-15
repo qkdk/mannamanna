@@ -63,11 +63,11 @@ public class NoteController {
         );
     }
 
-    //쪽지 삭제
-    @DeleteMapping("/{noteId}")
-    public ResponseEntity<ResponseTemplate> deleteNote(@PathVariable("noteId") int noteId) throws Exception {
+    //받은 쪽지 삭제
+    @DeleteMapping("/{noteId}/{userId}")
+    public ResponseEntity<ResponseTemplate> deleteNote(@PathVariable("noteId") int noteId, @PathVariable("userId") String userId) throws Exception {
 
-        noteService.deleteNote(noteId);
+        noteService.deleteNote(noteId,userId);
         return new ResponseEntity<>(
                 ResponseTemplate.builder()
                         .result(true)
@@ -76,6 +76,9 @@ public class NoteController {
         );
 
     }
+
+    //보낸 쪽지 삭제
+
 
     //쪽지 상세보기
     @ApiResponse(responseCode = "200", description = "성공", content = {

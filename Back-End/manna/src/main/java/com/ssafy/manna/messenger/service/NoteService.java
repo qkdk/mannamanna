@@ -19,8 +19,8 @@ public interface NoteService {
     //소개팅 쪽지 전송하기
     void sendSogaeNote(SogaeNoteSendRequest sogaeNoteSendRequest);
 
-    //쪽지 삭제하기
-    void deleteNote(int id);
+    //쪽지 삭제하기 - 받은쪽지, 보낸 쪽지
+    void deleteNote(int id,String userId);
 
     //쪽지 내용 보기 (읽기처리)
     //1. 소개팅 쪽지면 소개팅 Response

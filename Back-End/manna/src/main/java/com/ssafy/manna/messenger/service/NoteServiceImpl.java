@@ -106,9 +106,18 @@ public class NoteServiceImpl implements NoteService {
 
     //쪽지 삭제
     @Override
-    public void deleteNote(int noteId){
+    public void deleteNote(int noteId,String userId){
         Note deleteNote = noteRepository.findById(noteId).orElseThrow(() -> new RuntimeException(NOTE_EXIST_ERROR.getValue()));
-        deleteNote.updateDeleted(true);     //true로 설정
+
+        //보낸쪽지함에서 삭제한 경우
+        if(deleteNote.getSender().getId().equals(userId)){
+            deleteNote.updateSentDeleted(true);
+        }
+        else{
+            deleteNote.updateDeleted(true);
+        }
+        //받은쪽지함에서 삭제한 경우
+             //true로 설정
         noteRepository.save(deleteNote);
     }
 
@@ -186,7 +195,7 @@ public class NoteServiceImpl implements NoteService {
     //보낸 쪽지 리스트
     @Override
     public List<NoteListResponse> sentNoteList(String userId){
-        List<Note> sentNoteList = noteRepository.findAllBySenderId(userId);
+        List<Note> sentNoteList = noteRepository.findAllBySenderIdAndIsSentDeleted(userId,false);
         List<NoteListResponse> noteListResponses = new ArrayList<>();
         for (Note sentNote : sentNoteList) {
 
