@@ -69,6 +69,7 @@ public class NoteServiceImpl implements NoteService {
                 .isCheck(false)         //읽음 false 로 설정
                 .isReject(false)       // 거절 여부 false로 설정
                 .isDeleted(false)
+                .isSentDeleted(false)
                 .build();
         noteRepository.save(note);
     }
