@@ -15,6 +15,7 @@ import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionDetailResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
@@ -247,8 +248,37 @@ public class MissionServiceImpl implements MissionService {
             opponent = memberRepository.findById(mission.getMaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         }
 
+        return makeDto(userId, member, opponent, mission);
+    }
 
-        MissionParticipantResponse missionParticipantResponse = MissionParticipantResponse
+
+    @Override
+    public MissionDetailResponse getImagePerCard(Integer missionId, Integer cardId, String userId) {
+        Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException("회원을 찾을 수 없습니다."));
+        String userPath;
+        String opponentPath;
+        List<MissionQuestion> missionQuestionList = missionQuestionRepository.findByMissionIdOrderByIdAsc(missionId);
+        MissionQuestion missionQuestion = missionQuestionList.get(cardId - 1);
+
+        if(member.getGender().equals("male")){
+            userPath = missionQuestion.getMaleImagePath();
+            opponentPath = missionQuestion.getFemaleImagePath();
+        }
+        else{
+            userPath = missionQuestion.getFemaleImagePath();
+            opponentPath = missionQuestion.getMaleImagePath();
+        }
+
+        return MissionDetailResponse.builder()
+                .userImgPath(userPath)
+                .opponentImgPath(opponentPath)
+                .content(missionQuestion.getContent())
+                .build();
+    }
+
+
+    private MissionParticipantResponse makeDto(String userId, Member member, Member opponent, Mission mission) {
+        return MissionParticipantResponse
                 .builder()
                 .userId(userId)
                 .userName(member.getName())
@@ -256,7 +286,6 @@ public class MissionServiceImpl implements MissionService {
                 .opponentName(opponent.getName())
                 .missionId(mission.getId())
                 .build();
-        return missionParticipantResponse;
     }
 }
 
