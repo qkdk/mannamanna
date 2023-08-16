@@ -17,7 +17,8 @@ public enum SogaetingResponseMessage {
     SOGAETING_CHATRECOMMEND_SUCCESS("chat recommend success"),
     SOGAETING_RECOMMENDLOCATE_SUCCESS("recommend locate success"),
     SOGAETING_ONLINERECOMMEND_SUCCESS("online recommend success"),
-    SOGAETING_ONLINERECOMMENDLOCATE_SUCCESS("online recommend locate success");
+    SOGAETING_ONLINERECOMMENDLOCATE_SUCCESS("online recommend locate success"),
+    SOGAETING_INFO_SUCCESS("info success");
 
 
     private final String message;

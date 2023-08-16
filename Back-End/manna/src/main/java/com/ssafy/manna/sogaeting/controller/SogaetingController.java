@@ -3,6 +3,7 @@ package com.ssafy.manna.sogaeting.controller;
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingChatRecommendResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingInfoResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.enums.SogaetingResponseMessage;
 import com.ssafy.manna.sogaeting.service.SogaetingService;
@@ -147,6 +148,21 @@ public class SogaetingController {
                 ResponseTemplate.<SogaetingChatRecommendResponse>builder()
                         .msg(SogaetingResponseMessage.SOGAETING_CHATRECOMMEND_SUCCESS.getMessage())
                         .data(sogaetingChatRecommendResponse)
+                        .result(true)
+                        .build(),
+                HttpStatus.OK);
+    }
+
+    // 소개팅 정보 get
+    @GetMapping(value = "/sogaetingInfo/{id}")
+    public ResponseEntity<ResponseTemplate<SogaetingInfoResponse>> getSogaetingInfo(@PathVariable("id") int id)
+            throws Exception {
+        SogaetingInfoResponse sogaetingInfoResponse = sogaetingService.getSogaetingById(id);
+
+        return new ResponseEntity<>(
+                ResponseTemplate.<SogaetingInfoResponse>builder()
+                        .msg(SogaetingResponseMessage.SOGAETING_INFO_SUCCESS.getMessage())
+                        .data(sogaetingInfoResponse)
                         .result(true)
                         .build(),
                 HttpStatus.OK);

@@ -12,6 +12,7 @@ import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.sogaeting.dto.request.*;
 import com.ssafy.manna.sogaeting.dto.response.ImageMappedSogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingChatRecommendResponse;
+import com.ssafy.manna.sogaeting.dto.response.SogaetingInfoResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponse;
 import com.ssafy.manna.sogaeting.dto.response.SogaetingMemberResponsePage;
 import com.ssafy.manna.sogaeting.repository.CustomSogaetingRepository;
@@ -135,10 +136,12 @@ public class SogaetingServiceImpl implements SogaetingService {
     // 소개팅 시작하기
     @Override
     public void start(SogaetingStartRequest sogaetingStartRequest) {
+
         Member findMaleMember = memberRepository.findById(sogaetingStartRequest.getMaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
         Member findFemaleMember = memberRepository.findById(sogaetingStartRequest.getFemaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
 
         Sogaeting sogaeting = Sogaeting.builder()
+                .id(sogaetingStartRequest.getId())
                 .female(findFemaleMember)
                 .male(findMaleMember)
                 .isSuccess(false)
@@ -163,6 +166,29 @@ public class SogaetingServiceImpl implements SogaetingService {
         String name = codeDetail.getName();
         SogaetingChatRecommendResponse sogaetingChatRecommendResponse = new SogaetingChatRecommendResponse(name);
         return sogaetingChatRecommendResponse;
+    }
+
+    @Override
+    public SogaetingInfoResponse getSogaetingById(int id) throws Exception {
+        Sogaeting sogaeting = sogaetingRepository.findById(id).get();
+
+
+        // 여기서 Member 정보 가져오기
+        ///Member femaleMember = memberRepository.findById(sogaeting.getFemale()).orElse("일치하는 회원이 없습니다.");
+        //Member maleMember = memberRepository.findById(sogaeting.getMale()).orElse("일치하는 회원이 없습니다.");
+
+        Member findFemaleMember = sogaeting.getFemale();
+        Member findMaleMember = sogaeting.getMale();
+
+
+        boolean isSuccess = sogaeting.getIsSuccess();
+
+        // Member 정보가 null이 아닌 경우에만 이름 가져오기
+        String femaleId = (findFemaleMember != null) ? findFemaleMember.getId() : null;
+        String maleId = (findMaleMember != null) ? findMaleMember.getId() : null;
+
+        SogaetingInfoResponse sogaetingInfoResponse = new SogaetingInfoResponse(id, femaleId, maleId, isSuccess);
+        return sogaetingInfoResponse;
     }
 
     private PageRequest get2PageRequest(SogaetingFilteringRequest sogaetingFilteringRequest) {
