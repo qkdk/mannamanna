@@ -124,8 +124,8 @@ public class MissionServiceImpl implements MissionService {
     // 미션 사진 등록하기
     @Override
     public void doMission(MissionDoRequest missionDoRequest, MultipartFile missionPicture) throws IOException {
-        Optional<MissionQuestion> findMissionQuestion = missionQuestionRepository.findById(missionDoRequest.getId());
-        MissionQuestion missionQuestion = findMissionQuestion.get();
+        List<MissionQuestion> findMissionQuestion = missionQuestionRepository.findByMissionId(missionDoRequest.getMissionId());
+        MissionQuestion missionQuestion = findMissionQuestion.get(missionDoRequest.getId()-1);
 
         String path = storeFile(missionDoRequest.getMemberId(), missionPicture);
         if (missionDoRequest.getGender().equals("male")) {
@@ -234,15 +234,16 @@ public class MissionServiceImpl implements MissionService {
     public MissionParticipantResponse getParticipant(String userId) {
         Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         Member opponent;
+        Mission mission;
         if(member.getGender().equals("male")){
             //남자라면 maleId 로 찾기
-           Mission mission = missionRepository.findFirstByMaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
+           mission = missionRepository.findFirstByMaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
            opponent = memberRepository.findById(mission.getFemaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
 
         }
         else{
             //여자라면 femaileId 로 찾기
-            Mission mission = missionRepository.findFirstByFemaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
+            mission = missionRepository.findFirstByFemaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
             opponent = memberRepository.findById(mission.getMaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         }
 
@@ -253,6 +254,7 @@ public class MissionServiceImpl implements MissionService {
                 .userName(member.getName())
                 .opponentId(opponent.getId())
                 .opponentName(opponent.getName())
+                .missionId(mission.getId())
                 .build();
         return missionParticipantResponse;
     }
