@@ -13,6 +13,7 @@ import com.ssafy.manna.messenger.repository.ChatRepository;
 import com.ssafy.manna.messenger.repository.ChatRoomRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,6 +27,7 @@ import static com.ssafy.manna.messenger.Enums.ChatRoomExceptionEnums.*;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class ChatRoomServiceImpl implements ChatRoomService {
 
     // Redis
@@ -87,6 +89,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             .orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MALE.getValue()));
 
         if (chatRoomRepository.findByMaleAndFemale(male, female).isPresent()) {
+            log.error("중복방 에러");
             throw new RuntimeException(CHAT_ROOM_DUPLICATE_EXCEPTION.getValue());
         }
 
