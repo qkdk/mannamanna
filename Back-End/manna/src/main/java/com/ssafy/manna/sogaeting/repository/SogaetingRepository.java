@@ -3,7 +3,7 @@ package com.ssafy.manna.sogaeting.repository;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface SogaetingRepository extends JpaRepository<Sogaeting, String> {
+public interface SogaetingRepository extends JpaRepository<Sogaeting, Integer> {
 
 
     // 전부 가져오는 기능 - 성별만 다르게

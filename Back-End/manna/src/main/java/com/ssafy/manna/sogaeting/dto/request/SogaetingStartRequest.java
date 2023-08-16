@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SogaetingStartRequest {
 
+    private int id;
     private String femaleId;
     private String maleId;
 }
