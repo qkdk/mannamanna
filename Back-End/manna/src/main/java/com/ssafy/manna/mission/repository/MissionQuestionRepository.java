@@ -15,5 +15,8 @@ public interface MissionQuestionRepository extends JpaRepository<MissionQuestion
     List<MissionQuestion> findByMissionIdAndMaleIsDoneAndFemaleIsDone(int missionId, boolean maleIsDone, boolean femaleIsDone);
 
     //미션 아이디로 미션 리스트 불러오기
+    List<MissionQuestion> findByMissionIdOrderByIdAsc(int missionId);
+
+
     List<MissionQuestion> findByMissionId(int missionId);
 }

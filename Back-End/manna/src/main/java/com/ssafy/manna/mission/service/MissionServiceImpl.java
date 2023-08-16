@@ -15,6 +15,7 @@ import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionDetailResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
@@ -257,6 +258,29 @@ public class MissionServiceImpl implements MissionService {
                 .missionId(mission.getId())
                 .build();
         return missionParticipantResponse;
+    }
+
+    @Override
+    public MissionDetailResponse getImagePerCard(Integer missionId, Integer cardId, String userId) {
+        Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException("회원을 찾을 수 없습니다."));
+        String userPath;
+        String opponentPath;
+        List<MissionQuestion> missionQuestionList = missionQuestionRepository.findByMissionIdOrderByIdAsc(missionId);
+        MissionQuestion missionQuestion = missionQuestionList.get(cardId - 1);
+        if(member.getGender().equals("male")){
+            userPath = missionQuestion.getMaleImagePath();
+            opponentPath = missionQuestion.getFemaleImagePath();
+        }
+        else{
+            userPath = missionQuestion.getFemaleImagePath();
+            opponentPath = missionQuestion.getMaleImagePath();
+        }
+
+        MissionDetailResponse missionDetailResponse = MissionDetailResponse.builder()
+                .userImgPath(userPath)
+                .opponentImgPath(opponentPath)
+                .build();
+        return missionDetailResponse;
     }
 }
 

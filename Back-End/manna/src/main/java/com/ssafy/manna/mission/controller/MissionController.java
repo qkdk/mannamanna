@@ -7,6 +7,7 @@ import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
+import com.ssafy.manna.mission.dto.response.MissionDetailResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
 import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
@@ -18,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -138,7 +140,7 @@ public class MissionController {
 
     //사람 id로 상대방 id(이름) 까지 가져오기
     @GetMapping("/{id}")
-        public ResponseEntity<ResponseTemplate<MissionParticipantResponse>> getParticipant(@PathVariable("id") String userId){
+    public ResponseEntity<ResponseTemplate<MissionParticipantResponse>> getParticipant(@PathVariable("id") String userId){
             MissionParticipantResponse missionParticipantResponse = missionService.getParticipant(userId);
             return new ResponseEntity<>(
                     ResponseTemplate.<MissionParticipantResponse>builder()
@@ -148,8 +150,22 @@ public class MissionController {
                         .build(),
                 HttpStatus.OK
         );
-
     }
 
+    //미션 별 정보 get
+    @GetMapping("/{missionId}/{cardId}/{userId}")
+    public ResponseEntity<ResponseTemplate<MissionDetailResponse>> getImagePerCard(@PathVariable("missionId") Integer missionId, @PathVariable("cardId") Integer cardId
+    , @PathVariable("userId")String userId)
+    {
+        MissionDetailResponse missionDetailResponse = missionService.getImagePerCard(missionId, cardId, userId);
+        return new ResponseEntity<>(
+                ResponseTemplate.<MissionDetailResponse>builder()
+                        .result(true)
+                        .msg(MissionResponseMessage.MISSION_GET_DETAIL_SUCCESS.getMessage())
+                        .data(missionDetailResponse)
+                        .build(),
+                HttpStatus.OK
+        );
+    }
 
 }
