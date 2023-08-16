@@ -45,15 +45,19 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService {
         // KST 시간대로 변환
         ZoneId kstZone = ZoneId.of(SEOUL.getZoneId());
         ZonedDateTime kstDateTime = time.atZone(kstZone);
-        String url = scheduleRequest.getUrl();
 
+        System.out.println(kstDateTime);
+        System.out.println(kstDateTime.toLocalDateTime());
+
+        String url = scheduleRequest.getUrl();
+        System.out.println(url);
         OnlineSchedule onlineSchedule = OnlineSchedule.builder()
                 .female(female)
                 .male(male)
                 .date(kstDateTime.toLocalDateTime())
                 .url(url)
                 .build();
-
+      
         onlineScheduleRepository.save(onlineSchedule);
     }
 
@@ -102,7 +106,7 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService {
 
             //시간
             // DateTimeFormatter로 hh:mm 형식으로 변환
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String formattedTime = localTime.format(formatter);
 
             Member opponent;
@@ -140,7 +144,7 @@ public class OnlineScheduleServiceImpl implements OnlineScheduleService {
             if (date.equals(formattedDate)) {
                 //시간
                 // DateTimeFormatter로 hh:mm 형식으로 변환
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                 String formattedTime = localTime.format(formatter);
 
                 Member opponent;

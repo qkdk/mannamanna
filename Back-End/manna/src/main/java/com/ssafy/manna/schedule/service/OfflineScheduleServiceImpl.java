@@ -73,7 +73,7 @@ public class OfflineScheduleServiceImpl implements OfflineScheduleService {
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String formattedDate = localTime.format(dateFormatter);
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String formattedTime = localTime.format(formatter);
 
             Member opponent;
@@ -118,7 +118,7 @@ public class OfflineScheduleServiceImpl implements OfflineScheduleService {
             if (date.equals(formattedDate)) {
                 //시간
                 // DateTimeFormatter로 hh:mm 형식으로 변환
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
                 String formattedTime = localTime.format(formatter);
 
                 Member opponent;
