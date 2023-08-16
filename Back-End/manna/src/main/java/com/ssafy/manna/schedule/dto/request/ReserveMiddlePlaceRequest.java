@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReservePlaceSidoGugunRequest {
-    //추천 리스트 조회 request
-    String sido;
-    String gugun;
+public class ReserveMiddlePlaceRequest {
+
+    String userId;
+    String opponentId;
+    String category;
 }
