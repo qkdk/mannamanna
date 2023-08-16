@@ -8,20 +8,27 @@ import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
+import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -128,5 +135,21 @@ public class MissionController {
                         .build()
         );
     }
+
+    //사람 id로 상대방 id(이름) 까지 가져오기
+    @GetMapping("/{id}")
+        public ResponseEntity<ResponseTemplate<MissionParticipantResponse>> getParticipant(@PathVariable("id") String userId){
+            MissionParticipantResponse missionParticipantResponse = missionService.getParticipant(userId);
+            return new ResponseEntity<>(
+                    ResponseTemplate.<MissionParticipantResponse>builder()
+                            .result(true)
+                            .msg(MissionResponseMessage.MISSION_GET_PARTICIPANT_SUCCESS.getMessage())
+                            .data(missionParticipantResponse)
+                        .build(),
+                HttpStatus.OK
+        );
+
+    }
+
 
 }
