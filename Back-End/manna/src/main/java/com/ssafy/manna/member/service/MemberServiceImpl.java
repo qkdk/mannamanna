@@ -272,12 +272,19 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
         for (int i = 0; i < 3; i++) {
-            String path = storeFile(id, multipartFiles[i]);   //새로운 사진 저장한 경로
-            //원래 있던 사진 삭제
+            String path = "";
+            if (multipartFiles[i] != null) {
+                path = storeFile(id, multipartFiles[i]);
+            } else {
+                ProfilePicture existingPicture = profilePictureRepository.findByMemberAndPriority(member, i + 1)
+                        .orElseThrow(() -> new RuntimeException(PROFILE_PICTURE_NOT_EXIST.getValue()));
+                path = existingPicture.getPath();
+            }
+
             ProfilePicture updatePicture = profilePictureRepository.findByMemberAndPriority
                     (member, i + 1).orElseThrow(() -> new RuntimeException(PROFILE_PICTURE_NOT_EXIST.getValue()));
             updatePicture.updatePath(path);
-            updatePicture.updateName(member.getId()+"_"+multipartFiles[i].getOriginalFilename());
+            updatePicture.updateName(member.getId() + "_" + multipartFiles[i].getOriginalFilename());
             profilePictureRepository.save(updatePicture);
         }
 
