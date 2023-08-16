@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,5 +19,6 @@ public class MissionParticipantResponse {
     private String opponentName;
     //missinon id도 넘겨주기
     private int missionId;
+    List<MissionResponse> missionResponses;
 
 }
