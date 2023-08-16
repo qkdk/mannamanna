@@ -248,17 +248,9 @@ public class MissionServiceImpl implements MissionService {
             opponent = memberRepository.findById(mission.getMaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         }
 
-
-        MissionParticipantResponse missionParticipantResponse = MissionParticipantResponse
-                .builder()
-                .userId(userId)
-                .userName(member.getName())
-                .opponentId(opponent.getId())
-                .opponentName(opponent.getName())
-                .missionId(mission.getId())
-                .build();
-        return missionParticipantResponse;
+        return makeDto(userId, member, opponent, mission);
     }
+
 
     @Override
     public MissionDetailResponse getImagePerCard(Integer missionId, Integer cardId, String userId) {
@@ -267,6 +259,7 @@ public class MissionServiceImpl implements MissionService {
         String opponentPath;
         List<MissionQuestion> missionQuestionList = missionQuestionRepository.findByMissionIdOrderByIdAsc(missionId);
         MissionQuestion missionQuestion = missionQuestionList.get(cardId - 1);
+
         if(member.getGender().equals("male")){
             userPath = missionQuestion.getMaleImagePath();
             opponentPath = missionQuestion.getFemaleImagePath();
@@ -276,11 +269,23 @@ public class MissionServiceImpl implements MissionService {
             opponentPath = missionQuestion.getMaleImagePath();
         }
 
-        MissionDetailResponse missionDetailResponse = MissionDetailResponse.builder()
+        return MissionDetailResponse.builder()
                 .userImgPath(userPath)
                 .opponentImgPath(opponentPath)
+                .content(missionQuestion.getContent())
                 .build();
-        return missionDetailResponse;
+    }
+
+
+    private MissionParticipantResponse makeDto(String userId, Member member, Member opponent, Mission mission) {
+        return MissionParticipantResponse
+                .builder()
+                .userId(userId)
+                .userName(member.getName())
+                .opponentId(opponent.getId())
+                .opponentName(opponent.getName())
+                .missionId(mission.getId())
+                .build();
     }
 }
 

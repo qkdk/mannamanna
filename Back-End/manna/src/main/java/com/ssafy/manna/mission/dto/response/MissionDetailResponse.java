@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class MissionDetailResponse {
     private String userImgPath;
     private String opponentImgPath;
+    private String content;
 }
