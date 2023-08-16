@@ -271,11 +271,14 @@ public class MemberServiceImpl implements MemberService {
         memberDetail.updateReligion(memberUpdateRequest.getReligion());
         memberDetail.updateIsBlockingFriend(memberUpdateRequest.getIsBlockingFriend());
 
+
         for (int i = 0; i < 3; i++) {
             String path = "";
             if (multipartFiles[i] != null) {
+                log.info(i+"번째 사진은 null이 아니다."+multipartFiles[i]);
                 path = storeFile(id, multipartFiles[i]);
             } else {
+                log.info(i+"번째 사진은 null이다.");
                 ProfilePicture existingPicture = profilePictureRepository.findByMemberAndPriority(member, i + 1)
                         .orElseThrow(() -> new RuntimeException(PROFILE_PICTURE_NOT_EXIST.getValue()));
                 path = existingPicture.getPath();
