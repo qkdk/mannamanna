@@ -101,9 +101,9 @@ public class MemberController {
     @PutMapping("/mypage/{id}")
     public ResponseEntity<ResponseTemplate> myPageEdit(@RequestPart("memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
                                         @PathVariable("id") String id,
-                                        @RequestPart("profilePicture1") MultipartFile profilePicture1,
-                                        @RequestPart("profilePicture2") MultipartFile profilePicture2,
-                                        @RequestPart("profilePicture3") MultipartFile profilePicture3)
+                                        @RequestPart(value = "profilePicture1", required = false) MultipartFile profilePicture1,
+                                        @RequestPart(value = "profilePicture2", required = false) MultipartFile profilePicture2,
+                                        @RequestPart(value = "profilePicture3", required = false) MultipartFile profilePicture3)
     {
             MultipartFile[] multipartFiles = new MultipartFile[3];
             multipartFiles[0] = profilePicture1;
