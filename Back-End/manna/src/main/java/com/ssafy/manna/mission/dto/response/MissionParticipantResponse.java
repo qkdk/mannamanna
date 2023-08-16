@@ -15,5 +15,7 @@ public class MissionParticipantResponse {
     private String userName;
     private String opponentId;
     private String opponentName;
+    //missinon id도 넘겨주기
+    private int missionId;
 
 }
