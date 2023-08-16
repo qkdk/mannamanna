@@ -1,8 +1,5 @@
 package com.ssafy.manna.mission.service;
 
-import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MEMBER;
-import static com.ssafy.manna.mission.Enums.MissionResponseMessage.MISSION_NOT_EXISTS;
-
 import com.ssafy.manna.global.common.domain.CodeDetail;
 import com.ssafy.manna.global.common.repository.CodeDetailRepository;
 import com.ssafy.manna.member.domain.Member;
@@ -14,25 +11,26 @@ import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
-import com.ssafy.manna.mission.dto.response.MissionCallResponse;
-import com.ssafy.manna.mission.dto.response.MissionDetailResponse;
-import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
-import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
+import com.ssafy.manna.mission.dto.response.*;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.sogaeting.domain.Sogaeting;
 import com.ssafy.manna.sogaeting.repository.SogaetingRepository;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MEMBER;
+import static com.ssafy.manna.mission.Enums.MissionResponseMessage.MISSION_NOT_EXISTS;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +60,7 @@ public class MissionServiceImpl implements MissionService {
                     .maleIsDone(false)
                     .femaleIsDone(false)
                     .code(MissionCode.valueOf("M1"))
-                    .content(codeDetail.getName()) 
+                    .content(codeDetail.getName())
                     .maleImagePath(null)
                     .femaleImagePath(null)
                     .build();
@@ -126,7 +124,7 @@ public class MissionServiceImpl implements MissionService {
     @Override
     public void doMission(MissionDoRequest missionDoRequest, MultipartFile missionPicture) throws IOException {
         List<MissionQuestion> findMissionQuestion = missionQuestionRepository.findByMissionId(missionDoRequest.getMissionId());
-        MissionQuestion missionQuestion = findMissionQuestion.get(missionDoRequest.getId()-1);
+        MissionQuestion missionQuestion = findMissionQuestion.get(missionDoRequest.getId() - 1);
 
         String path = storeFile(missionDoRequest.getMemberId(), missionPicture);
         if (missionDoRequest.getGender().equals("male")) {
@@ -136,7 +134,6 @@ public class MissionServiceImpl implements MissionService {
             missionQuestion.updateFemaleImgPath(missionDoRequest.getMemberId() + "_" + missionPicture.getOriginalFilename());
             missionQuestion.updateFemaleIsDone(true);
         }
-
     }
 
     // 미션 사진 등록
@@ -218,7 +215,7 @@ public class MissionServiceImpl implements MissionService {
                 .id(missionStartRequest.getSogaetingId())
                 .build();
 
-       // sogaetingRepository.save(sogaeting);
+        // sogaetingRepository.save(sogaeting);
 
         Mission mission = Mission.builder()
                 .sogaeting(sogaeting)
@@ -233,38 +230,45 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public MissionParticipantResponse getParticipant(String userId) {
-        Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+        Member member = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         Member opponent;
         Mission mission;
-        if(member.getGender().equals("male")){
+
+        if (member.getGender().equals("male")) {
             //남자라면 maleId 로 찾기
-           mission = missionRepository.findFirstByMaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
-           opponent = memberRepository.findById(mission.getFemaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+            mission = missionRepository.findFirstByMaleId(userId).orElseThrow(() -> new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
+            opponent = memberRepository.findById(mission.getFemaleId()).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
 
-        }
-        else{
+        } else {
             //여자라면 femaileId 로 찾기
-            mission = missionRepository.findFirstByFemaleId(userId).orElseThrow(()->new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
-            opponent = memberRepository.findById(mission.getMaleId()).orElseThrow(()->new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
+            mission = missionRepository.findFirstByFemaleId(userId).orElseThrow(() -> new RuntimeException(MISSION_NOT_EXISTS.getMessage()));
+            opponent = memberRepository.findById(mission.getMaleId()).orElseThrow(() -> new RuntimeException(MEMBER_EXCEPTIONS_NONE_MEMBER.getValue()));
         }
 
-        return makeDto(userId, member, opponent, mission);
+        List<MissionQuestion> missionQuestions = missionQuestionRepository.findByMission(mission);
+        List<MissionResponse> missionResponses = missionQuestions.stream()
+                .map(this::MappingMissionResponse)
+                .toList();
+
+        return makeDto(userId, member, opponent, mission, missionResponses);
     }
 
+    private MissionResponse MappingMissionResponse(MissionQuestion missionQuestion) {
+        return new MissionResponse(missionQuestion.getId(), missionQuestion.checkCardIsDone(missionQuestion));
+    }
 
     @Override
     public MissionDetailResponse getImagePerCard(Integer missionId, Integer cardId, String userId) {
-        Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException("회원을 찾을 수 없습니다."));
+        Member member = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException("회원을 찾을 수 없습니다."));
         String userPath;
         String opponentPath;
         List<MissionQuestion> missionQuestionList = missionQuestionRepository.findByMissionIdOrderByIdAsc(missionId);
         MissionQuestion missionQuestion = missionQuestionList.get(cardId - 1);
 
-        if(member.getGender().equals("male")){
+        if (member.getGender().equals("male")) {
             userPath = missionQuestion.getMaleImagePath();
             opponentPath = missionQuestion.getFemaleImagePath();
-        }
-        else{
+        } else {
             userPath = missionQuestion.getFemaleImagePath();
             opponentPath = missionQuestion.getMaleImagePath();
         }
@@ -277,7 +281,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
 
-    private MissionParticipantResponse makeDto(String userId, Member member, Member opponent, Mission mission) {
+    private MissionParticipantResponse makeDto(String userId, Member member, Member opponent, Mission mission, List<MissionResponse> missionResponses) {
         return MissionParticipantResponse
                 .builder()
                 .userId(userId)
@@ -285,7 +289,9 @@ public class MissionServiceImpl implements MissionService {
                 .opponentId(opponent.getId())
                 .opponentName(opponent.getName())
                 .missionId(mission.getId())
+                .missionResponses(missionResponses)
                 .build();
     }
+
 }
 
