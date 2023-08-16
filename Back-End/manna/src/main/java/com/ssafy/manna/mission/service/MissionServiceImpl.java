@@ -141,7 +141,7 @@ public class MissionServiceImpl implements MissionService {
     // 미션 사진 등록
     @Override
     public String storeFile(String memberId, MultipartFile file) throws IOException {
-        String uploadDir = "/manna/upload/images/member/";
+        String uploadDir = "/manna/upload/images/mission/";
         String originalFileName = file.getOriginalFilename();
         String fileName = memberId + "_" + originalFileName;
 
