@@ -6,6 +6,7 @@ import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.MissionCallResponse;
 import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
+import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -31,4 +32,6 @@ public interface MissionService {
     MissionFinishResponse finishMission(String id);
 
     void startMission(MissionStartRequest missionStartRequest);
+
+    MissionParticipantResponse getParticipant(String userId);
 }

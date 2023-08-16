@@ -10,8 +10,9 @@ public enum MissionResponseMessage {
     MISSION_DO_SUCCESS("mission do success"),
     MISSION_DO_ERROR("mission do error"),
     MISSION_FINISH_SUCCESS("mission finish success"),
-    MISSION_START_SUCCESS("mission start success");
-
+    MISSION_START_SUCCESS("mission start success"),
+    MISSION_NOT_EXISTS("해당하는 미션 정보가 없습니다."),
+    MISSION_GET_PARTICIPANT_SUCCESS("mission get participant success");
     private final String message;
 
 
