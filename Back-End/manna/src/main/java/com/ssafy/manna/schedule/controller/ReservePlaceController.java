@@ -56,7 +56,6 @@ public class ReservePlaceController {
 
     }
 
-
     //두사람 id 받아서 위도 경도 계산해서 가운데 지점들 추천
 //    @GetMapping("{userId}/{opponentId}/{category}")
 //    public ResponseEntity<?> recommendMiddle(@PathVariable("userId") String userId,
@@ -79,10 +78,13 @@ public class ReservePlaceController {
 //    }
 
     @PostMapping(value = "/middlePlaceList")
-    public ResponseEntity<?> recommendMiddle(@RequestBody ReserveMiddlePlaceRequest reserveMiddlePlaceRequest) {
+    public ResponseEntity<?> recommendMiddle(
+            @RequestBody ReserveMiddlePlaceRequest reserveMiddlePlaceRequest) {
         ResponseTemplate<?> body;
         try {
-            List<ReservePlace> reservePlaces = reservePlaceService.recommendMiddle(reserveMiddlePlaceRequest);
+            List<ReservePlace> reservePlaces = reservePlaceService.recommendMiddle(
+                    reserveMiddlePlaceRequest);
+
             body = ResponseTemplate.builder()
                     .result(true)
                     .msg("회원 위치 기반 장소 추천")

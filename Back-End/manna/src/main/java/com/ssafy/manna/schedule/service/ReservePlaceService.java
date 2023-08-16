@@ -17,7 +17,5 @@ public interface ReservePlaceService {
     List<ReservePlace> getRecommendList(ReservePlaceRequest reservePlaceRequest) throws Exception;
 
     //두 사람 위치 가운데 장소 조회하기
-    //List<ReservePlace> recommendMiddle(String userId, String opponentId, String category) throws Exception;
-
     List<ReservePlace> recommendMiddle(ReserveMiddlePlaceRequest reserveMiddlePlaceRequest) throws Exception;
 }
