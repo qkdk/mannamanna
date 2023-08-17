@@ -21,6 +21,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static com.ssafy.manna.member.Enums.MemberInfoEnum.MEMBER_SEARCH_SUCCESS;
@@ -115,6 +117,7 @@ public class NoteController {
     @GetMapping("/received/{userId}")
     public ResponseEntity<ResponseTemplate<List<NoteListResponse>>> getReceivedNoteList(@PathVariable("userId") String userId) {
         List<NoteListResponse> receivedNoteList = noteService.receivedNoteList(userId);
+        Collections.reverse(receivedNoteList);
         return new ResponseEntity<>(
                 ResponseTemplate.<List<NoteListResponse>>builder()
                         .result(true)
@@ -129,6 +132,7 @@ public class NoteController {
     @GetMapping("/sent/{userId}")
     public ResponseEntity<ResponseTemplate<List<NoteListResponse>>> getSentNoteList(@PathVariable("userId") String userId) {
         List<NoteListResponse> sentNoteList = noteService.sentNoteList(userId);
+        Collections.reverse(sentNoteList);
         return new ResponseEntity<>(
                 ResponseTemplate.<List<NoteListResponse>>builder()
                         .result(true)
