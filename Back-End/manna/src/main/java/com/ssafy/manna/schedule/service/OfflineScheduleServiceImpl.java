@@ -85,6 +85,7 @@ public class OfflineScheduleServiceImpl implements OfflineScheduleService {
 
             ReservePlace reservePlace = schedule.getReserve();
             OfflineScheduleResponse offlineSchedule = OfflineScheduleResponse.builder()
+                    .opponentName(opponent.getName())
                     .scheduleId(schedule.getId())
                     .opponentId(opponent.getId())
                     .date(formattedDate)
