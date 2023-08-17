@@ -1,8 +1,14 @@
 package com.ssafy.manna.global.handler;
 
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_GENDER;
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_USER_ID;
+import static com.ssafy.manna.global.common.enums.SessionEnum.SOCKET_HEADER_USER_NAME;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.manna.global.auth.jwt.JwtService;
+import com.ssafy.manna.global.common.domain.Session;
+import com.ssafy.manna.global.common.repository.RedisSessionRepository;
 import com.ssafy.manna.messenger.domain.RedisChat;
 import com.ssafy.manna.messenger.domain.RedisChatHistory;
 import com.ssafy.manna.messenger.dto.ChatMessage;
@@ -29,25 +35,39 @@ public class StompHandler implements ChannelInterceptor {
     private final ObjectMapper objectMapper;
     private final RedisTemplate redisTemplate;
     private final ChatRepository chatRepository;
+    private final RedisSessionRepository redisSessionRepository;
+
 
 
     // websocket을 통해 들어온 요청이 처리 되기전 실행된다.
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor header = StompHeaderAccessor.wrap(message);
+        try {
+            if (StompCommand.CONNECT.equals(header.getCommand())) {
+                //connect라면 name값을 꺼내서 sessionAttributes에 넣기.
+                Map<String, Object> attributes = header.getSessionAttributes();
+                attributes.put("userId", header.getFirstNativeHeader("userId"));
+                attributes.put("userName", header.getFirstNativeHeader("userName"));
+                attributes.put("gender", header.getFirstNativeHeader("gender"));
+                attributes.put("token", header.getFirstNativeHeader("token"));
+                header.setSessionAttributes(attributes);
+                log.info("세션 어트리뷰트 정보 : " + attributes);
 
-        if (StompCommand.CONNECT.equals(header.getCommand())) {
-            //connect라면 name값을 꺼내서 sessionAttributes에 넣기.
-            Map<String, Object> attributes = header.getSessionAttributes();
-            attributes.put("userId", header.getFirstNativeHeader("userId"));
-            attributes.put("userName", header.getFirstNativeHeader("userName"));
-            attributes.put("gender", header.getFirstNativeHeader("gender"));
-            attributes.put("token", header.getFirstNativeHeader("token"));
-            header.setSessionAttributes(attributes);
+                String userName = header.getNativeHeader(SOCKET_HEADER_USER_NAME.getValue())
+                    .get(0);
+                String gender = header.getNativeHeader(SOCKET_HEADER_GENDER.getValue()).get(0);
+                String userId = header.getNativeHeader(SOCKET_HEADER_USER_ID.getValue()).get(0);
+
+                saveSession(userName, gender, userId);
+                log.info("saveSession");
 
 //          혹시 한글 안나오면 이거 주석 해제  하세요
 //            header.setNativeHeader("Content-Type", MimeTypeUtils.APPLICATION_JSON_VALUE);
 //            header.setNativeHeader("charset", StandardCharsets.UTF_8.name());
+            }
+        } catch (Exception e) {
+            log.info("세션 과정 오류 발생");
         }
 
         try {
@@ -77,4 +97,15 @@ public class StompHandler implements ChannelInterceptor {
 
         return objectMapper.readValue(publishMessage, ChatMessage.class);
     }
+
+    private void saveSession(String userName, String gender, String userId) {
+        Session socketSession = Session.builder()
+            .gender(gender)
+            .userId(userId)
+            .userName(userName)
+            .offset((int) (Math.random() * 30) + 1)
+            .build();
+        redisSessionRepository.save(socketSession);
+    }
+
 }
