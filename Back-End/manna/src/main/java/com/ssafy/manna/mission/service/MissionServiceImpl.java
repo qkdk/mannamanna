@@ -112,12 +112,10 @@ public class MissionServiceImpl implements MissionService {
 
     // 미션 포기하기
     @Override
-    public void giveUpMission(MissionGiveUpRequest missionGiveUpRequest) {
-        Optional<Mission> findMission = missionRepository.findById(missionGiveUpRequest.getId());
-        Mission mission = findMission.get();
-        mission.updateIsDone(true);
-
-        missionRepository.save(mission);
+    public void giveUpMission(MissionAssignRequest missionAssignRequest) {
+        Mission mission = missionRepository.findById(missionAssignRequest.getMissionId())
+                .orElseThrow(() -> new RuntimeException("미션이 없습니다."));
+        missionRepository.delete(mission);
     }
 
     // 미션 사진 등록하기
@@ -174,13 +172,10 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public void startMission(MissionStartRequest missionStartRequest) {
-        int sogaetingId = missionStartRequest.getSogaetingId();
+    public Mission startMission(MissionStartRequest missionStartRequest) {
         Sogaeting sogaeting = Sogaeting.builder()
                 .id(missionStartRequest.getSogaetingId())
                 .build();
-
-        // sogaetingRepository.save(sogaeting);
 
         Mission mission = Mission.builder()
                 .sogaeting(sogaeting)
@@ -190,7 +185,7 @@ public class MissionServiceImpl implements MissionService {
                 .femaleId(missionStartRequest.getFemaleId())
                 .build();
 
-        missionRepository.save(mission);
+        return missionRepository.save(mission);
     }
 
     @Override

@@ -71,7 +71,7 @@ public class MissionController {
     // 미션 포기하기
     @PutMapping(value = "/giveup")
     public ResponseEntity<ResponseTemplate<MissionGiveUpRequest>> giveUpMissionByMissionId(
-            @RequestBody MissionGiveUpRequest missionGiveUpRequest) {
+            @RequestBody MissionAssignRequest missionGiveUpRequest) {
 
         missionService.giveUpMission(missionGiveUpRequest);
 

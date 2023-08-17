@@ -1,5 +1,6 @@
 package com.ssafy.manna.mission.service;
 
+import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
@@ -22,7 +23,7 @@ public interface MissionService {
     List<MissionCallResponse> getMissionListByUserId(String userid);
 
     // 미션 포기하기
-    void giveUpMission(MissionGiveUpRequest missionGiveUpRequest);
+    void giveUpMission(MissionAssignRequest missionAssignRequest);
 
     // 미션 사진 올리기
     void doMission(MissionDoRequest missionDoRequest, MultipartFile missionPicture) throws IOException;
@@ -32,7 +33,7 @@ public interface MissionService {
 
     MissionFinishResponse finishMission(Integer missionId);
 
-    void startMission(MissionStartRequest missionStartRequest);
+    Mission startMission(MissionStartRequest missionStartRequest);
 
     MissionParticipantResponse getParticipant(String userId);
 

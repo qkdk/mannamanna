@@ -32,7 +32,7 @@ public class Mission extends BaseStartEndEntity {
 
     private String femaleId;
 
-    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MissionQuestion> missionQuestions;
 
     public void updateIsDone(boolean isDone) {
