@@ -58,20 +58,27 @@ public class MissionController {
 
     // 해당하는 회원의 미션정보 불러오기
     @GetMapping(value = "/call/{id}")
-    public ResponseEntity<ResponseTemplate<List<MissionCallResponse>>> getMissionListByUserId(
+    public ResponseEntity<ResponseTemplate<MissionCallResponse>> getMissionListByUserId(
             @Validated @PathVariable("id") String id) {
 
-        List<MissionCallResponse> response = missionService.getMissionListByUserId(id);
+        List<MissionCallResponse> responseList = missionService.getMissionListByUserId(id);
+
+        if (responseList.isEmpty()) {
+            // 리스트가 비어있을 경우 예외 처리
+            return ResponseEntity.notFound().build();
+        }
+
+        MissionCallResponse lastItem = responseList.get(responseList.size() - 1);
 
         return ResponseEntity.ok(
-                ResponseTemplate.<List<MissionCallResponse>>builder()
+                ResponseTemplate.<MissionCallResponse>builder()
                         .msg(MissionResponseMessage.MISSION_CALL_SUCCESS.getMessage())
-                        .data(response)
+                        .data(lastItem)
                         .result(true)
                         .build()
         );
-
     }
+
 
     // 미션 포기하기
     @PutMapping(value = "/giveup")
