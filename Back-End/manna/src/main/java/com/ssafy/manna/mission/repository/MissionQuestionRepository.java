@@ -21,4 +21,6 @@ public interface MissionQuestionRepository extends JpaRepository<MissionQuestion
     List<MissionQuestion> findByMissionId(int missionId);
 
     List<MissionQuestion> findByMission(Mission mission);
+
+    void deleteByMissionId(Integer id);
 }

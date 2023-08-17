@@ -2,10 +2,7 @@ package com.ssafy.manna.mission.controller;
 
 import com.ssafy.manna.global.util.ResponseTemplate;
 import com.ssafy.manna.mission.Enums.MissionResponseMessage;
-import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
-import com.ssafy.manna.mission.dto.request.MissionDoRequest;
-import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
-import com.ssafy.manna.mission.dto.request.MissionStartRequest;
+import com.ssafy.manna.mission.dto.request.*;
 import com.ssafy.manna.mission.dto.response.*;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
@@ -32,6 +29,18 @@ public class MissionController {
     private final MissionRepository missionRepository;
     private final MissionService missionService;
 
+    @DeleteMapping(value = "/del")
+    public ResponseEntity<ResponseTemplate<?>> deleteMission(@RequestBody MissionDeleteRequest missionDeleteRequest){
+        missionService.deleteMission(missionDeleteRequest);
+
+        return ResponseEntity.ok(
+                ResponseTemplate.builder()
+                        .result(true)
+                        .msg("미션 삭제 성공")
+                        .build()
+        );
+    }
+
 
     // 소개팅이 성공하면 미션 6가지 생성해주기
     @PostMapping(value = "/assign")
@@ -45,7 +54,6 @@ public class MissionController {
                         .msg(MissionResponseMessage.MISSION_ASSIGN_SUCCESS.getMessage())
                         .build()
         );
-
     }
 
     // 해당하는 회원의 미션정보 불러오기
@@ -120,7 +128,6 @@ public class MissionController {
     public ResponseEntity<ResponseTemplate<?>> startMission(@RequestBody MissionStartRequest missionStartRequest) {
         missionService.startMission(missionStartRequest);
 
-        int id = missionService.startMission(missionStartRequest).getId();
         MissionStartResponse missionStartResponse = new MissionStartResponse(missionService.startMission(missionStartRequest).getId());
         return ResponseEntity.ok(
                 ResponseTemplate.<MissionStartResponse>builder()

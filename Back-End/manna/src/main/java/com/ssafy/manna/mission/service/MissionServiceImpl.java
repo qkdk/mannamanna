@@ -8,6 +8,7 @@ import com.ssafy.manna.mission.Enums.MissionCode;
 import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionDeleteRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.*;
@@ -26,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MEMBER;
 import static com.ssafy.manna.mission.Enums.MissionResponseMessage.MISSION_NOT_EXISTS;
@@ -243,6 +245,26 @@ public class MissionServiceImpl implements MissionService {
                 .opponentImgPath(opponentPath)
                 .content(missionQuestion.getContent())
                 .build();
+    }
+
+    @Override
+    public void deleteMission(MissionDeleteRequest missionDeleteRequest) {
+        List<Mission> femaleList = missionRepository.findByFemaleId(missionDeleteRequest.getFemaleId());
+        List<Mission> maleList = missionRepository.findByMaleId(missionDeleteRequest.getMaleId());
+
+
+
+        for (Mission mission : femaleList) {
+            System.out.println("female : " + mission.getId());
+            missionQuestionRepository.deleteByMissionId(mission.getId());
+        }
+
+        for (Mission mission : maleList) {
+            System.out.println("male : " + mission.getId());
+            missionQuestionRepository.deleteByMissionId(mission.getId());
+        }
+
+
     }
 
 

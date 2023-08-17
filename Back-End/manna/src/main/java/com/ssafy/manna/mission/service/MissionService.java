@@ -2,6 +2,7 @@ package com.ssafy.manna.mission.service;
 
 import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
+import com.ssafy.manna.mission.dto.request.MissionDeleteRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.*;
@@ -36,4 +37,5 @@ public interface MissionService {
     MissionDetailResponse getImagePerCard(Integer missionId, Integer cardId, String userId);
 
 
+    void deleteMission(MissionDeleteRequest missionDeleteRequest);
 }
