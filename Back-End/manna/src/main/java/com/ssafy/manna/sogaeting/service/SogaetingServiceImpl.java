@@ -139,13 +139,13 @@ public class SogaetingServiceImpl implements SogaetingService {
         Member findFemaleMember = memberRepository.findById(sogaetingStartRequest.getFemaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
         Member findMaleMember = memberRepository.findById(sogaetingStartRequest.getMaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
 
-        System.out.println(isIdAlreadyUsed(sogaetingStartRequest.getId()));
-        if (isIdAlreadyUsed(sogaetingStartRequest.getId())) {
+        System.out.println(isIdAlreadyUsed(sogaetingStartRequest.getSogaetingId()));
+        if (isIdAlreadyUsed(sogaetingStartRequest.getSogaetingId())) {
             throw new RuntimeException("이미 사용된 ID입니다.");
         }
 
         Sogaeting sogaeting = Sogaeting.builder()
-                .id(sogaetingStartRequest.getId())
+                .id(sogaetingStartRequest.getSogaetingId())
                 .female(findFemaleMember)
                 .male(findMaleMember)
                 .isSuccess(false)
