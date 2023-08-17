@@ -30,7 +30,7 @@ public interface MissionService {
     // 사진 등록
     String storeFile(String memberId, MultipartFile file) throws IOException;
 
-    MissionFinishResponse finishMission(String id);
+    MissionFinishResponse finishMission(Integer missionId);
 
     void startMission(MissionStartRequest missionStartRequest);
 

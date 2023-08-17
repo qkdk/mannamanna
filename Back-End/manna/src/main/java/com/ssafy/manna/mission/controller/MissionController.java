@@ -103,11 +103,11 @@ public class MissionController {
 
 
     // 미션 완료 후 인증서 발급
-    @GetMapping(value = "/finish/{id}")
+    @GetMapping(value = "/finish/{missionId}")
     public ResponseEntity<ResponseTemplate<MissionFinishResponse>> finishMission(
-            @Validated @PathVariable("id") String id) throws Exception {
+            @Validated @PathVariable("missionId") Integer missionId) throws Exception {
 
-        MissionFinishResponse missionFinishResponse = missionService.finishMission(id);
+        MissionFinishResponse missionFinishResponse = missionService.finishMission(missionId);
 
         return new ResponseEntity<>(
                 ResponseTemplate.<MissionFinishResponse>builder()
