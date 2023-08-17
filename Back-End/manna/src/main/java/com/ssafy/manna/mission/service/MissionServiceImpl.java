@@ -171,6 +171,11 @@ public class MissionServiceImpl implements MissionService {
 
     @Override
     public Mission startMission(MissionStartRequest missionStartRequest) {
+        if (missionRepository.findBySogaetingId(missionStartRequest.getSogaetingId())
+            .isPresent()) {
+            throw new RuntimeException("중복된 채팅방이 존재합니다.");
+        }
+
         Sogaeting sogaeting = Sogaeting.builder()
                 .id(missionStartRequest.getSogaetingId())
                 .build();

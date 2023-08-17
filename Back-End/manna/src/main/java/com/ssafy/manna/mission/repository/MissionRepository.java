@@ -26,4 +26,5 @@ public interface MissionRepository extends JpaRepository<Mission, String> {
     // 여자 회원의 id 찾기
     Optional<Mission> findFirstByFemaleId(String femaleId);
 
+    Optional<Mission> findBySogaetingId(Integer sogaetingId);
 }
