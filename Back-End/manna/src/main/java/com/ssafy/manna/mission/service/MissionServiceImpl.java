@@ -162,50 +162,15 @@ public class MissionServiceImpl implements MissionService {
     }
 
     @Override
-    public MissionFinishResponse finishMission(String id) {
-        Optional<Member> findMember = memberRepository.findById(id);
-        Member member = findMember.get();
-        String gender = member.getGender();
+    public MissionFinishResponse finishMission(Integer missionId) {
+        List<MissionQuestion> missionQuestions = missionQuestionRepository.findByMissionId(missionId);
 
-        Optional<Mission> missions;
-        int missionId = 0;
-        if (gender.equals("male")) {
-            missions = missionRepository.findFirstByMaleId(id);
-            missionId = missions.get().getId();
-        } else if (gender.equals("female")) {
-            missions = missionRepository.findFirstByFemaleId(id);
-            missionId = missions.get().getId();
-        }
-
-        Optional<Mission> findMission = missionRepository.findById(missionId);
-        String maleId = findMission.get().getMaleId();
-        String femaleId = findMission.get().getFemaleId();
-
-        List<MissionQuestion> completedQuestions = missionQuestionRepository.findByMissionIdAndMaleIsDoneAndFemaleIsDone(missionId, true, true);
-        int endCnt = 0;
-        for (MissionQuestion completedQuestion : completedQuestions) {
-            if (completedQuestion.getMaleIsDone() == true) {
-                endCnt++;
-            }
-            if (completedQuestion.getFemaleIsDone() == true) {
-                endCnt++;
-            }
-        }
-        if (endCnt == 12) {
-            // 모든 미션을 완료
-            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
-                    .maleId(maleId)
-                    .femaleId(femaleId)
-                    .build();
-            return missionFinishResponse;
-        } else {
-            // 모든 미션을 완료하지 못함
-            MissionFinishResponse missionFinishResponse = new MissionFinishResponse().builder()
-                    .maleId("error")
-                    .femaleId("error")
-                    .build();
-            return missionFinishResponse;
-        }
+        return new MissionFinishResponse(
+                missionQuestions.stream()
+                        .filter((missionQuestion) -> !missionQuestion.checkCardIsDone())
+                        .findFirst()
+                        .isEmpty()
+        );
     }
 
     @Override
@@ -254,7 +219,7 @@ public class MissionServiceImpl implements MissionService {
     }
 
     private MissionResponse MappingMissionResponse(MissionQuestion missionQuestion) {
-        return new MissionResponse(missionQuestion.getId(), missionQuestion.checkCardIsDone(missionQuestion));
+        return new MissionResponse(missionQuestion.getId(), missionQuestion.checkCardIsDone());
     }
 
     @Override
