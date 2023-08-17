@@ -9,7 +9,6 @@ import com.ssafy.manna.mission.domain.Mission;
 import com.ssafy.manna.mission.domain.MissionQuestion;
 import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
-import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
 import com.ssafy.manna.mission.dto.response.*;
 import com.ssafy.manna.mission.repository.MissionQuestionRepository;
@@ -27,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.ssafy.manna.member.Enums.MemberExceptionsEnum.MEMBER_EXCEPTIONS_NONE_MEMBER;
 import static com.ssafy.manna.mission.Enums.MissionResponseMessage.MISSION_NOT_EXISTS;
@@ -185,7 +183,9 @@ public class MissionServiceImpl implements MissionService {
                 .femaleId(missionStartRequest.getFemaleId())
                 .build();
 
-        return missionRepository.save(mission);
+        missionRepository.save(mission);
+        return mission;
+
     }
 
     @Override

@@ -6,10 +6,7 @@ import com.ssafy.manna.mission.dto.request.MissionAssignRequest;
 import com.ssafy.manna.mission.dto.request.MissionDoRequest;
 import com.ssafy.manna.mission.dto.request.MissionGiveUpRequest;
 import com.ssafy.manna.mission.dto.request.MissionStartRequest;
-import com.ssafy.manna.mission.dto.response.MissionCallResponse;
-import com.ssafy.manna.mission.dto.response.MissionDetailResponse;
-import com.ssafy.manna.mission.dto.response.MissionFinishResponse;
-import com.ssafy.manna.mission.dto.response.MissionParticipantResponse;
+import com.ssafy.manna.mission.dto.response.*;
 import com.ssafy.manna.mission.repository.MissionRepository;
 import com.ssafy.manna.mission.service.MissionService;
 import lombok.RequiredArgsConstructor;
@@ -120,13 +117,16 @@ public class MissionController {
 
     // 소개팅 성공 시 미션 시작
     @PostMapping(value = "/start")
-    public ResponseEntity<ResponseTemplate<MissionResponseMessage>> startMission(@RequestBody MissionStartRequest missionStartRequest) {
+    public ResponseEntity<ResponseTemplate<?>> startMission(@RequestBody MissionStartRequest missionStartRequest) {
         missionService.startMission(missionStartRequest);
 
+        int id = missionService.startMission(missionStartRequest).getId();
+        MissionStartResponse missionStartResponse = new MissionStartResponse(missionService.startMission(missionStartRequest).getId());
         return ResponseEntity.ok(
-                ResponseTemplate.<MissionResponseMessage>builder()
+                ResponseTemplate.<MissionStartResponse>builder()
                         .result(true)
                         .msg(MissionResponseMessage.MISSION_START_SUCCESS.getMessage())
+                        .data(missionStartResponse)
                         .build()
         );
     }
