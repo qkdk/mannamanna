@@ -133,8 +133,6 @@ public class MissionController {
     // 소개팅 성공 시 미션 시작
     @PostMapping(value = "/start")
     public ResponseEntity<ResponseTemplate<?>> startMission(@RequestBody MissionStartRequest missionStartRequest) {
-        missionService.startMission(missionStartRequest);
-
         MissionStartResponse missionStartResponse = new MissionStartResponse(missionService.startMission(missionStartRequest).getId());
         return ResponseEntity.ok(
                 ResponseTemplate.<MissionStartResponse>builder()
