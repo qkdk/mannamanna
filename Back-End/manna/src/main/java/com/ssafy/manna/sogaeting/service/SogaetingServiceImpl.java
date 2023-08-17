@@ -136,9 +136,13 @@ public class SogaetingServiceImpl implements SogaetingService {
     // 소개팅 시작하기
     @Override
     public void start(SogaetingStartRequest sogaetingStartRequest) {
-
-        Member findMaleMember = memberRepository.findById(sogaetingStartRequest.getMaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
         Member findFemaleMember = memberRepository.findById(sogaetingStartRequest.getFemaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
+        Member findMaleMember = memberRepository.findById(sogaetingStartRequest.getMaleId()).orElseThrow(() -> new RuntimeException("일치하는 회원이 없습니다."));
+
+        System.out.println(isIdAlreadyUsed(sogaetingStartRequest.getId()));
+        if (isIdAlreadyUsed(sogaetingStartRequest.getId())) {
+            throw new RuntimeException("이미 사용된 ID입니다.");
+        }
 
         Sogaeting sogaeting = Sogaeting.builder()
                 .id(sogaetingStartRequest.getId())
@@ -149,6 +153,11 @@ public class SogaetingServiceImpl implements SogaetingService {
 
         sogaetingRepository.save(sogaeting);
     }
+
+    public boolean isIdAlreadyUsed(int id) {
+        return sogaetingRepository.existsById(id);
+    }
+
 
     // 소개팅 성공 저장
     @Override
