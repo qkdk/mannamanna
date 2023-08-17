@@ -45,19 +45,13 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor header = StompHeaderAccessor.wrap(message);
         try {
             if (StompCommand.CONNECT.equals(header.getCommand())) {
-                //connect라면 name값을 꺼내서 sessionAttributes에 넣기.
-                Map<String, Object> attributes = header.getSessionAttributes();
-                attributes.put("userId", header.getFirstNativeHeader("userId"));
-                attributes.put("userName", header.getFirstNativeHeader("userName"));
-                attributes.put("gender", header.getFirstNativeHeader("gender"));
-                attributes.put("token", header.getFirstNativeHeader("token"));
-                header.setSessionAttributes(attributes);
-                log.info("세션 어트리뷰트 정보 : " + attributes);
+                log.info("헤더 정보 " + header.toString());
 
                 String userName = header.getNativeHeader(SOCKET_HEADER_USER_NAME.getValue())
                     .get(0);
                 String gender = header.getNativeHeader(SOCKET_HEADER_GENDER.getValue()).get(0);
                 String userId = header.getNativeHeader(SOCKET_HEADER_USER_ID.getValue()).get(0);
+                header.getSessionAttributes().put(SOCKET_HEADER_USER_ID.getValue(), userId);
 
                 saveSession(userName, gender, userId);
                 log.info("saveSession");
