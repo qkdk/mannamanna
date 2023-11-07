@@ -1,6 +1,6 @@
 
 <div align="center">
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/884f2c48-1973-41f0-ae5a-7ee7eebf47ea" width="40%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/5fba1e1a-a6d3-4b0a-9f80-d41f50e737ce" width="40%"/>
 </div>
 
 <br/>
@@ -658,7 +658,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/4b557dfb-32b5-4072-be25-3e35dea81f74" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/5cc7d3e9-8f45-414d-a9a9-8f37d21d6863" width="80%"/>
   <br />
 </div>
 
@@ -670,7 +670,8 @@
 
 ## 🗂 ERD
 
- <img src="https://github.com/choijehyuk/manna/assets/90392777/b26df546-f1f4-499f-89fa-18ba59af7429" width=100%>
+
+ <img src="https://github.com/qkdk/mannamanna/assets/86948395/e8cb42af-9d41-4282-8c19-913cf52e5d62" width=100%>
 
 <br/>
 <br/>
@@ -681,7 +682,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/b5f0a177-e6af-4cd8-bd90-e9044f87b6ee" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/c2a9a8b5-8b2d-4fc2-ac11-4693b4c67632" width="80%"/>
   <br />
 </div>
 
@@ -689,7 +690,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/1be7de35-befe-42c0-9597-b44c6fa0dc3e" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/7c13dbe6-b61b-4bff-994e-04254f8f8f3b" width="80%"/>
   <br />
 </div>
 
@@ -701,19 +702,19 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/66d04999-73b7-4ff0-80da-e12f2846abde" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/69eb395e-dd2b-4a6c-a031-c68123a9eb2f" width="80%"/>
   <br />
 </div>
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/575de72d-70d0-4875-8c77-acf6c971bbd3" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/1df9bcf9-1982-43ab-b9e3-7fbddd2dca52" width="80%"/>
   <br />
 </div>
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/014171ea-8d5a-48f7-b2f6-6546b64d2048" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/7ab39722-4cc0-40ab-8f61-7e42a117b48d" width="80%"/>
   <br />
 </div>
 
@@ -729,15 +730,16 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/d0a072d1-b2a6-4a8d-b9f8-1f5496fddb9a" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/b77d0b91-39c7-4166-bfef-891c1f5e7377" width="80%"/>
   <br />
 </div>
+
 
 * 예약된 스케줄이 달력에 하트모양으로 표시되고 입장 버튼을 누르면 소개팅에 입장 할 수 있습니다.
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/81f0bfba-ee19-4773-8807-0c47ab7aa0a5" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/384591a5-a999-4ac0-82b7-77b5af3f5f69" width="80%"/>
   <br />
 </div>
 
@@ -745,7 +747,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/17174c31-768d-4f7a-b769-2d590959ebff" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/0b33719c-f827-40d0-b772-97bf2095c7eb" width="80%"/>
   <br />
 </div>
 
@@ -753,7 +755,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/ba5f4ed3-44a8-467f-b4bc-d95854ea8bc3" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/7aed104f-eb3f-48b9-89e1-a1d3b42e6f13" width="80%"/>
   <br />
 </div>
 
@@ -767,7 +769,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/98ae9faf-e75d-4aa3-b345-9a807cf553b9" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/cd427d48-dbdc-43e2-b294-589f993b5570" width="80%"/>
   <br />
 </div>
 
@@ -775,7 +777,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/df2ec4f6-e2ce-4e5c-9622-11248865cbee" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/48251ce5-5074-4645-9db1-91be9808671c" width="80%"/>
   <br />
 </div>
 
@@ -787,13 +789,13 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/6214a684-8b28-453a-ba7f-9c08b90a7fd9" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/66362cd9-e7f5-4d8e-b41b-0716fef35aa8" width="80%"/>
   <br />
 </div>
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/7ea8379d-cceb-4a54-84a4-6a2cb7aab01c" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/40427b05-76e6-42ae-a70c-df53ebb0f3c6" width="80%"/>
   <br />
 </div>
 
@@ -801,7 +803,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/2409a1c5-748c-4fa8-b02e-d3344a318882" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/6499ca22-64ef-4002-b840-2096c742f874" width="80%"/>
   <br />
 </div>
 
@@ -809,7 +811,7 @@
 
 <div align="center">
   <br />
-  <img src="https://github.com/choijehyuk/manna/assets/90392777/49e57245-b9b2-42df-9e02-61e92d9ffc0a" width="80%"/>
+  <img src="https://github.com/qkdk/mannamanna/assets/86948395/1441d253-e3b8-4f09-8127-3418853080d3" width="80%"/>
   <br />
 </div>
 
